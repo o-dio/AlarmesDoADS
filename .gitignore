@@ -1,0 +1,14 @@
+# Ignorar arquivos específicos
+.metadata
+
+# Ignorar IDEs
+/.idea/
+/.vscode/
+
+# Ignorar arquivos de build
+/target/
+/build/
+
+# Ignorar arquivos de sistema
+.DS_Store
+Thumbs.db
