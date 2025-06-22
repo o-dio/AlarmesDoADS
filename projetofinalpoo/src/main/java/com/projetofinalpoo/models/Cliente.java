@@ -1,26 +1,31 @@
 package com.projetofinalpoo.models;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Cliente {
 	//Atributos
 	private String login;
 	private String senha;
 	private String cpf;
-	private String dataNasc;
+	private LocalDate dataNasc;
 	private String fone;
 	private String email;
 	private String foneContato;
+	private String cargo;
 	
 	//Construtor
 	public Cliente(String login, String senha, String cpf, String dataNasc, String fone, String email,
-			String foneContato) {
+			String foneContato, String cargo) {
 		super();
 		this.login = login;
 		this.senha = senha;
 		this.cpf = cpf;
-		this.dataNasc = dataNasc;
+		this.dataNasc = LocalDate.parse(dataNasc, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.fone = fone;
 		this.email = email;
 		this.foneContato = foneContato;
+		this.cargo = cargo;
 	}
 
 	
@@ -49,11 +54,11 @@ public class Cliente {
 		this.cpf = cpf;
 	}
 	
-	public String getDataNasc() {
+	public LocalDate getDataNasc() {
 		return dataNasc;
 	}
 	
-	public void setDataNasc(String dataNasc) {
+	public void setDataNasc(LocalDate dataNasc) {
 		this.dataNasc = dataNasc;
 	}
 	
@@ -79,6 +84,88 @@ public class Cliente {
 	
 	public void setFoneContato(String foneContato) {
 		this.foneContato = foneContato;
+	}
+
+	public String getCargo() {
+		return this.cargo;
+	}
+
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((login == null) ? 0 : login.hashCode());
+		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
+		result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
+		result = prime * result + ((dataNasc == null) ? 0 : dataNasc.hashCode());
+		result = prime * result + ((fone == null) ? 0 : fone.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((foneContato == null) ? 0 : foneContato.hashCode());
+		result = prime * result + ((cargo == null) ? 0 : cargo.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cliente other = (Cliente) obj;
+		if (login == null) {
+			if (other.login != null)
+				return false;
+		} else if (!login.equals(other.login))
+			return false;
+		if (senha == null) {
+			if (other.senha != null)
+				return false;
+		} else if (!senha.equals(other.senha))
+			return false;
+		if (cpf == null) {
+			if (other.cpf != null)
+				return false;
+		} else if (!cpf.equals(other.cpf))
+			return false;
+		if (dataNasc == null) {
+			if (other.dataNasc != null)
+				return false;
+		} else if (!dataNasc.equals(other.dataNasc))
+			return false;
+		if (fone == null) {
+			if (other.fone != null)
+				return false;
+		} else if (!fone.equals(other.fone))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (foneContato == null) {
+			if (other.foneContato != null)
+				return false;
+		} else if (!foneContato.equals(other.foneContato))
+			return false;
+		if (cargo == null) {
+			if (other.cargo != null)
+				return false;
+		} else if (!cargo.equals(other.cargo))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Cliente [login=" + login + ", senha=" + senha + ", cpf=" + cpf + ", dataNasc=" + dataNasc + ", fone="
+				+ fone + ", email=" + email + ", foneContato=" + foneContato + ", cargo=" + cargo + "]";
 	}
 	
 }
