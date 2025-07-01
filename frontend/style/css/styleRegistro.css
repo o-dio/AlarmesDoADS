@@ -22,22 +22,25 @@ body {
   height: 100vh;
 }
 
-.login-wrapper {
+.register-wrapper {
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
   padding: 2rem;
+  margin-top: 2rem;
 }
 
-.login-box {
+
+.register-box {
   background-color: #1a1a1a;
-  padding: 2.5rem;
+  padding: 3rem;
   border-radius: 1rem;
   box-shadow: 0 0 20px rgba(0,0,0,0.6);
   color: var(--light-color);
   text-align: center;
+  margin-top: 2rem;
 }
 
-.login-box h2 {
+.register-box h2 {
   margin-bottom: 1.5rem;
   color: var(--main-color);
 }
@@ -57,17 +60,8 @@ form input::placeholder {
   color: #aaa;
 }
 
-.role-selector {
-  display: flex;
-  justify-content: space-around;
-  margin: 1rem 0 1.5rem;
-  font-size: 0.95rem;
-  color: #ddd;
-}
-
-.role-selector input[type="radio"] {
-  accent-color: var(--main-color);
-  margin-right: 0.4rem;
+form input[type="date"] {
+  color-scheme: dark;
 }
 
 button {
@@ -87,16 +81,28 @@ button:hover {
   background-color: var(--hover-color);
 }
 
-.register-link {
+.login-link {
   margin-top: 1.2rem;
   font-size: 0.9rem;
 }
 
-.register-link a {
+.login-link a {
   color: var(--main-color);
   text-decoration: none;
 }
 
-.register-link a:hover {
+.login-link a:hover {
   text-decoration: underline;
+}
+.role-selector {
+  display: flex;
+  justify-content: space-around;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  color: #ddd;
+}
+
+.role-selector input[type="radio"] {
+  accent-color: var(--main-color);
+  margin-right: 0.4rem;
 }

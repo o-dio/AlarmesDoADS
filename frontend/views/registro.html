@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar-se</title>
+    <link rel="stylesheet" href="../style/css/styleRegistro.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="register-wrapper">
+        <div class="register-box">
+            <h2>Cadastro</h2>
+            <form>
+                <input type="text" placeholder="Nome completo" required />
+                <input type="email" placeholder="E-mail" required />
+                <input type="tel" placeholder="Telefone" required />
+                <input type="date" placeholder="Data de nascimento" required />
+                <input type="text" placeholder="Nome de usuário" required />
+                <input type="password" placeholder="Senha" required />
+                <input type="password" placeholder="Confirmar senha" required />
+
+                <div class="role-selector">
+                    <label><input type="radio" name="role" value="cliente" checked> Cliente</label>
+                    <label><input type="radio" name="role" value="vigilante"> Vigilante</label>
+                </div>
+                <button type="submit">Registrar</button>
+                <p class="login-link">Já tem conta? <a href="login.html">Faça login</a></p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

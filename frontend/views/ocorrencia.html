@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Ocorrência</title>
+  <link rel="stylesheet" href="../style/css/styleOcorrencia.css">
+</head>
+<body>
+  <div class="container-ocorrencia">
+    <h2>Registrar Ocorrência</h2>
+
+    <form class="form-ocorrencia" enctype="multipart/form-data">
+      <label for="tipo">Tipo de Ocorrência:</label>
+      <select id="tipo" name="tipo" required>
+        <option value="">Selecione</option>
+        <option value="invasao">Tentativa de Invasão</option>
+        <option value="alarme">Alarme Disparado</option>
+        <option value="comportamento">Comportamento Suspeito</option>
+        <option value="outros">Outros</option>
+      </select>
+
+      <label for="data">Data da Ocorrência:</label>
+      <input type="date" id="data" name="data" required>
+
+      <label for="local">Local:</label>
+      <input type="text" id="local" name="local" placeholder="Endereço ou referência" required>
+
+      <label for="descricao">Descrição:</label>
+      <textarea id="descricao" name="descricao" rows="4" placeholder="Detalhes da ocorrência..." required></textarea>
+
+      <label for="status">Status:</label>
+      <select id="status" name="status" required>
+        <option value="em_analise">Em Análise</option>
+        <option value="resolvida">Resolvida</option>
+        <option value="encaminhada">Encaminhada</option>
+      </select>
+
+      <label for="midia">Anexar Foto/Vídeo:</label>
+      <input type="file" id="midia" name="midia" accept="image/*,video/*">
+
+      <button type="submit">Registrar Ocorrência</button>
+    </form>
+  </div>
+  <script>
+    // Efeitos de foco suave nos campos
+document.querySelectorAll('.form-ocorrencia input, .form-ocorrencia textarea, .form-ocorrencia select').forEach(field => {
+  field.addEventListener('focus', () => {
+    field.style.boxShadow = '0 0 8px var(--main-color)';
+    field.style.transition = '0.3s ease';
+  });
+
+  field.addEventListener('blur', () => {
+    field.style.boxShadow = 'none';
+  });
+});
+
+// Feedback no envio
+document.querySelector('.form-ocorrencia').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.innerText = "Enviando...";
+  btn.disabled = true;
+
+  // Simula envio
+  setTimeout(() => {
+    btn.innerText = "Ocorrência Registrada ✅";
+    btn.style.backgroundColor = "#4caf50";
+  }, 1500);
+});
+
+  </script>
+</body>
+</html>

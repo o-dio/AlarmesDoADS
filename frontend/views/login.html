@@ -2,23 +2,27 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-    <title>Login - Cliente e Vigilante</title>
-    <link rel="stylesheet" href="../style/css/styleLogin.css">
+  <title>Login - Acesso</title>
+  <link rel="stylesheet" href="../style/css/styleLogin.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="login-wrapper">
     <div class="login-box">
-      <h2>Login Cliente</h2>
-      <input type="text" placeholder="Usuário do Cliente" />
-      <input type="password" placeholder="Senha" />
-      <button>Entrar</button>
-    </div>
-
-    <div class="login-box">
-      <h2>Login Vigilante</h2>
-      <input type="text" placeholder="Usuário do Vigilante" />
-      <input type="password" placeholder="Senha" />
-      <button>Entrar</button>
+      <h2>Login</h2>
+      <!--FAZER MENSAGEM DE ERRO, CASO LOGIN NAO FUNCIONE-->
+      <form>
+        <input type="text" placeholder="Usuário" required />
+        <input type="password" placeholder="Senha" required />
+        <div class="role-selector">
+          <label><input type="radio" name="role" value="cliente" checked> Cliente</label>
+          <label><input type="radio" name="role" value="vigilante"> Vigilante</label>
+          <label><input type="radio" name="role" value="admin"> Administrador</label>
+        </div>
+        <button type="submit">Entrar</button>
+        <p class="register-link">Não tem uma conta? <a href="registro.html">Registrar-se</a></p>
+      </form>
     </div>
   </div>
 </body>

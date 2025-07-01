@@ -4,55 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../style/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <title>Document</title>
 </head>
 <body>
-     <nav>
-    <div class="logo">Nome do site</div>
-    <ul>
-      <li><a href="#about">Sobre</a></li>
-      <li><a href="#contato">Contato</a></li>
-    </ul>
-  </nav>
+    <header class="header">
+      <section>
+        <a href="#" class="logo">
+          <img src="" alt="" class="logo-img">
+        </a> 
+        <nav class="navbar">
+          <a href="#">Inicio</a>
+          <a href="#about">Sobre</a>
+          <a href="#contato">Contato</a>
+        </nav>
+        <div class="perfil">
+          <i class="fas fa-user-circle"></i>
+          <span id="user-name">Usuário</span>
+        </div>
+      </section>
+    </header>
 
-  <header>
-    <h1>Bem-vindo cliente</h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste molestiae nulla facilis! Perspiciatis velit commodi eveniet architecto vel, maxime necessitatibus consequuntur impedit animi id rerum, delectus, minima enim. Placeat, tenetur?</p>
-  </header>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Protegendo o que importa</h1>
+        <p>Com tecnologia e confiança, garantimos sua segurança 24 horas por dia.</p>
+      </div>
+      <div class="hero-img">
+        <img src="../style/images/security-hero.png" alt="Segurança" />
+      </div>
+    </div>
+  </section>
 
   <main>
-    <section id="about" class="about">
-      <div class="about-content">
-        <img src="" alt="Imagem">
-        <div>
-          <h2>Sobre Nós</h2>
-          <p>Somos uma empresa dedicada a segurança...</p>
-        </div>
+
+  <!-- SOBRE -->
+  <section class="about section-wrapper">
+    <div class="about-content">
+      <img src="../style/images/about-img.jpg" alt="Imagem">
+      <div>
+        <h2>Sobre Nós</h2>
+        <p>Somos uma empresa dedicada à segurança. Atuamos com tecnologia de ponta, vigilância especializada e soluções customizadas para garantir a tranquilidade de nossos clientes 24 horas por dia.</p>
       </div>
-    </section>
+    </div>
+  </section>
 
-   <section id="acessos" class="acessos">
-  <h2>Acessos Rápidos</h2>
+
+
+  <!-- ACESSOS -->
+  <section class="acessos section-wrapper alt">
+    <h2>Acessos Rápidos</h2>
     <div class="cards">
-        <a href="#" class="card">Relatórios de Rondas</a>
-        <a href="#" class="card">Ocorrências</a>
-        <a href="#" class="card">Pagamentos</a>
-        <a href="#" class="card">Status do Alarme</a>
-        <a href="#" class="card">Solicitar Suporte</a>
-        <a href="#" class="card">Histórico dos Vigilantes</a>
-        </div>
-    </section>
+      <a href="#" class="card">Relatórios de Rondas</a>
+      <a href="#" class="card">Ocorrências</a>
+      <a href="#" class="card">Pagamentos</a>
+      <a href="#" class="card">Status do Alarme</a>
+      <a href="#" class="card">Solicitar Suporte</a>
+      <a href="#" class="card">Histórico dos Vigilantes</a>
+    </div>
+  </section>
 
-    <section id="contato" class="contato">
-      <h2>Entre em Contato</h2>
-      <form>
-        <input type="text" placeholder="Seu nome">
-        <input type="email" placeholder="Seu e-mail">
-        <textarea placeholder="Mensagem"></textarea>
-        <button type="submit">Enviar</button>
-      </form>
-    </section>
-  </main>
+
+  <!-- CONTATO -->
+  <section class="contato section-wrapper">
+    <h2>Entre em Contato</h2>
+    <form>
+      <input type="text" placeholder="Seu nome">
+      <input type="email" placeholder="Seu e-mail">
+      <textarea placeholder="Mensagem"></textarea>
+      <button type="submit">Enviar</button>
+    </form>
+  </section>
+
+</main>
 
   <footer>
     <p>&copy; 2025 Segurança</p>
