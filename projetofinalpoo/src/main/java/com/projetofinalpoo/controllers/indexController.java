@@ -1,4 +1,4 @@
-package com.projetofinalpoo;
+package com.projetofinalpoo.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

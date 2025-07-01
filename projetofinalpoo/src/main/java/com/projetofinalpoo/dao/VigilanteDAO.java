@@ -105,6 +105,40 @@ public class VigilanteDAO {
         }
     }
 
+    public Vigilante buscarPeloLoginSenha(String login, String senha) {
+        String sql = "SELECT * FROM \"Vigilante\" WHERE \"Login\" = ? AND \"Senha\" = ?";
+        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, login);
+            stmt.setString(2, senha);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Vigilante(
+                    rs.getString("Login"),
+                    rs.getString("Senha"),
+                    rs.getString("Turno"),
+                    rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
+                    rs.getDouble("Remuneracao"),
+                    rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
+                    rs.getString("Fone"),
+                    rs.getString("Email"),
+                    rs.getString("FoneContato"),
+                    rs.getString("Role")
+                );
+            } else {
+                System.out.println("Vigilante nao encontrado");
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar vigilante: " + e.getMessage());
+            return null;
+        }
+    }
+
     public Vigilante buscarPeloLogin(String login) {
         String sql = "SELECT * FROM \"Vigilante\" WHERE \"Login\" = ?";
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

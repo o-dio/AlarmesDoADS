@@ -1,107 +1,55 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns="http://thymeleaf.org"
-                   xmlns:layaout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to right, #667eea, #764ba2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .login-container {
-      background-color: #ffffff;
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 360px;
-    }
-
-    .login-container h2 {
-      margin-bottom: 24px;
-      text-align: center;
-      color: #333;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      color: #555;
-      font-weight: 500;
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 14px;
-      transition: border-color 0.3s;
-    }
-
-    input[type="text"]:focus,
-    input[type="password"]:focus {
-      border-color: #667eea;
-      outline: none;
-    }
-
-    .login-button {
-      width: 100%;
-      padding: 12px;
-      background-color: #667eea;
-      border: none;
-      color: #fff;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .login-button:hover {
-      background-color: #5a67d8;
-    }
-
-    .footer-text {
-      margin-top: 16px;
-      text-align: center;
-      font-size: 14px;
-      color: #888;
-    }
-  </style>
+  <title>Login - Cliente e Vigilante</title>
+  <link rel="stylesheet" href="./style/css/styleLogin.css" />
 </head>
 <body>
-  <div class="login-container">
-    <h2>Login</h2>
-    <form action="#" method="POST">
-      <div class="form-group">
-        <label for="login">Usuário</label>
-        <input type="text" id="login" name="login" value="" required />
-      </div>
-      <div class="form-group">
-        <label for="password">Senha</label>
-        <input type="password" id="password" name="password" value="" required />
-      </div>
-      <button type="submit" class="login-button">Entrar</button>
-    </form>
-    <div class="footer-text">Esqueceu a senha? Contate o suporte.</div>
+  <div class="login-wrapper">
+    <div class="login-box">
+      <h2>Login Cliente</h2>
+      <!-- Inputs visiveis -->
+      <input id="nomeCliente" type="text" placeholder="Usuário do Cliente" />
+      <input id="senhaCliente" type="password" placeholder="Senha" />
+      <button onclick="submitCliente()">Entrar</button>
+
+      <!-- Form escondido para envio -->
+      <form id="loginFormCliente" action="/login" method="post" style="display:none;">
+        <input type="hidden" name="nome" id="hiddenNomeCliente" />
+        <input type="hidden" name="senha" id="hiddenSenhaCliente" />
+      </form>
+    </div>
+
+    <div class="login-box">
+      <h2>Login Vigilante</h2>
+      <!-- Inputs visiveis -->
+      <input id="nomeVigilante" type="text" placeholder="Usuário do Vigilante" />
+      <input id="senhaVigilante" type="password" placeholder="Senha" />
+      <button onclick="submitVigilante()">Entrar</button>
+
+      <!-- Form escondido para envio -->
+      <form id="loginFormVigilante" action="/login" method="post" style="display:none;">
+        <input type="hidden" name="nome" id="hiddenNomeVigilante" />
+        <input type="hidden" name="senha" id="hiddenSenhaVigilante" />
+      </form>
+    </div>
   </div>
+
+  <script>
+    function submitCliente() {
+      document.getElementById('hiddenNomeCliente').value = document.getElementById('nomeCliente').value;
+      document.getElementById('hiddenSenhaCliente').value = document.getElementById('senhaCliente').value;
+
+      document.getElementById('loginFormCliente').submit();
+    }
+
+    function submitVigilante() {
+      document.getElementById('hiddenNomeVigilante').value = document.getElementById('nomeVigilante').value;
+      document.getElementById('hiddenSenhaVigilante').value = document.getElementById('senhaVigilante').value;
+
+      document.getElementById('loginFormVigilante').submit();
+    }
+  </script>
 </body>
 </html>

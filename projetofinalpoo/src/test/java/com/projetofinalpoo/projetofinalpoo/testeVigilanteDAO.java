@@ -35,6 +35,13 @@ public class testeVigilanteDAO {
         logger.info("\n\n==== Fim ====\n");
     }
 
+    public void buscarPeloLoginSenha() {
+        logger.info("\n\n==== Inicio teste buscar vigilante Pelo Login e Senha ====\n");
+        Vigilante vigilante = vigilanteDao.buscarPeloLoginSenha("fabio.silva", "1234");
+        System.out.println(vigilante.getLogin());
+        logger.info("\n\n==== Fim ====\n");
+    }
+
     public void atualizar() {
         logger.info("\n\n==== Inicio teste atualizar vigilante ====\n");
         try {

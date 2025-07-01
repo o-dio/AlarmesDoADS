@@ -97,6 +97,37 @@ public class ClienteDAO {
         }
     }
 
+    public Cliente buscarPeloLoginSenha(String login, String senha) {
+        String sql = "SELECT * FROM \"Cliente\" WHERE \"Login\" = ? AND \"Senha\" = ?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, login);
+            stmt.setString(2, senha);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Cliente findClient = new Cliente(
+                    rs.getString("Login"),
+                    rs.getString("Senha"),
+                    rs.getString("CPF"),
+                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
+                    rs.getString("Fone"),
+                    rs.getString("Email"),
+                    rs.getString("FoneContato"),
+                    rs.getString("Role")
+                );
+                return findClient;
+            } else {
+                System.out.println("Cliente nao encontrado");
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar cliente: " + e.getMessage());
+            return null;
+        }
+    }
+
     public Cliente buscarPeloCpf(String cpf) {
         String sql = "SELECT * FROM \"Cliente\" WHERE \"CPF\" = ?";
 

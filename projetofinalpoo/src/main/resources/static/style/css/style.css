@@ -1,0 +1,183 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #121212;
+  font-family: 'Segoe UI', sans-serif;
+  color: #f1f1f1;
+}
+
+nav {
+  background-color: #1f1f1f;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+nav .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #f9a825;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+nav ul li a {
+  color: #f1f1f1;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+nav ul li a:hover {
+  color: #f9a825;
+}
+
+header {
+  padding: 80px 40px;
+  background: linear-gradient(to right, #1c1c1c, #2a2a2a);
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #f9a825;
+}
+
+header p {
+  font-size: 1.2rem;
+  color: #ccc;
+}
+
+main {
+  padding: 60px 40px;
+}
+
+.about-content {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.about img {
+  max-width: 300px;
+  border-radius: 10px;
+}
+
+.about h2 {
+  margin-bottom: 10px;
+  color: #f9a825;
+}
+
+.about p {
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.acessos {
+  margin-top: 60px;
+  text-align: center;
+}
+
+.acessos h2 {
+  margin-bottom: 20px;
+  color: #f9a825;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card {
+  background-color: #1f1f1f;
+  padding: 30px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #fff;
+  flex: 1 1 calc(25% - 20px); 
+  min-width: 220px;
+  max-width: 250px;
+  text-align: center;
+  font-weight: 500;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.card:hover {
+  background-color: #f9a825;
+  color: #000;
+  transform: translateY(-5px);
+}
+
+
+.contato {
+  margin-top: 80px;
+  text-align: center;
+}
+
+.contato h2 {
+  margin-bottom: 20px;
+  color: #f9a825;
+}
+
+.contato form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 0 auto;
+  gap: 15px;
+}
+
+.contato input, .contato textarea {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+.contato textarea {
+  height: 120px;
+  resize: none;
+}
+
+.contato button {
+  background-color: #f9a825;
+  color: #000;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.contato button:hover {
+  background-color: #f57f17;
+}
+
+footer {
+  margin-top: 60px;
+  background-color: #1f1f1f;
+  text-align: center;
+  padding: 20px;
+  color: #aaa;
+}
