@@ -11,12 +11,17 @@ public class Trajeto {
     private int idRota;
 
     //Construtor
-    public Trajeto(String dataIni, String dataFim, int idVigilante, int idRota) {
-        this.dataIni = LocalDate.parse(dataIni, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+  public Trajeto(String dataIni, String dataFim, int idVigilante, int idRota) {
+    this.dataIni = LocalDate.parse(dataIni, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    if (dataFim != null) {
         this.dataFim = LocalDate.parse(dataFim, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        this.idVigilante = idVigilante;
-        this.idRota = idRota;
+    } else {
+        this.dataFim = null;
     }
+    this.idVigilante = idVigilante;
+    this.idRota = idRota;
+}
+
 
     //Metodos
     public LocalDate getDataIni() {

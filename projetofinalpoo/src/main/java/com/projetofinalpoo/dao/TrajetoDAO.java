@@ -35,11 +35,10 @@ public class TrajetoDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Trajeto t = new Trajeto(
-                    rs.getDate("dataIni").toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    rs.getDate("dataFim").toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    rs.getInt("idVigilante"),
-                    rs.getInt("idRota")
-                );
+                        rs.getDate("DataIni").toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        rs.getDate("DataFim").toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        rs.getInt("idVigilante"),
+                        rs.getInt("idRota"));
                 trajetos.add(t);
             }
             return trajetos;
@@ -51,7 +50,7 @@ public class TrajetoDAO {
 
     public void atualizar(Trajeto trajeto, String dataIniOld, String dataFimOld, int idVigilanteOld, int idRotaOld) {
         String sql = "UPDATE \"Trajeto\" SET \"dataIni\" = ?, \"dataFim\" = ?, \"idVigilante\" = ?, \"idRota\" = ? " +
-                     "WHERE \"dataIni\" = ? AND \"dataFim\" = ? AND \"idVigilante\" = ? AND \"idRota\" = ?";
+                "WHERE \"dataIni\" = ? AND \"dataFim\" = ? AND \"idVigilante\" = ? AND \"idRota\" = ?";
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, trajeto.getDataIni().format(formatter));
@@ -81,4 +80,31 @@ public class TrajetoDAO {
             System.out.println("Erro ao deletar trajeto: " + e.getMessage());
         }
     }
+
+    // Buscar login do vigilante e rota para acrescentar dinamicamente na interface
+    //-----------------------------------------------------------------------------
+    public ArrayList<Trajeto> buscarPorLoginVigilante(String login) {
+        String sql = "SELECT t.* FROM \"Trajeto\" t JOIN \"Vigilante\" v ON t.\"IdVigilante\" = v.id WHERE v.\"Login\" = ?";
+        ArrayList<Trajeto> trajetos = new ArrayList<>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, login);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Trajeto t = new Trajeto(
+                        rs.getDate("DataIni").toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                        rs.getDate("DataFim") != null
+                                ? rs.getDate("DataFim").toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                                : null,
+                        rs.getInt("IdVigilante"),
+                        rs.getInt("IdRota"));
+                trajetos.add(t);
+            }
+            return trajetos;
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar trajetos por login vigilante: " );
+            return new ArrayList<>();         }
+    }
+
+    // -----------------------------------------------------------------------------
 }

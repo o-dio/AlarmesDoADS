@@ -1,5 +1,5 @@
 package com.projetofinalpoo.controllers;
-
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,32 +26,22 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String formLogin(@RequestParam String nome, 
-							@RequestParam String senha, 
-							@RequestParam String role,
-							HttpSession session) {	
-		System.out.println(role);
-		if(role.equals("cliente")) {
-			ClienteDAO clienteDao = new ClienteDAO();
-			Cliente findCliente = clienteDao.buscarPeloLoginSenha(nome, senha);
-			if(findCliente != null) {
-				session.setAttribute("usuarioLogado", findCliente);
-				session.setAttribute("tipo", "cliente");
-				return "redirect:/";
-			}
-		} else if(role.equals("vigilante")) {
+	public String formLogin(@RequestParam String nome, @RequestParam String senha) {
+		ClienteDAO clienteDao = new ClienteDAO();
+		Cliente findCliente = clienteDao.buscarPeloLoginSenha(nome, senha);
+
+		if(findCliente != null) {
+            return "redirect:/";
+        } else {
 			VigilanteDAO vigilanteDao = new VigilanteDAO();
 			Vigilante findVigilante = vigilanteDao.buscarPeloLoginSenha(nome, senha);
+
 			if(findVigilante != null) {
-				session.setAttribute("usuarioLogado", findVigilante);
-				session.setAttribute("tipo", "vigilante");
 				return "redirect:/";
+			} else {
+				return "login";
 			}
-		} else if(role == "admin") {
-			
-		}
-			
-		return "login";
+        }
     }
 }
 

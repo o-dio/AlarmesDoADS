@@ -32,11 +32,10 @@ public class RotaDAO {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Rota r = new Rota(
-                    rs.getString("nome"),
-                    rs.getString("bairro"),
-                    rs.getString("descricao"),
-                    rs.getString("observacao")
-                );
+                        rs.getString("nome"),
+                        rs.getString("bairro"),
+                        rs.getString("descricao"),
+                        rs.getString("observacao"));
                 rotas.add(r);
             }
             return rotas;
@@ -46,6 +45,31 @@ public class RotaDAO {
         }
     }
 
+    // func para buscar um id especifico, ao inves de todos
+    //------------------------------------------------------------------------
+    public Rota buscarPorId(int id) {
+        String sql = "SELECT * FROM \"Rota\" WHERE id = ?";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Rota(
+                        rs.getString("nome"),
+                        rs.getString("bairro"),
+                        rs.getString("descricao"),
+                        rs.getString("observacao"));
+
+            }
+            return null;
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar rota por id: " + e.getMessage());
+            return null;
+        }
+    }
+    //------------------------------------------------------------------------
+    
     public void atualizar(Rota rota) {
         String sql = "UPDATE \"Rota\" SET \"bairro\" = ?, \"descricao\" = ?, \"observacao\" = ? WHERE \"nome\" = ?";
         try {
