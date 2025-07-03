@@ -31,7 +31,7 @@
           <div class="dropdown-menu" id="dropdown">
             <a href="#">Meu Perfil</a>
             <a href="#">Configurações</a>
-            <a href="#">Sair</a>
+            <a href="/logout">Sair</a>
           </div>
         </div>
       </section>
@@ -81,13 +81,14 @@
   <!-- CONTATO -->
   <section id="contato" class="contato section-wrapper">
     <h2>Entre em Contato</h2>
-    <form>
-      <input type="text" placeholder="Seu nome">
-      <input type="email" placeholder="Seu e-mail">
-      <textarea placeholder="Mensagem"></textarea>
+    <form method="POST" action="/enviarEmail">
+      <input type="text" name="nome" placeholder="Seu nome" required>
+      <input type="email" name="email" placeholder="Seu e-mail" required>
+      <textarea name="mensagem" placeholder="Mensagem" required></textarea>
       <button type="submit">Enviar</button>
     </form>
   </section>
+  
 
 </main>
 
@@ -118,24 +119,6 @@
       link.addEventListener("click", () => {
         document.querySelector(".navbar").classList.remove("active");
       });
-    });
-
-    // Enviar Email
-    emailjs.init('karem75749@kimdyn.com');
-
-    const form = document.querySelector('form');
-
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      emailjs.sendForm('SEU_SERVICE_ID', 'SEU_TEMPLATE_ID', this)
-        .then(() => {
-          alert('Mensagem enviada com sucesso!');
-          form.reset();
-        }, (error) => {
-          alert('Erro ao enviar a mensagem, tente novamente.');
-          console.error(error);
-        });
     });
   </script>
 </body>
