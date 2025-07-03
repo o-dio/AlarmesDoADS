@@ -13,8 +13,6 @@ CREATE TABLE "Admin" (
 	id SERIAL,
 	"Login" VARCHAR(256) NOT NULL UNIQUE,
 	"Senha" VARCHAR(256) NOT NULL,
-	"Role" CHAR NOT NULL,
-	CONSTRAINT role_check_admin CHECK ("Role" = 'A'),
 	CONSTRAINT admin_pk PRIMARY KEY (id)
 );
 
@@ -27,9 +25,7 @@ CREATE TABLE "Cliente" (
 	"Fone" CHAR(11),
 	"Email" VARCHAR(256),
 	"FoneContato" CHAR(11),
-	"Role" CHAR NOT NULL,
-	CONSTRAINT cliente_pk PRIMARY KEY (id),
-	CONSTRAINT role_check_cli CHECK ("Role" = 'C')
+	CONSTRAINT cliente_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE "Endereco" (
@@ -59,11 +55,9 @@ CREATE TABLE "Vigilante" (
 	"Fone" CHAR(11),
 	"Email" VARCHAR(256),
 	"FoneContato" CHAR(11),
-	"Role" CHAR NOT NULL,
 	"IdEndereco" INT,
 	CONSTRAINT vigilante_pk PRIMARY KEY (id),
 	CONSTRAINT turno_check CHECK ("Turno" = 'D' OR "Turno" = 'N'),
-	CONSTRAINT role_check_vigi CHECK ("Role" = 'V'),
 	CONSTRAINT vigilante_fk FOREIGN KEY ("IdEndereco")
 		REFERENCES "Endereco"(id)
 		ON UPDATE CASCADE
@@ -155,15 +149,15 @@ CREATE TABLE "Ocorrencia" (
 		ON DELETE SET NULL
 );
 
-INSERT INTO "Admin" ("Login", "Senha", "Role") VALUES
-	('teste', 'teste', 'A');
+INSERT INTO "Admin" ("Login", "Senha") VALUES
+	('teste', 'teste');
 
-INSERT INTO "Cliente" ("Login", "Senha", "CPF", "DataNasc", "Fone", "Email", "FoneContato", "Role") VALUES
-	('cliente1', 'senha1', '86705321984', '1988-10-14', '11945678234', 'cliente1@email.com', '11932147890', 'C'),
-	('cliente2', 'senha2', '25387143921', '1995-07-22', '11998765432', 'cliente2@email.com', '11987654321', 'C'),
-	('cliente3', 'senha3', '53417896421', '2001-03-12', '11976543210', 'cliente3@email.com', '11965432109', 'C'),
-	('cliente4', 'senha4', '64820913579', '1982-12-03', '11912345678', 'cliente4@email.com', '11943215678', 'C'),
-	('cliente5', 'senha5', '15932784610', '1999-05-19', '11956473829', 'cliente5@email.com', '11993827164', 'C');
+INSERT INTO "Cliente" ("Login", "Senha", "CPF", "DataNasc", "Fone", "Email", "FoneContato") VALUES
+	('cliente1', 'senha1', '86705321984', '1988-10-14', '11945678234', 'cliente1@email.com', '11932147890'),
+	('cliente2', 'senha2', '25387143921', '1995-07-22', '11998765432', 'cliente2@email.com', '11987654321'),
+	('cliente3', 'senha3', '53417896421', '2001-03-12', '11976543210', 'cliente3@email.com', '11965432109'),
+	('cliente4', 'senha4', '64820913579', '1982-12-03', '11912345678', 'cliente4@email.com', '11943215678'),
+	('cliente5', 'senha5', '15932784610', '1999-05-19', '11956473829', 'cliente5@email.com', '11993827164');
 
 INSERT INTO "Endereco" ("Rua", "Numero", "Complemento", "Bairro", "Cidade", "Estado", "IdCliente") VALUES
 	('Rua 1', 101, 'Apto 10', 'Bairro 1', 'Cidade 1', 'SP', 1),
@@ -172,10 +166,10 @@ INSERT INTO "Endereco" ("Rua", "Numero", "Complemento", "Bairro", "Cidade", "Est
 	('Rua 4', 404, 'Apto 40', 'Bairro 4', 'Cidade 4', 'SP', 4),
 	('Rua 5', 505, 'Apto 50', 'Bairro 5', 'Cidade 5', 'SP', 5);
 
-INSERT INTO "Vigilante" ("Login", "Senha", "Turno", "CargaHoraria", "Remuneracao", "DataContratacao", "Fone", "Email", "FoneContato", "Role", "IdEndereco") VALUES
-	('vigilante1', 'senhavig1', 'D', '08:00:00', 2750.50, '2018-04-15', '11956473829', 'vig1@empresa.com', '11993827164', 'V', 1),
-	('vigilante2', 'senhavig2', 'N', '10:00:00', 3200.75, '2020-11-22', '11912348765', 'vig2@empresa.com', '11976543210', 'V', 2),
-	('vigilante3', 'senhavig3', 'D', '12:00:00', 4100.00, '2017-07-30', '11987654321', 'vig3@empresa.com', '11965432109', 'V', 3);
+INSERT INTO "Vigilante" ("Login", "Senha", "Turno", "CargaHoraria", "Remuneracao", "DataContratacao", "Fone", "Email", "FoneContato", "IdEndereco") VALUES
+	('vigilante1', 'senhavig1', 'D', '08:00:00', 2750.50, '2018-04-15', '11956473829', 'vig1@empresa.com', '11993827164', 1),
+	('vigilante2', 'senhavig2', 'N', '10:00:00', 3200.75, '2020-11-22', '11912348765', 'vig2@empresa.com', '11976543210', NULL),
+	('vigilante3', 'senhavig3', 'D', '12:00:00', 4100.00, '2017-07-30', '11987654321', 'vig3@empresa.com', '11965432109', 3);
 
 INSERT INTO "Rota" ("Nome", "Bairro", "Descricao", "Observacao") VALUES
 	('Rota 1', 'Bairro 1', 'Descrição da Rota 1', 'Observação da Rota 1'),
