@@ -2,77 +2,124 @@ package com.projetofinalpoo.controllers;
 
 import com.projetofinalpoo.dao.TrajetoDAO;
 import com.projetofinalpoo.dao.RotaDAO;
+import com.projetofinalpoo.dao.VigilanteDAO;
 import com.projetofinalpoo.models.Trajeto;
+import com.projetofinalpoo.models.Vigilante;
 import com.projetofinalpoo.models.Rota;
 
 import jakarta.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class RondaController {
+    private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-    @GetMapping("/rondas")
-    public String exibirRondas(HttpSession session, Model model) {
-        // pEGA LOGIN DO VIGILANTE
-        String loginVigilante = (String) session.getAttribute("loginVigilante");
-
-        // REDIRECIONA DE VOLTA
-        if (loginVigilante == null) {
+    @RequestMapping("/rondas/checkin")
+    public String realizarCheckin(@RequestParam("idRota") int idRota, HttpSession session) {
+        Vigilante vigilante = (Vigilante) session.getAttribute("usuarioLogado");
+        if (vigilante == null) {
             return "redirect:/login";
         }
 
-        TrajetoDAO trajetoDAO = new TrajetoDAO();
-        RotaDAO rotaDAO = new RotaDAO();
+        int idVigilante = new VigilanteDAO().buscarIdPorLogin(vigilante.getLogin());
 
-        // Trajetos ligados ao vigilante logado
-        ArrayList<Trajeto> trajetos = trajetoDAO.buscarPorLoginVigilante(loginVigilante);
-        System.out.println("Trajetos encontrados: " + trajetos.size());
-
-        List<RondaViewModel> rondas = new ArrayList<>();
-
-        for (Trajeto t : trajetos) {
-            Rota rota = rotaDAO.buscarPorId(t.getIdRota());
-            if (rota != null) {
-                String enderecoCompleto = rota.getNome() + ", " + rota.getBairro(); 
-                rondas.add(new RondaViewModel(
-                        t.getDataIni().format(formatter),
-                        t.getDataFim() != null ? t.getDataFim().format(formatter) : null,
-                        rota.getNome(),
-                        rota.getBairro(),
-                        rota.getDescricao(),
-                        t.getDataFim() == null ? "Em andamento" : "Finalizada",
-                        enderecoCompleto 
-                ));
-
-            } else {
-                System.out.println("nao encontrada");
-            }
-        }
-        model.addAttribute("rondas", rondas);
-        return "rondas"; 
+        Trajeto novo = new Trajeto();
+        novo.setIdRota(idRota);
+        novo.setIdVigilante(idVigilante);
+        novo.setDataIni(LocalDate.now());
+        new TrajetoDAO().cadastrar(novo);
+        return "redirect:/rondas";
     }
 
-    // Classe interna Ronnda view para uso do Thymeleaf, basicamente trajeto/rota
-    public static class RondaViewModel {
-        private String dataIni;
-        private String dataFim;
-        private String local;
-        private String bairro;
-        private String descricao;
-        private String status;
-        private String enderecoCompleto;
+    @RequestMapping("/rondas/checkout")
+    public String realizarCheckout(@RequestParam("idRota") int idRota, HttpSession session) {
+        Vigilante vigilante = (Vigilante) session.getAttribute("usuarioLogado");
+        if (vigilante == null) {
+            return "redirect:/login";
+        }
 
-        public RondaViewModel(String dataIni, String dataFim, String local, String bairro, String descricao,
-                String status, String enderecoCompleto) {
+        int idVigilante = new VigilanteDAO().buscarIdPorLogin(vigilante.getLogin());
+
+        TrajetoDAO trajDao = new TrajetoDAO();
+
+        Trajeto trajetoEmAndamento = trajDao.buscarTrajetoPorVigilanteERota(idVigilante, idRota);
+        
+        if (trajetoEmAndamento != null) {
+            trajetoEmAndamento.setDataFim(LocalDate.now());
+            trajDao.atualizarDataFim(trajetoEmAndamento); 
+        } else {
+            System.out.println("Nenhum trajeto aberto encontrado para checkout.");
+        }
+
+        return "redirect:/rondas";
+    }
+
+    @RequestMapping("/rondas")
+    public String exibirRondas(HttpSession session, Model model) {
+        Vigilante vigilante = (Vigilante) session.getAttribute("usuarioLogado");
+        if (vigilante == null) {
+            return "redirect:/login";
+        }
+
+        int idVigilante = new VigilanteDAO()
+                .buscarIdPorLogin(vigilante.getLogin());
+
+        TrajetoDAO trajDao = new TrajetoDAO();
+        ArrayList<Trajeto> trajetos = trajDao.buscarPorIdVigilante(idVigilante);
+
+        List<RondaViewModel> rondas = new ArrayList<>();
+        boolean emRonda = false;
+        String enderecoRondaAtual = null;
+        RotaDAO rotaDAO = new RotaDAO();
+
+        for (Trajeto t : trajetos) {
+           
+            Rota r = rotaDAO.buscarPorId(t.getIdRota());
+            if (r == null)
+                continue;
+            String endereco = r.getNome() + " – " + r.getBairro();
+
+            if (t.getDataFim() == null && !emRonda) {
+                emRonda = true;
+                enderecoRondaAtual = endereco;
+            }
+
+            rondas.add(new RondaViewModel(
+                    t.getDataIni().format(fmt),
+                    t.getDataFim() != null ? t.getDataFim().format(fmt) : null,
+                    r.getNome(),
+                    r.getBairro(),
+                    r.getDescricao(),
+                    t.getDataFim() == null ? "Em andamento" : "Finalizada",
+                    endereco,
+                    t.getIdRota()));
+        }
+        List<Rota> rotasDisponiveis = rotaDAO.buscarTodos();
+        model.addAttribute("rotasDisponiveis", rotasDisponiveis);
+
+        model.addAttribute("rondas", rondas);
+        model.addAttribute("emRonda", emRonda);
+        model.addAttribute("enderecoRondaAtual", enderecoRondaAtual);
+
+        return "rondas";
+    }
+
+    // Ronda 
+    public static class RondaViewModel {
+        private String dataIni, dataFim, local, bairro, descricao, status, enderecoCompleto;
+        private int idRota;
+
+        public RondaViewModel(String dataIni, String dataFim,
+                String local, String bairro, String descricao,
+                String status, String enderecoCompleto, int idRota) {
             this.dataIni = dataIni;
             this.dataFim = dataFim;
             this.local = local;
@@ -80,7 +127,9 @@ public class RondaController {
             this.descricao = descricao;
             this.status = status;
             this.enderecoCompleto = enderecoCompleto;
+            this.idRota = idRota;
         }
+
         public String getDataIni() {
             return dataIni;
         }
@@ -107,6 +156,10 @@ public class RondaController {
 
         public String getEnderecoCompleto() {
             return enderecoCompleto;
+        }
+
+        public int getIdRota() {
+            return idRota;
         }
     }
 }

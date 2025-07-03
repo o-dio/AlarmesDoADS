@@ -11,9 +11,8 @@ public class RotaDAO {
     private Connection conn = new ConexaoDAO().conectar();
 
     public void cadastrar(Rota rota) {
-        String sql = "INSERT INTO \"Rota\" (\"nome\", \"bairro\", \"descricao\", \"observacao\") VALUES (?, ?, ?, ?)";
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        String sql = "INSERT INTO \"Rota\" (\"Nome\", \"Bairro\", \"Descricao\", \"Observacao\") VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, rota.getNome());
             stmt.setString(2, rota.getBairro());
             stmt.setString(3, rota.getDescricao());
@@ -27,53 +26,46 @@ public class RotaDAO {
     public ArrayList<Rota> buscarTodos() {
         String sql = "SELECT * FROM \"Rota\"";
         ArrayList<Rota> rotas = new ArrayList<>();
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Rota r = new Rota(
-                        rs.getString("nome"),
-                        rs.getString("bairro"),
-                        rs.getString("descricao"),
-                        rs.getString("observacao"));
-                rotas.add(r);
+                int id        = rs.getInt("id");
+                String nome   = rs.getString("Nome");
+                String bairro = rs.getString("Bairro");
+                String desc   = rs.getString("Descricao");
+                String obs    = rs.getString("Observacao");
+                rotas.add(new Rota(id, nome, bairro, desc, obs));
             }
-            return rotas;
         } catch (Exception e) {
             System.out.println("Erro ao buscar rotas: " + e.getMessage());
-            return null;
         }
+        return rotas;
     }
 
-    // func para buscar um id especifico, ao inves de todos
-    //------------------------------------------------------------------------
+    // Busca um id específico, ao invés de todos
     public Rota buscarPorId(int id) {
         String sql = "SELECT * FROM \"Rota\" WHERE id = ?";
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
                 return new Rota(
-                        rs.getString("nome"),
-                        rs.getString("bairro"),
-                        rs.getString("descricao"),
-                        rs.getString("observacao"));
-
+                    rs.getInt("id"),
+                    rs.getString("Nome"),
+                    rs.getString("Bairro"),
+                    rs.getString("Descricao"),
+                    rs.getString("Observacao")
+                );
             }
-            return null;
         } catch (Exception e) {
             System.out.println("Erro ao buscar rota por id: " + e.getMessage());
-            return null;
         }
+        return null;
     }
-    //------------------------------------------------------------------------
-    
+
     public void atualizar(Rota rota) {
-        String sql = "UPDATE \"Rota\" SET \"bairro\" = ?, \"descricao\" = ?, \"observacao\" = ? WHERE \"nome\" = ?";
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        String sql = "UPDATE \"Rota\" SET \"Bairro\" = ?, \"Descricao\" = ?, \"Observacao\" = ? WHERE \"Nome\" = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, rota.getBairro());
             stmt.setString(2, rota.getDescricao());
             stmt.setString(3, rota.getObservacao());
@@ -85,9 +77,8 @@ public class RotaDAO {
     }
 
     public void deletar(String nome) {
-        String sql = "DELETE FROM \"Rota\" WHERE \"nome\" = ?";
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        String sql = "DELETE FROM \"Rota\" WHERE \"Nome\" = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, nome);
             stmt.executeUpdate();
         } catch (Exception e) {

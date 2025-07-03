@@ -215,4 +215,19 @@ public class VigilanteDAO {
             System.out.println("Erro ao deletar vigilante: " + e.getMessage());
         }
     }
+    //metodo id
+    public int buscarIdPorLogin(String login) {
+    String sql = "SELECT id FROM \"Vigilante\" WHERE \"Login\" = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, login);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("id");
+        }
+    } catch (Exception e) {
+        System.out.println("Erro ao buscar ID do vigilante: " + e.getMessage());
+    }
+    return -1; 
+}
+
 }

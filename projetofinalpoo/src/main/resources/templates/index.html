@@ -18,6 +18,9 @@
           <a href="#">Inicio</a>
           <a href="#about">Sobre</a>
           <a href="#contato">Contato</a>
+          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
+          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
+          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
         </nav>
         <div class="menu-toggle" onclick="toggleMenu()">
           <i class="fas fa-bars"></i>
