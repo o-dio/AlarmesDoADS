@@ -12,14 +12,13 @@ public class AdminDAO {
 
     public void cadastrar(Admin admin) {
         String sql = "INSERT INTO \"Admin\" " +
-        "(\"Login\", \"Senha\", \"Role\")" +
-        "VALUES (?, ?, ?)";
+        "(\"Login\", \"Senha\")" +
+        "VALUES (?, ?)";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, admin.getLogin());
             stmt.setString(2, admin.getSenha());
-            stmt.setString(3, admin.getCargo());
 
             stmt.executeUpdate();
             System.out.println("Admin cadastrado com sucesso!");
@@ -39,8 +38,7 @@ public class AdminDAO {
             while (rs.next()) {
                 admins.add(new Admin(
                     rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("Role")
+                    rs.getString("Senha")
                 ));
             }
 
@@ -67,8 +65,7 @@ public class AdminDAO {
             if (rs.next()) {
                 Admin findAdmin = new Admin(
                     rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("Role")
+                    rs.getString("Senha")
                 );
                 return findAdmin;
             } else {
@@ -83,16 +80,14 @@ public class AdminDAO {
     public void atualizar(Admin oldAdmin, Admin newAdmin) {
         String sql = "UPDATE \"Admin\" SET " +
         "\"Login\" = ?, " +
-        "\"Senha\" = ?, " +
-        "\"Role\" = ? " +
+        "\"Senha\" = ? " +
         "WHERE \"Login\" = ?";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, newAdmin.getLogin());
             stmt.setString(2, newAdmin.getSenha());
-            stmt.setString(3, newAdmin.getCargo());
-            stmt.setString(4, oldAdmin.getLogin());
+            stmt.setString(3, oldAdmin.getLogin());
 
             int linhasAfetadas = stmt.executeUpdate();
 

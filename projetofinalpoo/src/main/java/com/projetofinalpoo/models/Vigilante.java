@@ -15,11 +15,10 @@ public class Vigilante {
     private String fone;
     private String email;
     private String foneContato;
-    private String role;
 
     //Construtor
     public Vigilante(String login, String senha, String turno, String cargaHoraria, double remuneracao,
-                     String dataContratacao, String fone, String email, String foneContato, String role) {
+                     String dataContratacao, String fone, String email, String foneContato) {
         this.login = login;
         this.senha = senha;
         this.turno = turno;
@@ -29,7 +28,6 @@ public class Vigilante {
         this.fone = fone;
         this.email = email;
         this.foneContato = foneContato;
-        this.role = role;
     }
 
     //Metodos
@@ -105,14 +103,6 @@ public class Vigilante {
         this.foneContato = foneContato;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -128,7 +118,6 @@ public class Vigilante {
         result = prime * result + ((fone == null) ? 0 : fone.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((foneContato == null) ? 0 : foneContato.hashCode());
-        result = prime * result + ((role == null) ? 0 : role.hashCode());
         return result;
     }
 
@@ -183,11 +172,6 @@ public class Vigilante {
                 return false;
         } else if (!foneContato.equals(other.foneContato))
             return false;
-        if (role == null) {
-            if (other.role != null)
-                return false;
-        } else if (!role.equals(other.role))
-            return false;
         return true;
     }
 
@@ -195,6 +179,6 @@ public class Vigilante {
     public String toString() {
         return "Vigilante [login=" + login + ", senha=" + senha + ", turno=" + turno + ", cargaHoraria=" + cargaHoraria
                 + ", remuneracao=" + remuneracao + ", dataContratacao=" + dataContratacao + ", fone=" + fone
-                + ", email=" + email + ", foneContato=" + foneContato + ", role=" + role + "]";
+                + ", email=" + email + ", foneContato=" + foneContato + "]";
     }
 }

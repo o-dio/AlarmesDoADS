@@ -14,8 +14,8 @@ public class ClienteDAO {
 
     public void cadastrar(Cliente cliente) {
         String sql = "INSERT INTO \"Cliente\" " +
-        "(\"Login\", \"Senha\", \"CPF\", \"DataNasc\", \"Fone\", \"Email\", \"FoneContato\", \"Role\")" +
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        "(\"Login\", \"Senha\", \"CPF\", \"DataNasc\", \"Fone\", \"Email\", \"FoneContato\")" +
+        "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -26,8 +26,6 @@ public class ClienteDAO {
             stmt.setString(5, cliente.getFone());
             stmt.setString(6, cliente.getEmail());
             stmt.setString(7, cliente.getFoneContato());
-            stmt.setString(8, cliente.getCargo());
-
             stmt.executeUpdate();
             System.out.println("Cliente cadastrado com sucesso!");
         } catch (Exception e) {
@@ -51,8 +49,7 @@ public class ClienteDAO {
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
                     rs.getString("Fone"),
                     rs.getString("Email"),
-                    rs.getString("FoneContato"),
-                    rs.getString("Role")
+                    rs.getString("FoneContato")
                 ));
             }
 
@@ -84,8 +81,7 @@ public class ClienteDAO {
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
                     rs.getString("Fone"),
                     rs.getString("Email"),
-                    rs.getString("FoneContato"),
-                    rs.getString("Role")
+                    rs.getString("FoneContato")
                 );
                 return findClient;
             } else {
@@ -114,8 +110,7 @@ public class ClienteDAO {
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
                     rs.getString("Fone"),
                     rs.getString("Email"),
-                    rs.getString("FoneContato"),
-                    rs.getString("Role")
+                    rs.getString("FoneContato")
                 );
                 return findClient;
             } else {
@@ -144,8 +139,7 @@ public class ClienteDAO {
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
                     rs.getString("Fone"),
                     rs.getString("Email"),
-                    rs.getString("FoneContato"),
-                    rs.getString("Role")
+                    rs.getString("FoneContato")
                 );
                 return findClient;
             } else {
@@ -167,8 +161,7 @@ public class ClienteDAO {
         "\"DataNasc\" = ?, " +
         "\"Fone\" = ?, " +
         "\"Email\" = ?, " +
-        "\"FoneContato\" = ?, " +
-        "\"Role\" = ? " +
+        "\"FoneContato\" = ? "+
         "WHERE \"CPF\" = ?";
 
         try {
@@ -180,8 +173,7 @@ public class ClienteDAO {
             stmt.setString(5, cliente.getFone());
             stmt.setString(6, cliente.getEmail());
             stmt.setString(7, cliente.getFoneContato());
-            stmt.setString(8, cliente.getCargo());
-            stmt.setString(9, cliente.getCpf());
+            stmt.setString(8, cliente.getCpf());
 
             int linhasAfetadas = stmt.executeUpdate();
 

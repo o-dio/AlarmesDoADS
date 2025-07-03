@@ -16,8 +16,8 @@ public class VigilanteDAO {
     public void cadastrar(Vigilante vigilante) {
         String sql = "INSERT INTO \"Vigilante\" " +
                 "(\"Login\", \"Senha\", \"Turno\", \"CargaHoraria\", \"Remuneracao\", " +
-                "\"DataContratacao\", \"Fone\", \"Email\", \"FoneContato\", \"Role\") " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "\"DataContratacao\", \"Fone\", \"Email\", \"FoneContato\") " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -30,7 +30,6 @@ public class VigilanteDAO {
             stmt.setString(7, vigilante.getFone());
             stmt.setString(8, vigilante.getEmail());
             stmt.setString(9, vigilante.getFoneContato());
-            stmt.setString(10, vigilante.getRole());
 
             stmt.executeUpdate();
             System.out.println("Vigilante cadastrado com sucesso!");
@@ -59,8 +58,7 @@ public class VigilanteDAO {
                     rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
                     rs.getString("Fone"),
                     rs.getString("Email"),
-                    rs.getString("FoneContato"),
-                    rs.getString("Role")
+                    rs.getString("FoneContato")
                 );
                 vigilantes.add(v);
             }
@@ -92,8 +90,7 @@ public class VigilanteDAO {
                     rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
                     rs.getString("Fone"),
                     rs.getString("Email"),
-                    rs.getString("FoneContato"),
-                    rs.getString("Role")
+                    rs.getString("FoneContato")
                 );
                 return v;
             } else {
@@ -126,8 +123,7 @@ public class VigilanteDAO {
                     rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
                     rs.getString("Fone"),
                     rs.getString("Email"),
-                    rs.getString("FoneContato"),
-                    rs.getString("Role")
+                    rs.getString("FoneContato")
                 );
             } else {
                 System.out.println("Vigilante nao encontrado");
@@ -159,8 +155,7 @@ public class VigilanteDAO {
                     rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
                     rs.getString("Fone"),
                     rs.getString("Email"),
-                    rs.getString("FoneContato"),
-                    rs.getString("Role")
+                    rs.getString("FoneContato")
                 );
             }
 
@@ -174,7 +169,7 @@ public class VigilanteDAO {
     public void atualizar(Vigilante oldVigilante, Vigilante newVigilante) {
         String sql = "UPDATE \"Vigilante\" SET " +
                 "\"Login\" = ?, \"Senha\" = ?, \"Turno\" = ?, \"CargaHoraria\" = ?, \"Remuneracao\" = ?, " +
-                "\"DataContratacao\" = ?, \"Fone\" = ?, \"Email\" = ?, \"FoneContato\" = ?, \"Role\" = ? " +
+                "\"DataContratacao\" = ?, \"Fone\" = ?, \"Email\" = ?, \"FoneContato\" = ? " +
                 "WHERE \"Login\" = ?";
 
         try {
@@ -188,8 +183,7 @@ public class VigilanteDAO {
             stmt.setString(7, newVigilante.getFone());
             stmt.setString(8, newVigilante.getEmail());
             stmt.setString(9, newVigilante.getFoneContato());
-            stmt.setString(10, newVigilante.getRole());
-            stmt.setString(11, oldVigilante.getLogin());
+            stmt.setString(10, oldVigilante.getLogin());
 
             int linhas = stmt.executeUpdate();
 

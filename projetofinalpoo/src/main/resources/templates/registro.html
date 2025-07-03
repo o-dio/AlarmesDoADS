@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registrar-se</title>
+  <link rel="stylesheet" href="./style/css/styleRegistro.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    .hidden {
+      display: none;
+    }
+
+    select {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      background-color: var(--input-bg);
+      color: var(--light-color);
+      border: 1px solid var(--border-color);
+      font-size: 1rem;
+    }
+
+    option {
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="register-wrapper">
+    <div class="register-box">
+      <h2>Cadastro</h2>
+      <form action="/registrar" method="post">
+        <!-- Campos comuns para Cliente e Vigilante -->
+        <input type="text" name="login" placeholder="Nome de usuário" required />
+        <input type="password" name="senha" placeholder="Senha" required />
+        <input type="email" name="email" placeholder="E-mail" required />
+        <input type="tel" name="fone" placeholder="Telefone" required />
+        <input type="tel" name="foneContato" placeholder="Telefone de Contato" />
+        
+        <!-- Role -->
+        <div class="role-selector">
+          <label><input type="radio" name="role" value="cliente" checked> Cliente</label>
+          <label><input type="radio" name="role" value="vigilante"> Vigilante</label>
+        </div>
+
+        <!-- Campos especificos de Cliente -->
+        <div id="cliente-fields">
+          <input type="text" name="cpf" placeholder="CPF" maxlength="11" required />
+          <input type="date" name="dataNasc" placeholder="Data de nascimento" required />
+        </div>
+
+        <!-- Campos especificos de Vigilante -->
+        <div id="vigilante-fields" class="hidden">
+          <label for="turno">Turno</label>
+          <select name="turno" required>
+            <option value="">-- Selecione --</option>
+            <option value="D">🌞 Diurno</option>
+            <option value="N">🌙 Noturno</option>
+          </select>
+
+          <label for="dataContratacao">Data de Contratação</label>
+          <input type="date" name="dataContratacao" required />
+        </div>
+
+        <button type="submit">Registrar</button>
+        <p class="login-link">Já tem conta? <a href="/login">Faça login</a></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const roleRadios = document.querySelectorAll('input[name="role"]');
+    const clienteFields = document.getElementById('cliente-fields');
+    const vigilanteFields = document.getElementById('vigilante-fields');
+
+    roleRadios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        const isCliente = radio.value === 'cliente';
+
+        //Mostra ou esconde os campos
+        clienteFields.classList.toggle('hidden', !isCliente);
+        vigilanteFields.classList.toggle('hidden', isCliente);
+
+        //Atualiza os atributos 'required' dos campos com base na role
+        document.querySelector('input[name="cpf"]').required = isCliente;
+        document.querySelector('input[name="dataNasc"]').required = isCliente;
+
+        document.querySelector('select[name="turno"]').required = !isCliente;
+        document.querySelector('input[name="dataContratacao"]').required = !isCliente;
+      });
+    });
+
+    //Executa no carregamento inicial para garantir consistencia
+    document.addEventListener('DOMContentLoaded', () => {
+      const selectedRole = document.querySelector('input[name="role"]:checked').value;
+      const isCliente = selectedRole === 'cliente';
+
+      clienteFields.classList.toggle('hidden', !isCliente);
+      vigilanteFields.classList.toggle('hidden', isCliente);
+
+      document.querySelector('input[name="cpf"]').required = isCliente;
+      document.querySelector('input[name="dataNasc"]').required = isCliente;
+
+      document.querySelector('select[name="turno"]').required = !isCliente;
+      document.querySelector('input[name="dataContratacao"]').required = !isCliente;
+    });
+
+  </script>
+</body>
+</html>

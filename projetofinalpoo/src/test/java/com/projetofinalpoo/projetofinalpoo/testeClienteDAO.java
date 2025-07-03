@@ -19,7 +19,7 @@ public class testeClienteDAO {
     public void cadastrar() {
 		logger.info("\n\n==== Inicio teste Cadastrar Cliente ====\n");
 		Cliente cliente = new Cliente("fabio.silva","senhaSegura123","01123456789","20/05/1990",
-									  "11988887777","joao.silva@email.com", "11999996666","C");
+									  "11988887777","joao.silva@email.com", "11999996666");
 		clienteDao.cadastrar(cliente);
 		logger.info("\n\n==== Fim ====\n");
     }
@@ -34,7 +34,7 @@ public class testeClienteDAO {
 	public void buscar() {
 		logger.info("\n\n==== Inicio teste buscar cliente ====\n");
 		Cliente cliente = new Cliente("fabio.silva","senhaSegura123","01123456789","20/05/1990",
-									  "11988887777","joao.silva@email.com", "11999996666","C");
+									  "11988887777","joao.silva@email.com", "11999996666");
 		Cliente findCliente= clienteDao.buscar(cliente);
 		System.out.println(findCliente.getLogin());
 		logger.info("\n\n==== Fim ====\n");
@@ -58,7 +58,7 @@ public class testeClienteDAO {
 	public void atualizar() {
 		logger.info("\n\n==== Inicio teste atualizar cliente ====\n");
 		Cliente cliente = new Cliente("fabio.silva", "senhaSegura123", "", "20/05/1990",
-									  "11988887777", "joao.silva@email.com", "11999996666", "C");
+									  "11988887777", "joao.silva@email.com", "11999996666");
 		System.out.println("Antes da atualizacao: " + clienteDao.buscarPeloCpf("01123456789").getLogin());
 		cliente.setLogin("paulao.silva");
 		clienteDao.atualizar(cliente);
@@ -70,7 +70,7 @@ public class testeClienteDAO {
 	public void deletarCliente() {
 		logger.info("\n\n==== Inicio teste deletar cliente ====\n");
 		Cliente cliente = new Cliente("fabio.silva", "senhaSegura123", "01123456789", "20/05/1990",
-									  "11988887777", "joao.silva@email.com", "11999996666", "C");
+									  "11988887777", "joao.silva@email.com", "11999996666");
 		try {
 			System.out.println("Cliente encontrado antes de deletar: " + clienteDao.buscarPeloCpf(cliente.getCpf()).getLogin());
 			clienteDao.deletar(cliente);

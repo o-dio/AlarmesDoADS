@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Administrador</title>
+  <link rel="stylesheet" href="../style/css/styleDashboard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <h1>Dashboard do Administrador</h1>
+      <p>Bem-vindo à central de comando</p>
+    </header>
+
+    <section class="dashboard-indicators">
+        <div class="card">
+            <i data-lucide="shield-check"></i>
+            <h3>Rondas</h3>
+            <p>132</p>
+        </div>
+        <div class="card">
+            <i data-lucide="alert-circle"></i>
+            <h3>Ocorrências</h3>
+            <p>48</p>
+        </div>
+        <div class="card">
+            <i data-lucide="alarm-clock"></i>
+            <h3>Alarmes</h3>
+            <p>7</p>
+        </div>
+        <div class="card">
+            <i data-lucide="inbox"></i>
+            <h3>Relatos</h3>
+            <p>15</p>
+        </div>
+    </section>
+
+    <section class="dashboard-shortcuts">
+      <h2>Atalhos Rápidos</h2>
+      <div class="shortcut-grid">
+        <a href="#">Gerenciar Rondas</a>
+        <a href="#">Ver Ocorrências</a>
+        <a href="#">Controle de Alarmes</a>
+        <a href="#">Relatos</a>
+        <a href="#">Painel de Usuários</a>
+      </div>
+    </section>
+
+    <section class="dashboard-logs">
+      <h2>Logs Recentes</h2>
+      <div class="logs-box">
+        <p>[20:14] Nova ocorrência registrada</p>
+        <p>[20:09] Alarme disparado na Zona 3</p>
+        <p>[19:57] Usuário 'joao_admin' realizou login</p>
+        <p>[19:41] Relato recebido via app móvel</p>
+        <p>[19:30] Ronda iniciada - Setor Leste</p>
+      </div>
+    </section>
+
+  </div>
+
+</body>
+<script>
+  lucide.createIcons();
+</script>
+
+</html>

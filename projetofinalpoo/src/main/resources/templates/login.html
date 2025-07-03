@@ -1,55 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Login - Cliente e Vigilante</title>
-  <link rel="stylesheet" href="./style/css/styleLogin.css" />
+  <meta charset="UTF-8">
+  <title>Login - Acesso</title>
+  <link rel="stylesheet" href="./style/css/styleLogin.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="login-wrapper">
     <div class="login-box">
-      <h2>Login Cliente</h2>
-      <!-- Inputs visiveis -->
-      <input id="nomeCliente" type="text" placeholder="Usuário do Cliente" />
-      <input id="senhaCliente" type="password" placeholder="Senha" />
-      <button onclick="submitCliente()">Entrar</button>
-
-      <!-- Form escondido para envio -->
-      <form id="loginFormCliente" action="/login" method="post" style="display:none;">
-        <input type="hidden" name="nome" id="hiddenNomeCliente" />
-        <input type="hidden" name="senha" id="hiddenSenhaCliente" />
-      </form>
-    </div>
-
-    <div class="login-box">
-      <h2>Login Vigilante</h2>
-      <!-- Inputs visiveis -->
-      <input id="nomeVigilante" type="text" placeholder="Usuário do Vigilante" />
-      <input id="senhaVigilante" type="password" placeholder="Senha" />
-      <button onclick="submitVigilante()">Entrar</button>
-
-      <!-- Form escondido para envio -->
-      <form id="loginFormVigilante" action="/login" method="post" style="display:none;">
-        <input type="hidden" name="nome" id="hiddenNomeVigilante" />
-        <input type="hidden" name="senha" id="hiddenSenhaVigilante" />
+      <h2>Login</h2>
+      <!--FAZER MENSAGEM DE ERRO, CASO LOGIN NAO FUNCIONE-->
+      <form id="loginFormCliente" action="/login" method="post">
+        <input name="nome" type="text" placeholder="Usuário" required />
+        <input name="senha" type="password" placeholder="Senha" required />
+        <div class="role-selector">
+          <label><input type="radio" name="role" value="cliente" checked> Cliente</label>
+          <label><input type="radio" name="role" value="vigilante"> Vigilante</label>
+          <label><input type="radio" name="role" value="admin"> Administrador</label>
+        </div>
+        <button type="submit">Entrar</button>
+        <p class="register-link">Não tem uma conta? <a href="/registro">Registrar-se</a></p>
       </form>
     </div>
   </div>
-
-  <script>
-    function submitCliente() {
-      document.getElementById('hiddenNomeCliente').value = document.getElementById('nomeCliente').value;
-      document.getElementById('hiddenSenhaCliente').value = document.getElementById('senhaCliente').value;
-
-      document.getElementById('loginFormCliente').submit();
-    }
-
-    function submitVigilante() {
-      document.getElementById('hiddenNomeVigilante').value = document.getElementById('nomeVigilante').value;
-      document.getElementById('hiddenSenhaVigilante').value = document.getElementById('senhaVigilante').value;
-
-      document.getElementById('loginFormVigilante').submit();
-    }
-  </script>
 </body>
 </html>
