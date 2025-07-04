@@ -3,15 +3,25 @@ package com.projetofinalpoo.models;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Representa um produto (ex: câmera, alarme, cerca elétrica) instalado em um endereço específico.
+ */
 public class Produto {
-    //Atributos
     private int id;
     private LocalDate dataInst;
     private LocalDate dataRet;
     private boolean defeito;
     private int idEndereco;
 
-    //Construtor
+    /**
+     * Construtor completo da classe Produto.
+     *
+     * @param id o identificador do produto
+     * @param dataInst a data de instalação no formato "dd/MM/yyyy" (pode ser nula ou vazia)
+     * @param dataRet a data de retirada no formato "dd/MM/yyyy" (pode ser nula ou vazia)
+     * @param defeito indica se o produto está com defeito
+     * @param idEndereco o ID do endereço onde o produto está/estava instalado
+     */
     public Produto(int id, String dataInst, String dataRet, boolean defeito, int idEndereco) {
         this.id = id;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -21,47 +31,101 @@ public class Produto {
         this.idEndereco = idEndereco;
     }
 
-    //Metodos
+    /**
+     * Retorna o identificador do produto.
+     *
+     * @return o id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Define o identificador do produto.
+     *
+     * @param id o novo id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Retorna a data de instalação do produto.
+     *
+     * @return a data de instalação
+     */
     public LocalDate getDataInst() {
         return dataInst;
     }
 
+    /**
+     * Define a data de instalação do produto.
+     *
+     * @param dataInst a nova data de instalação
+     */
     public void setDataInst(LocalDate dataInst) {
         this.dataInst = dataInst;
     }
 
+    /**
+     * Retorna a data de retirada do produto.
+     *
+     * @return a data de retirada
+     */
     public LocalDate getDataRet() {
         return dataRet;
     }
 
+    /**
+     * Define a data de retirada do produto.
+     *
+     * @param dataRet a nova data de retirada
+     */
     public void setDataRet(LocalDate dataRet) {
         this.dataRet = dataRet;
     }
 
+    /**
+     * Verifica se o produto está com defeito.
+     *
+     * @return {@code true} se estiver com defeito; {@code false} caso contrário
+     */
     public boolean isDefeito() {
         return defeito;
     }
 
+    /**
+     * Define o estado de defeito do produto.
+     *
+     * @param defeito {@code true} se estiver com defeito; {@code false} caso contrário
+     */
     public void setDefeito(boolean defeito) {
         this.defeito = defeito;
     }
 
+    /**
+     * Retorna o ID do endereço relacionado ao produto.
+     *
+     * @return o ID do endereço
+     */
     public int getIdEndereco() {
         return idEndereco;
     }
 
+    /**
+     * Define o ID do endereço relacionado ao produto.
+     *
+     * @param idEndereco o novo ID do endereço
+     */
     public void setIdEndereco(int idEndereco) {
         this.idEndereco = idEndereco;
     }
 
+    /**
+     * Gera o código hash do objeto Produto.
+     *
+     * @return o valor do hash
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -74,6 +138,12 @@ public class Produto {
         return result;
     }
 
+    /**
+     * Verifica se dois objetos Produto são iguais com base em seus atributos.
+     *
+     * @param obj o objeto a ser comparado
+     * @return {@code true} se forem iguais; caso contrário, {@code false}
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -102,10 +172,14 @@ public class Produto {
         return true;
     }
 
+    /**
+     * Retorna uma representação em string do produto.
+     *
+     * @return uma string com os dados do produto
+     */
     @Override
     public String toString() {
         return "Produto [id=" + id + ", dataInst=" + dataInst + ", dataRet=" + dataRet + ", defeito=" + defeito
                 + ", idEndereco=" + idEndereco + "]";
     }
-    
 }

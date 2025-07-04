@@ -1,12 +1,28 @@
 package com.projetofinalpoo.models;
 
-import java.security.NoSuchAlgorithmException;
-
+/**
+ * Interface que define os métodos básicos de um usuário do sistema.
+ */
 public interface Usuario {
 
-    public String getLogin();
+    /**
+     * Retorna o login do usuário.
+     *
+     * @return login como {@code String}
+     */
+    String getLogin();
 
-    public void setLogin(String login);
-    public void setSenha(String Senha) throws NoSuchAlgorithmException;
-    
+    /**
+     * Define o login do usuário.
+     *
+     * @param login novo login
+     */
+    void setLogin(String login);
+
+    /**
+     * Define a senha do usuário. A senha deve ser processada (ex: criptografada).
+     *
+     * @param senha nova senha em texto plano
+     */
+    void setSenha(String senha);
 }
