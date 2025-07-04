@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.Date;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.projetofinalpoo.controllers.OcorrenciaController.ProdutoMonitoradoViewModel;
 
 import com.projetofinalpoo.models.Produto;
 
@@ -111,6 +114,7 @@ public class ProdutoDAO {
 
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
+
             stmt.setInt(1, id);
 
             int linhas = stmt.executeUpdate();
@@ -124,4 +128,45 @@ public class ProdutoDAO {
             System.out.println("Erro ao deletar produto: " + e.getMessage());
         }
     }
+
+    public List<ProdutoMonitoradoViewModel> buscarProdutosComClienteEndereco() {
+    List<ProdutoMonitoradoViewModel> lista = new ArrayList<>();
+
+    String sql = "SELECT p.id AS produto_id, " +
+                 "c.\"Login\" AS cliente_nome, c.\"Fone\" AS cliente_telefone, " +
+                 "e.\"Rua\", e.\"Numero\", e.\"Bairro\", e.\"Cidade\", e.\"Estado\" " +
+                 "FROM \"Produto\" p " +
+                 "JOIN \"Endereco\" e ON p.\"IdEndereco\" = e.id " +
+                 "JOIN \"Cliente\" c ON e.\"IdCliente\" = c.id";
+
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            int idProduto = rs.getInt("produto_id");
+            String nomeCliente = rs.getString("cliente_nome");
+            String telefoneCliente = rs.getString("cliente_telefone");
+
+            String enderecoCompleto = String.format("%s, %s - %s, %s - %s",
+                    rs.getString("Rua"),
+                    rs.getString("Numero"),
+                    rs.getString("Bairro"),
+                    rs.getString("Cidade"),
+                    rs.getString("Estado"));
+
+            ProdutoMonitoradoViewModel p = new ProdutoMonitoradoViewModel(
+                    idProduto,
+                    nomeCliente,
+                    telefoneCliente,
+                    enderecoCompleto
+            );
+
+            lista.add(p);
+        }
+    } catch (Exception e) {
+        System.out.println("Erro ao buscar produtos monitorados: " + e.getMessage());
+    }
+
+    return lista;
+}
 }

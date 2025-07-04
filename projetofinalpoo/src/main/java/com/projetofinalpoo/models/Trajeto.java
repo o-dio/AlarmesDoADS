@@ -5,20 +5,47 @@ import java.time.format.DateTimeFormatter;
 
 public class Trajeto {
     //Atributos
+    private int id;
     private LocalDate dataIni;
     private LocalDate dataFim;
     private int idVigilante;
     private int idRota;
+ 
+    // Construtor 
+    public Trajeto() {}
 
-    //Construtor
     public Trajeto(String dataIni, String dataFim, int idVigilante, int idRota) {
         this.dataIni = LocalDate.parse(dataIni, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        this.dataFim = LocalDate.parse(dataFim, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        if (dataFim != null) {
+            this.dataFim = LocalDate.parse(dataFim, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } else {
+            this.dataFim = null;
+        }
         this.idVigilante = idVigilante;
         this.idRota = idRota;
     }
 
+    public Trajeto(int id, String dataIni, String dataFim, int idVigilante, int idRota) {
+        this.id = id;
+        this.dataIni = LocalDate.parse(dataIni, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        if (dataFim != null) {
+            this.dataFim = LocalDate.parse(dataFim, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } else {
+            this.dataFim = null;
+        }
+        this.idVigilante = idVigilante;
+        this.idRota = idRota;
+    }
+    
     //Metodos
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public LocalDate getDataIni() {
         return dataIni;
     }

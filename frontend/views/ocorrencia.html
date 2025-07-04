@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Registro de Ocorrência</title>
   <link rel="stylesheet" href="../style/css/styleOcorrencia.css">
 </head>
 <body>
+  
+  <div th:replace="fragments/nav :: navbar"></div>
+  
   <div class="container-ocorrencia">
     <h2>Registrar Ocorrência</h2>
 

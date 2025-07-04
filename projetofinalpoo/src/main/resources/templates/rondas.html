@@ -1,63 +1,86 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Escala e Rondas - Vigilante</title>
-  <link rel="stylesheet" href="../style/css/styleRondas.css">
+  <link rel="stylesheet" th:href="@{/style/css/styleRondas.css}" />
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-
 <body>
-<!--Arrumar quando implementar dados e tal, check-in e check-out-->
   <div class="rondas-container">
-    <header>
-      <h1>Minhas Rondas</h1>
-      <p>Visualize, inicie e finalize suas rondas</p>
-    </header>
+    <h1>Rondas do Vigilante</h1>
 
-
-
-    <div class="ronda-card">
-      <div class="ronda-info">
-        <h3><i data-lucide="clock"></i> 01/07/2025 às 09:10</h3>
-        <p><i data-lucide="map"></i> IFRS - Bloco A</p>
-      </div>
-      <div class="ronda-acoes">
-        <button class="checkin-btn">
-          <i data-lucide="log-in"></i> Check-in
-        </button>
-        <button class="checkout-btn" disabled>
-          <i data-lucide="log-out"></i> Check-out
-        </button>
-      </div>
+    <!-- CHECK‑OUT-->
+    <div class="ronda-card" th:if="${emRonda}">
+      <h3>Ronda em andamento</h3>
+    <form th:action="@{/rondas/checkout}" method="post">
+    <label for="idRota">Finalizar Ronda Atual:</label>
+    <select name="idRota" required>
+        <option th:each="ronda : ${rondas}" 
+                th:if="${ronda.status == 'Em andamento'}"
+                th:value="${ronda.idRota}" 
+                th:text="${ronda.enderecoCompleto}">
+        </option>
+    </select>
+    <button type="submit">Finalizar Ronda</button>
+</form>
     </div>
 
+    <!-- CHECK‑IN-->
+    <div class="ronda-card" th:if="${!emRonda}">
+      <h3>Iniciar nova ronda</h3>
+      <form th:action="@{/rondas/checkin}" th:method="post">
+        <label for="idRotaCheckin">Selecionar Rota:</label>
+        <select name="idRota" id="idRotaCheckin" required>
+          <option th:each="rota : ${rotasDisponiveis}"
+                  th:value="${rota.id}"
+                  th:text="${rota.nome} + ' – ' + ${rota.bairro}">
+          </option>
+        </select>
+        <button type="submit" class="checkin-btn">
+          <i data-lucide="log-in"></i> Iniciar Ronda
+        </button>
+      </form>
+    </div>
 
-    <section class="ronda-extra">
-      <h2><i data-lucide="file-text"></i> Registros durante a Ronda</h2>
-      <textarea placeholder="Observações ou ocorrências..."></textarea>
-      <button class="registrar-btn">
-        <i data-lucide="pencil"></i> Registrar
-      </button>
-    </section>
+    <hr />
 
+    <h2>Histórico de Rondas</h2>
+    <table class="historico">
+      <thead>
+        <tr>
+          <th>Data Início</th>
+          <th>Data Fim</th>
+          <th>Local</th>
+          <th>Bairro</th>
+          <th>Descrição</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="ronda : ${rondas}">
+          <td th:text="${ronda.dataIni}"></td>
+          <td th:text="${ronda.dataFim} ?: '---'"></td>
+          <td th:text="${ronda.local}"></td>
+          <td th:text="${ronda.bairro}"></td>
+          <td th:text="${ronda.descricao}"></td>
+          <td th:text="${ronda.status}"></td>
+        </tr>
+      </tbody>
+    </table>
 
-    <section class="ronda-mapa">
-      <h2><i data-lucide="route"></i> Rota Planejada</h2>
-      <div class="mapa-box">
-        <iframe width="100%" height="300" frameborder="0" style="border:0; border-radius: 0.5rem;" allowfullscreen
-          loading="lazy"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3452.129582991756!2d-50.27112388488561!3d-29.888276681935803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9519328c9ec79cf3%3A0x502d8e1f7021376a!2sOs%C3%B3rio%2C%20RS!5e0!3m2!1spt-BR!2sbr!4v1719889721505!5m2!1spt-BR!2sbr">
-        </iframe>
-      </div>
-
-    </section>
-
+    <!-- Mapa -->
+    <div class="ronda-mapa" th:if="${enderecoRondaAtual != null}">
+      <h2><i data-lucide="route"></i> Rota Atual</h2>
+      <iframe width="100%" height="300" frameborder="0" style="border:0; border-radius:0.5rem;"
+              th:src="'https://www.google.com/maps?q=' + ${enderecoRondaAtual} + '&output=embed'"
+              allowfullscreen loading="lazy">
+      </iframe>
+    </div>
   </div>
+
   <script>
     lucide.createIcons();
   </script>
-
 </body>
 </html>

@@ -3,71 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <title>Registro de Ocorrência</title>
-  <link rel="stylesheet" href="../style/css/styleOcorrencia.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="../style/css/styleOcorrencia.css">
+
+  
 </head>
 <body>
   <div class="container-ocorrencia">
-    <h2>Registrar Ocorrência</h2>
+    <h2><i class="fas fa-bell"></i> Registro de Ocorrência</h2>
+ <table>
+    <tr>
+        <th>ID Produto</th>
+        <th>Cliente</th>
+        <th>Telefone</th>
+        <th>Endereço</th>
+        <th>Ação</th>
+    </tr>
+    <tr th:each="p : ${produtosMonitorados}">
+        <td th:text="${p.idProduto}"></td>
+        <td th:text="${p.nomeCliente}"></td>
+        <td th:text="${p.telefoneCliente}"></td>
+        <td th:text="${p.enderecoCompleto}"></td>
+        <td>
+            <form th:action="@{/ocorrencia/cadastrar}" method="post">
+                <input type="hidden" name="idProduto" th:value="${p.idProduto}" />
+                <input type="text" name="duracao" placeholder="HH:mm:ss" required />
+                <button type="submit">Registrar</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</div>
 
-    <form class="form-ocorrencia" enctype="multipart/form-data">
-      <label for="tipo">Tipo de Ocorrência:</label>
-      <select id="tipo" name="tipo" required>
-        <option value="">Selecione</option>
-        <option value="invasao">Tentativa de Invasão</option>
-        <option value="alarme">Alarme Disparado</option>
-        <option value="comportamento">Comportamento Suspeito</option>
-        <option value="outros">Outros</option>
-      </select>
 
-      <label for="data">Data da Ocorrência:</label>
-      <input type="date" id="data" name="data" required>
-
-      <label for="local">Local:</label>
-      <input type="text" id="local" name="local" placeholder="Endereço ou referência" required>
-
-      <label for="descricao">Descrição:</label>
-      <textarea id="descricao" name="descricao" rows="4" placeholder="Detalhes da ocorrência..." required></textarea>
-
-      <label for="status">Status:</label>
-      <select id="status" name="status" required>
-        <option value="em_analise">Em Análise</option>
-        <option value="resolvida">Resolvida</option>
-        <option value="encaminhada">Encaminhada</option>
-      </select>
-
-      <label for="midia">Anexar Foto/Vídeo:</label>
-      <input type="file" id="midia" name="midia" accept="image/*,video/*">
-
-      <button type="submit">Registrar Ocorrência</button>
-    </form>
-  </div>
-  <script>
-    // Efeitos de foco suave nos campos
-document.querySelectorAll('.form-ocorrencia input, .form-ocorrencia textarea, .form-ocorrencia select').forEach(field => {
-  field.addEventListener('focus', () => {
-    field.style.boxShadow = '0 0 8px var(--main-color)';
-    field.style.transition = '0.3s ease';
-  });
-
-  field.addEventListener('blur', () => {
-    field.style.boxShadow = 'none';
-  });
-});
-
-// Feedback no envio
-document.querySelector('.form-ocorrencia').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const btn = e.target.querySelector('button');
-  btn.innerText = "Enviando...";
-  btn.disabled = true;
-
-  // Simula envio
-  setTimeout(() => {
-    btn.innerText = "Ocorrência Registrada ✅";
-    btn.style.backgroundColor = "#4caf50";
-  }, 1500);
-});
-
-  </script>
 </body>
 </html>
