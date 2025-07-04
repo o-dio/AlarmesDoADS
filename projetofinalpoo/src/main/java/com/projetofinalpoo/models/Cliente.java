@@ -1,10 +1,10 @@
 package com.projetofinalpoo.models;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import com.projetofinalpoo.services.HashMD5Service;
 
 public class Cliente implements Usuario{
 	//Atributos
@@ -46,12 +46,7 @@ public class Cliente implements Usuario{
 	}
 	
 	public void setSenha(String senha) throws NoSuchAlgorithmException {
-        MessageDigest m;
-        m = MessageDigest.getInstance("MD5");
-        m.update(senha.getBytes(), 0, senha.length());
-        BigInteger senha1 = new BigInteger(1, m.digest());
-        senha = String.format("%1$032X", senha1);
-        this.senha = senha;
+		this.senha = HashMD5Service.gerarMD5(senha);
     }
 	
 	public String getCpf() {

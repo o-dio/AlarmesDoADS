@@ -11,6 +11,7 @@ import com.projetofinalpoo.models.Cliente;
 import com.projetofinalpoo.models.Vigilante;
 import com.projetofinalpoo.services.CacheClienteService;
 import com.projetofinalpoo.services.CacheVigilanteService;
+import com.projetofinalpoo.services.HashMD5Service;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -29,7 +30,7 @@ public class RegistroController {
         if ("cliente".equalsIgnoreCase(role)) {
             Cliente cliente = new Cliente(
                     request.getParameter("login"),
-                    request.getParameter("senha"),
+                    HashMD5Service.gerarMD5(request.getParameter("senha")),
                     request.getParameter("cpf"),
                     formatarData(request.getParameter("dataNasc")),
                     request.getParameter("fone"),
@@ -44,7 +45,7 @@ public class RegistroController {
         } else if ("vigilante".equalsIgnoreCase(role)) {
             Vigilante vigilante = new Vigilante(
                     request.getParameter("login"),
-                    request.getParameter("senha"),
+                    HashMD5Service.gerarMD5(request.getParameter("senha")),
                     request.getParameter("turno"),
                     "00:00:00",
                     0.0,

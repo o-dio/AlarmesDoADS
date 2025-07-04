@@ -11,6 +11,7 @@ import com.projetofinalpoo.models.Vigilante;
 import com.projetofinalpoo.services.CacheAdminService;
 import com.projetofinalpoo.services.CacheClienteService;
 import com.projetofinalpoo.services.CacheVigilanteService;
+import com.projetofinalpoo.services.HashMD5Service;
 
 import jakarta.servlet.http.HttpSession; 
 
@@ -36,7 +37,7 @@ public class LoginController {
 		if(role.equals("cliente")) {
 			CacheClienteService clienteCache = new CacheClienteService();
 			clienteCache.carregarDoBanco();
-			Cliente findCliente = clienteCache.buscarPeloLoginSenha(nome, senha);
+			Cliente findCliente = clienteCache.buscarPeloLoginSenha(nome, HashMD5Service.gerarMD5(senha));
 			if(findCliente != null) {
 				session.setAttribute("usuarioLogado", findCliente);
 				session.setAttribute("tipo", "cliente");
@@ -45,7 +46,7 @@ public class LoginController {
 		} else if(role.equals("vigilante")) {
 			CacheVigilanteService vigilanteCache = new CacheVigilanteService();
 			vigilanteCache.carregarDoBanco();
-			Vigilante findVigilante = vigilanteCache.buscarPeloLoginSenha(nome, senha);
+			Vigilante findVigilante = vigilanteCache.buscarPeloLoginSenha(nome, HashMD5Service.gerarMD5(senha));
 			if(findVigilante != null) {
 				session.setAttribute("usuarioLogado", findVigilante);
 				session.setAttribute("tipo", "vigilante");
@@ -54,7 +55,7 @@ public class LoginController {
 		} else if(role == "admin") {
 			CacheAdminService adminCache = new CacheAdminService();
 			adminCache.carregarDoBanco();
-			Admin findAdmin = adminCache.buscarPeloLoginSenha(nome, senha);
+			Admin findAdmin = adminCache.buscarPeloLoginSenha(nome, HashMD5Service.gerarMD5(senha));
 			if(findAdmin != null) {
 				session.setAttribute("usuarioLogado", findAdmin);
 				session.setAttribute("tipo", "vigilante");
