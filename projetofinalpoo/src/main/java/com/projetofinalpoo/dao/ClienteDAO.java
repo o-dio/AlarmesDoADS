@@ -8,24 +8,32 @@ import java.util.ArrayList;
 import java.sql.Date;
 
 import com.projetofinalpoo.models.Cliente;
+import com.projetofinalpoo.models.ContatoInfo;
 
+/**
+ * Classe responsável por realizar operações de acesso a dados (DAO) da entidade Cliente.
+ */
 public class ClienteDAO {
     private Connection conn = new ConexaoDAO().conectar();
 
+    /**
+     * Cadastra um novo cliente no banco de dados.
+     *
+     * @param cliente Objeto Cliente a ser cadastrado.
+     */
     public void cadastrar(Cliente cliente) {
         String sql = "INSERT INTO \"Cliente\" " +
         "(\"Login\", \"Senha\", \"CPF\", \"DataNasc\", \"Fone\", \"Email\", \"FoneContato\")" +
         "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, cliente.getLogin());
             stmt.setString(2, cliente.getSenha());
             stmt.setString(3, cliente.getCpf());
             stmt.setDate(4, Date.valueOf(cliente.getDataNasc()));
-            stmt.setString(5, cliente.getFone());
-            stmt.setString(6, cliente.getEmail());
-            stmt.setString(7, cliente.getFoneContato());
+            stmt.setString(5, cliente.getContatoInfo().getFone());
+            stmt.setString(6, cliente.getContatoInfo().getEmail());
+            stmt.setString(7, cliente.getContatoInfo().getFoneContato());
             stmt.executeUpdate();
             System.out.println("Cliente cadastrado com sucesso!");
         } catch (Exception e) {
@@ -33,12 +41,16 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Retorna uma lista com todos os clientes cadastrados.
+     *
+     * @return Lista de objetos Cliente ou null se nenhum cliente for encontrado.
+     */
     public ArrayList<Cliente> buscarTodos() {
         String sql = "SELECT * FROM \"Cliente\"";
         ArrayList<Cliente> clientes = new ArrayList<Cliente>();
-        
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -49,10 +61,13 @@ public class ClienteDAO {
                     rs.getString("Login"),
                     rs.getString("Senha"),
                     rs.getString("CPF"),
-                    dataFormatada,
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+
+                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 ));
             }
 
@@ -68,11 +83,16 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Busca um cliente pelo login.
+     *
+     * @param cliente Objeto Cliente com o login preenchido.
+     * @return Cliente correspondente ou null se não encontrado.
+     */
     public Cliente buscar(Cliente cliente) {
         String sql = "SELECT * FROM \"Cliente\" WHERE \"CPF\" = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, cliente.getCpf());
             ResultSet rs = stmt.executeQuery();
 
@@ -82,9 +102,11 @@ public class ClienteDAO {
                     rs.getString("Senha"),
                     rs.getString("CPF"),
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 );
                 return findClient;
             } else {
@@ -96,11 +118,17 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Busca um cliente pelo login e senha.
+     *
+     * @param login Login do cliente.
+     * @param senha Senha do cliente.
+     * @return Cliente correspondente ou null se não encontrado.
+     */
     public Cliente buscarPeloLoginSenha(String login, String senha) {
         String sql = "SELECT * FROM \"Cliente\" WHERE \"Login\" = ? AND \"Senha\" = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, login);
             stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
@@ -111,9 +139,11 @@ public class ClienteDAO {
                     rs.getString("Senha"),
                     rs.getString("CPF"),
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 );
                 return findClient;
             } else {
@@ -126,11 +156,16 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Busca um Cliente pelo CPF.
+     *
+     * @param cpf String CPF a ser consultada no banco.
+     * @return Objeto Cliente completo ou null se não encontrado.
+     */
     public Cliente buscarPeloCpf(String cpf) {
         String sql = "SELECT * FROM \"Cliente\" WHERE \"CPF\" = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, cpf);
             ResultSet rs = stmt.executeQuery();
 
@@ -140,9 +175,11 @@ public class ClienteDAO {
                     rs.getString("Senha"),
                     rs.getString("CPF"),
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 );
                 return findClient;
             } else {
@@ -156,6 +193,11 @@ public class ClienteDAO {
     }
 
 
+    /**
+     * Atualiza os dados de um cliente existente.
+     *
+     * @param Cliente Objeto Cliente a ser alterado.
+     */
     public void atualizar(Cliente cliente) {
         String sql = "UPDATE \"Cliente\" SET " +
         "\"Login\" = ?, " +
@@ -167,15 +209,14 @@ public class ClienteDAO {
         "\"FoneContato\" = ? "+
         "WHERE \"CPF\" = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, cliente.getLogin());
             stmt.setString(2, cliente.getSenha());
             stmt.setString(3, cliente.getCpf());
             stmt.setDate(4, Date.valueOf(cliente.getDataNasc()));
-            stmt.setString(5, cliente.getFone());
-            stmt.setString(6, cliente.getEmail());
-            stmt.setString(7, cliente.getFoneContato());
+            stmt.setString(5, cliente.getContatoInfo().getFone());
+            stmt.setString(6, cliente.getContatoInfo().getEmail());
+            stmt.setString(7, cliente.getContatoInfo().getFoneContato());
             stmt.setString(8, cliente.getCpf());
 
             int linhasAfetadas = stmt.executeUpdate();
@@ -191,22 +232,27 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Remove um cliente do banco de dados.
+     *
+     * @param cliente Objeto Cliente a ser deletado.
+     * @throws Exception Caso ocorra algum erro durante a exclusão.
+     */
     public void deletar(Cliente cliente) {
         String sql = "DELETE FROM \"Cliente\" WHERE \"CPF\" = ?";
-    
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
 
             stmt.setString(1, cliente.getCpf());
-    
+
             int linhasAfetadas = stmt.executeUpdate();
-    
+
             if (linhasAfetadas > 0) {
                 System.out.println("Cliente deletado com sucesso!");
             } else {
                 System.out.println("Cliente nao encontrado para excluir.");
             }
-    
+
         } catch (Exception e) {
             System.out.println("Erro ao deletar cliente: " + e.getMessage());
         }

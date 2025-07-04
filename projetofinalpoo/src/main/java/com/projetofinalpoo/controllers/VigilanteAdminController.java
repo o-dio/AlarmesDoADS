@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.projetofinalpoo.dao.VigilanteDAO;
+import com.projetofinalpoo.models.ContatoInfo;
 import com.projetofinalpoo.models.Vigilante;
 
 @Controller
@@ -33,7 +34,7 @@ public class VigilanteAdminController {
                          @RequestParam String email,
                          @RequestParam String foneContato) {
 
-        Vigilante vigilante = new Vigilante(login, senha, turno, cargaHoraria, remuneracao, dataContratacao, fone, email, foneContato);
+        Vigilante vigilante = new Vigilante(login, senha, turno, cargaHoraria, remuneracao, dataContratacao, new ContatoInfo(fone, email, foneContato));
 
         if (loginAntigo == null || loginAntigo.isEmpty()) {
             vigilanteDAO.cadastrar(vigilante);

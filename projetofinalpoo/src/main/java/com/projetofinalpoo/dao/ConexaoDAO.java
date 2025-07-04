@@ -4,11 +4,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Classe responsável por realizar a conexão com o banco de dados PostgreSQL.
+ */
 public class ConexaoDAO {
 
+    /**
+     * Estabelece a conexão com o banco de dados.
+     *
+     * @return Objeto Connection ativo ou null em caso de falha.
+     */
     private static final String URL = "jdbc:postgresql://localhost:5432/alarmeadsbd";
     private static final String USUARIO = "postgres";
-//SENHA DIFERENTE NAO DAR COMMIT
     private static final String SENHA = "gustavo";
 
 

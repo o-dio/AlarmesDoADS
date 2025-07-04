@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.projetofinalpoo.dao.VigilanteDAO;
+import com.projetofinalpoo.models.ContatoInfo;
 import com.projetofinalpoo.models.Vigilante;
 
 public class testeVigilanteDAO {
@@ -16,7 +17,7 @@ public class testeVigilanteDAO {
     public void cadastrar() {
         logger.info("\n\n==== Inicio teste cadastrar vigilante ====\n");
         Vigilante vigilante = new Vigilante("fabio.silva", "senhaSegura123", "D", "08:00:00", 3500.0,
-                                            "20/05/2020", "11988887777", "fabio@email.com", "11999996666");
+                                            "20/05/2020", new ContatoInfo("11988887777", "fabio@email.com", "11999996666"));
         vigilanteDao.cadastrar(vigilante);
         logger.info("\n\n==== Fim ====\n");
     }

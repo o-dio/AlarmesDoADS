@@ -11,15 +11,22 @@ import java.util.List;
 
 import com.projetofinalpoo.models.Gravacao;
 
+/**
+ * Classe responsável por realizar operações de acesso a dados (DAO) da entidade Gravacao.
+ */
 public class GravacaoDAO {
     private Connection conn = new ConexaoDAO().conectar();
 
+    /**
+     * Cadastra uma nova gravação no banco de dados.
+     *
+     * @param gravacao Objeto Gravacao a ser cadastrado.
+     */
     public void cadastrar(Gravacao gravacao) {
         String sql = "INSERT INTO \"Gravacao\" (\"Data\", \"Duracao\", \"Arquivo\", \"Descricao\", \"IdProduto\") " +
                      "VALUES (?, ?, ?, ?, ?)";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(gravacao.getData()));
             stmt.setTime(2, Time.valueOf(gravacao.getDuracao()));
             stmt.setString(3, gravacao.getArquivo());
@@ -33,50 +40,57 @@ public class GravacaoDAO {
         }
     }
 
-    public ArrayList<Gravacao> buscarTodos() {
+    /**
+     * Retorna uma lista com todas as gravações cadastradas.
+     *
+     * @return Lista de objetos Gravacao ou null em caso de erro.
+     */
+   
+    public List<Gravacao> buscarTodos() {
         String sql = "SELECT * FROM \"Gravacao\"";
-        ArrayList<Gravacao> gravacoes = new ArrayList<>();
-        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        List<Gravacao> lista = new ArrayList<>();
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
+        try (PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Gravacao g = new Gravacao(
                     rs.getInt("id"),
-                    rs.getDate("Data").toLocalDate().format(dataFormatter),
-                    rs.getTime("Duracao").toLocalTime().format(timeFormatter),
+                    rs.getDate("Data").toLocalDate(),
+                    rs.getTime("Duracao").toLocalTime(),
                     rs.getString("Arquivo"),
                     rs.getString("Descricao"),
                     rs.getInt("IdProduto")
                 );
-                gravacoes.add(g);
+                lista.add(g);
             }
 
-            return gravacoes;
         } catch (Exception e) {
-            System.out.println("Erro ao buscar gravacoes: " + e.getMessage());
-            return null;
+            System.out.println("Erro ao buscar gravações: " + e.getMessage());
         }
-    }
 
+        return lista;
+    }
+    /**
+     * Busca uma gravação pelo ID.
+     *
+     * @param id Identificador da gravação.
+     * @return Objeto Gravacao correspondente ou null se não encontrado.
+     */
     public Gravacao buscarPorId(int id) {
         String sql = "SELECT * FROM \"Gravacao\" WHERE id = ?";
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 return new Gravacao(
-                    rs.getInt("id"),
-                    rs.getDate("Data").toLocalDate().format(dataFormatter),
-                    rs.getTime("Duracao").toLocalTime().format(timeFormatter),
+                      rs.getInt("id"),
+                    rs.getDate("Data").toLocalDate(),
+                    rs.getTime("Duracao").toLocalTime(),
                     rs.getString("Arquivo"),
                     rs.getString("Descricao"),
                     rs.getInt("IdProduto")
@@ -90,13 +104,18 @@ public class GravacaoDAO {
         }
     }
 
+    /**
+     * Atualiza os dados de uma gravação existente.
+     *
+     * @param id ID da gravação a ser atualizada.
+     * @param gravacao Objeto Gravacao com os novos dados.
+     */
     public void atualizar(int id, Gravacao gravacao) {
         String sql = "UPDATE \"Gravacao\" SET " +
                      "\"Data\" = ?, \"Duracao\" = ?, \"Arquivo\" = ?, \"Descricao\" = ?, \"IdProduto\" = ? " +
                      "WHERE id = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(gravacao.getData()));
             stmt.setTime(2, Time.valueOf(gravacao.getDuracao()));
             stmt.setString(3, gravacao.getArquivo());
@@ -116,11 +135,15 @@ public class GravacaoDAO {
         }
     }
 
+    /**
+     * Remove uma gravação do banco de dados.
+     *
+     * @param id ID da gravação a ser removida.
+     */
     public void deletar(int id) {
         String sql = "DELETE FROM \"Gravacao\" WHERE id = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, id);
 
             int linhas = stmt.executeUpdate();
@@ -151,14 +174,15 @@ public class GravacaoDAO {
         DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         while (rs.next()) {
-            int id = rs.getInt("id");
-            String data = rs.getDate("Data").toLocalDate().format(formatterData);
-            String duracao = rs.getTime("Duracao").toLocalTime().format(formatterHora);
-            String arquivo = rs.getString("Arquivo");
-            String descricao = rs.getString("Descricao");
-            int idProduto = rs.getInt("IdProduto");
+            Gravacao g = new Gravacao(
+                rs.getInt("id"),
+                rs.getDate("Data").toLocalDate(),
+                rs.getTime("Duracao").toLocalTime(),
+                rs.getString("Arquivo"),
+                rs.getString("Descricao"),
+                rs.getInt("IdProduto")
+            );
 
-            Gravacao g = new Gravacao(id, data, duracao, arquivo, descricao, idProduto);
             lista.add(g);
         }
     } catch (Exception e) {

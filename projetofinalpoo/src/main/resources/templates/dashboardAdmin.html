@@ -1,607 +1,677 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+  <!DOCTYPE html>
+  <html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard - Administrador</title>
-  <link rel="stylesheet" th:href="@{/style/css/styleDashboard.css}">
+  <head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Administrador</title>
+    <link rel="stylesheet" th:href="@{/style/css/styleDashboard.css}">
+    <link rel="stylesheet" href="./style/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
 
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-
-<body>
-
-  <div class="dashboard-container">
-    <header class="dashboard-header">
-      <h1>Dashboard do Administrador</h1>
-      <p>Bem-vindo à central de comando</p>
+  <body>
+ <header class="header">
+      <section>
+        <a href="#" class="logo">
+          <img src="" alt="" class="logo-img">
+        </a> 
+        <nav class="navbar">
+          <a href="#">Inicio</a>
+          <a href="#about">Sobre</a>
+          <a href="#contato">Contato</a>
+          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
+          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
+          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
+          <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
+        </nav>
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="fas fa-bars"></i>
+        </div>
+        <div class="perfil" onclick="toggleDropdown()">
+          <i class="fas fa-user-circle"></i>
+          <span id="user-name">Usuário</span>
+          <div class="dropdown-menu" id="dropdown">
+            <a href="#">Meu Perfil</a>
+            <a href="#">Configurações</a>
+            <a href="/logout">Sair</a>
+          </div>
+        </div>
+      </section>
     </header>
 
-    <div class="card">
-      <i data-lucide="shield-check"></i>
-      <h3>Rondas</h3>
-      <p th:text="${totalRondas}">0</p>
-    </div>
-    <div class="card">
-      <i data-lucide="alert-circle"></i>
-      <h3>Ocorrências</h3>
-      <p th:text="${totalOcorrencias}">0</p>
-    </div>
-    <div class="card">
-      <i data-lucide="alarm-clock"></i>
-      <h3>Alarmes</h3>
-      <p th:text="${totalAlarmes}">0</p>
-    </div>
-    <div class="card">
-      <i data-lucide="inbox"></i>
-      <h3>Relatos</h3>
-      <p th:text="${totalRelatos}">0</p>
-    </div>
-    <div class="card">
-      <i data-lucide="users"></i>
-      <h3>Clientes</h3>
-      <p th:text="${totalClientes}">0</p>
-    </div>
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <h1>Dashboard do Administrador</h1>
+        <p>Bem-vindo à central de comando</p>
+      </header>
 
-    <div class="card">
-      <i data-lucide="user-shield"></i>
-      <h3>Vigilantes</h3>
-      <p th:text="${totalVigilantes}">0</p>
-    </div>
-
-
-
-    <section class="dashboard-shortcuts">
-      <h2>Atalhos Rápidos</h2>
-      <div class="shortcut-grid">
-        <button type="button" id="btnGerenciarRondas" onclick="mostrarRondas()">Gerenciar Rondas</button>
-        <button type="button" onclick="mostrarOcorrencias()">Ver Ocorrências</button>
-        <button type="button" onclick="mostrarVigilantes()">Ver Vigilantes</button>
-        <button type="button" onclick="mostrarAlarmes()">Ver Alarmes</button>
-        <a href="#">Relatos</a>
-        <button type="button" onclick="mostrarUsuarios()">Ver Clientes</button>
+    <div class="dashboard-indicators">
+      <div class="card">
+        <i data-lucide="shield-check"></i>
+        <h3>Rondas</h3>
+        <p th:text="${totalRondas}">0</p>
       </div>
-    </section>
+      <div class="card">
+        <i data-lucide="alert-circle"></i>
+        <h3>Ocorrências</h3>
+        <p th:text="${totalOcorrencias}">0</p>
+      </div>
+      <div class="card">
+        <i data-lucide="alarm-clock"></i>
+        <h3>Alarmes</h3>
+        <p th:text="${totalAlarmes}">0</p>
+      </div>
+      <div class="card">
+        <i data-lucide="inbox"></i>
+        <h3>Relatos</h3>
+        <p th:text="${totalRelatos}">0</p>
+      </div>
+      <div class="card">
+        <i data-lucide="users"></i>
+        <h3>Clientes</h3>
+        <p th:text="${totalClientes}">0</p>
+      </div>
 
-
-    <!--TABELA RONDAS-->
-    <div id="rondasContainer" style="display:none;">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Bairro</th>
-            <th>Descrição</th>
-            <th>Observação</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="ronda : ${rondas}" th:attr="data-id=${ronda.id}">
-            <td th:text="${ronda.id}"></td>
-            <td th:text="${ronda.nome}"></td>
-            <td th:text="${ronda.bairro}"></td>
-            <td th:text="${ronda.descricao}"></td>
-            <td th:text="${ronda.observacao}"></td>
-            <td>
-              <button type="button" th:onclick="|abrirModalEditar(${ronda.id})|">Editar</button>
-              <a th:href="@{/excluir/{nome}(nome=${ronda.nome})}" onclick="return confirm('Deseja excluir esta rota?')">
-                <button>Excluir</button>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button onclick="abrirModalAdicionar()">Nova Ronda</button>
-    </div>
-
-    <!--TABELA OCORRENCIAS-->
-    <div id="ocorrenciasContainer" style="display:none;">
-   
-
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Data</th>
-            <th>Duração</th>
-            <th>Vigilante</th>
-            <th>Produto</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="ocorrencia : ${ocorrencias}" th:attr="data-id=${ocorrencia.id}">
-
-            <td th:text="${ocorrencia.id}">1</td>
-            <td th:text="${ocorrencia.data}">01/01/2024</td>
-            <td th:text="${ocorrencia.duracao}">00:30:00</td>
-            <td th:text="${ocorrencia.idVigilante}">10</td>
-            <td th:text="${ocorrencia.idProduto}">5</td>
-            <td>
-              <button th:onclick="|abrirModalEditarOcorrencia(${ocorrencia.id})|">Editar</button>
-              <a th:href="@{/dashboard/ocorrencias/excluir/{id}(id=${ocorrencia.id})}"
-                onclick="return confirm('Deseja excluir esta ocorrência?')">
-                <button>Excluir</button>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button type="button" onclick="abrirModalAdicionarOcorrencia()">Nova Ocorrência</button>
-    </div>
-
-<!--TABELA ALARMES -->
-<div id="alarmesContainer" style="display:none;">
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Data Instalação</th>
-        <th>Data Retirada</th>
-        <th>Defeito</th>
-        <th>ID Endereço</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="alarme : ${alarmes}" th:attr="data-id=${alarme.id}">
-        <td th:text="${alarme.id}">1</td>
-        <td th:text="${#temporals.format(alarme.dataInst, 'dd/MM/yyyy')}">01/01/2024</td>
-        <td th:text="${#temporals.format(alarme.dataInst, 'dd/MM/yyyy')}">01/02/2024</td>
-        <td th:text="${alarme.defeito}">false</td>
-        <td th:text="${alarme.idEndereco}">10</td>
-        <td>
-          <button type="button" th:onclick="|abrirModalEditarAlarme(${alarme.id})|">Editar</button>
-          <a th:href="@{/produto/excluir/{id}(id=${alarme.id})}" onclick="return confirm('Deseja excluir este alarme?')">
-            <button>Excluir</button>
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <button type="button" onclick="abrirModalAdicionarAlarme()">Novo Alarme</button>
+      <div class="card">
+        <i data-lucide="user-shield"></i>
+        <h3>Vigilantes</h3>
+        <p th:text="${totalVigilantes}">0</p>
+      </div>
 </div>
 
-<!--TABELA CLIENTES-->
-<!-- <div id="clientesContainer" style="display: none;">
-   <table border="1">
-    <thead>
-      <tr>
-        <th>Login</th>
-        <th>CPF</th>
-        <th>Data Nasc.</th>
-        <th>Telefone</th>
-        <th>Email</th>
-        <th>Fone Contato</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="cliente : ${clientes}" th:attr="data-cpf=${cliente.cpf}">
-        <td th:text="${cliente.login}">login</td>
-        <td th:text="${cliente.cpf}">cpf</td>
-        <td th:text="${#temporals.format(cliente.dataNasc, 'dd/MM/yyyy')}">data</td>
-        <td th:text="${cliente.fone}">fone</td>
-        <td th:text="${cliente.email}">email</td>
-        <td th:text="${cliente.foneContato}">fone contato</td>
-        <td>
-           <button type="button" th:onclick="|abrirModalEditarCliente(${cliente.cpf})|">Editar</button> -->
-          <!-- <a th:href="@{/dashboard/clientes/excluir/{cpf}(cpf=${cliente.cpf})}"
-             onclick="return confirm('Deseja excluir este cliente?')">
-            <button>Excluir</button>
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
-  <button type="button" onclick="abrirModalAdicionarCliente()">Novo Cliente</button>
-</div>  -->
+      <section class="dashboard-shortcuts">
+        <h2>Atalhos Rápidos</h2>
+        <div class="shortcut-grid">
+          <button type="button" id="btnGerenciarRondas" onclick="mostrarRondas()">Gerenciar Rondas</button>
+          <button type="button" onclick="mostrarOcorrencias()">Ver Ocorrências</button>
+          <button type="button" onclick="mostrarVigilantes()">Ver Vigilantes</button>
+          <button type="button" onclick="mostrarAlarmes()">Ver Alarmes</button>
+          <button type="button" onclick="mostrarGravacoes()">Ver Gravações</button>
+          <button type="button" onclick="mostrarUsuarios()">Ver Clientes</button>
+        </div>
+      </section>
 
-  <!-- Modal para cadastro/edição -->
-  <!-- <div id="modalCliente" class="modal" style="display:none;">
-    <div class="modal-content">
-      <span onclick="fecharModal('modalCliente')" class="close">&times;</span>
-      <h2 id="tituloModalCliente">Cadastrar Cliente</h2>
-      <form th:action="@{/dashboard/clientes/salvar}" method="post" id="formCliente">
-        <label>Login:</label>
-        <input type="text" name="login" id="loginc" required /><br/>
+      <!-- TABELA GRAVACOES -->
 
-        <label>Senha:</label>
-        <input type="password" name="senha" id="senha" required /><br/>
-
-        <label>CPF:</label>
-        <input type="text" name="cpf" id="cpf" required /><br/>
-
-        <label>Data Nascimento (dd/MM/yyyy):</label>
-      <input type="date" name="dataNasc" id="dataNasc" required />
-
-
-        <label>Telefone:</label>
-        <input type="text" name="fone" id="fone" required /><br/>
-
-        <label>Email:</label>
-        <input type="email" name="email" id="email" required /><br/>
-
-        <label>Fone Contato:</label>
-        <input type="text" name="foneContato" id="foneContato" required /><br/>
-
-        <button type="submit">Salvar</button>
-        <button type="button" onclick="fecharModal('modalCliente')">Cancelar</button>
-      </form>
-    </div>
-  </div>
- -->
-
-
-    <!--TABELA VIGILANTES-->
-    <div id="vigilantesContainer" style="display:none;">
-   
-    <table>
-  <thead>
-    <tr>
-      <th>Login</th>
-      <th>Turno</th>
-      <th>Carga Horária</th>
-      <th>Remuneração</th>
-      <th>Data Contratação</th>
-      <th>Telefone</th>
-      <th>Email</th>
-      <th>Fone Contato</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-    
-  <tr th:each="vigilante : ${vigilantes}" th:attr="data-login=${vigilante.login}">
-        <td th:text="${vigilante.login}"></td>
-        <td th:text="${vigilante.turno}"></td>
-        <td th:text="${vigilante.cargaHoraria}"></td>
-        <td th:text="${vigilante.remuneracao}"></td>
-        <td th:text="${#temporals.format(vigilante.dataContratacao, 'dd/MM/yyyy')}"></td>
-        <td th:text="${vigilante.fone}"></td>
-        <td th:text="${vigilante.email}"></td>
-        <td th:text="${vigilante.foneContato}"></td>
-        <td>
+  <div id="gravacoesContainer" style="display:none;">
+  <table border="1">
+      <thead>
+          <tr>
+              <th>ID</th>
+              <th>Descrição</th>
+              <th>Duração</th>
+              <th>Data</th>
+              <th>Arquivo</th>
+              <th>ID Produto</th>
           </tr>
-  <!-- <button type="button" th:onclick="|abrirModalEditarVigilante(${vigilante.login})|">Editar</button> -->
+      </thead>
+      <tbody>
+          <tr th:each="gravacao : ${gravacoes}" th:attr="data-id=${gravacao.id}">
+              <td th:text="${gravacao.id}"></td>
+              <td th:text="${gravacao.descricao}"></td>
+              <td th:text="${#temporals.format(gravacao.duracao, 'HH:mm:ss')}"></td>
+              <td th:text="${#temporals.format(gravacao.data, 'dd/MM/yyyy')}"></td>
+              <td th:text="${gravacao.arquivo}"></td>
+              <td th:text="${gravacao.idProduto}"></td>
+              <td>
+          <button type="button" th:onclick="|abrirModalEditar(${gravacao.id})|">Editar</button>
 
-
-          <a th:href="@{/dashboard/vigilantes/excluir/{login}(login=${vigilante.login})}"
-            onclick="return confirm('Deseja excluir este  ')"><button type="button">Excluir</button></a>
-       
-        </td>
-      </tr>
-    </tbody>
-</table>
- <button type="button" onclick="abrirModalAdicionarVigilante()">Novo Vigilante</button>
-</div> 
-
-
-    <!-- <section class="dashboard-logs">
-      <h2>Logs Recentes</h2>
-      <div class="logs-box">
-        <p>[20:14] Nova ocorrência registrada</p>
-        <p>[20:09] Alarme disparado na Zona 3</p>
-        <p>[19:57] Usuário 'joao_admin' realizou login</p>
-        <p>[19:41] Relato recebido via app móvel</p>
-        <p>[19:30] Ronda iniciada - Setor Leste</p>
-      </div>
-    </section>
-  -->
-
-
+          <a th:href="@{/excluirGravacao/{id}(id=${gravacao.id})}" 
+            onclick="return confirm('Deseja excluir esta gravação?')">
+              <button>Excluir</button>
+          </a>
+      </td>
+          </tr>
+      </tbody>
+  </table>
+    <button onclick="abrirModalAdicionarGravacao()">Nova Gravação</button>
   </div>
+      <!--TABELA RONDAS-->
+      <div id="rondasContainer" style="display:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Bairro</th>
+              <th>Descrição</th>
+              <th>Observação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="ronda : ${rondas}" th:attr="data-id=${ronda.id}">
+              <td th:text="${ronda.id}"></td>
+              <td th:text="${ronda.nome}"></td>
+              <td th:text="${ronda.bairro}"></td>
+              <td th:text="${ronda.descricao}"></td>
+              <td th:text="${ronda.observacao}"></td>
+              <td>
+                <button type="button" th:onclick="|abrirModalEditar(${ronda.id})|">Editar</button>
+                <a th:href="@{/excluir/{nome}(nome=${ronda.nome})}" onclick="return confirm('Deseja excluir esta rota?')">
+                  <button>Excluir</button>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button onclick="abrirModalAdicionar()">Nova Ronda</button>
+      </div>
+
+      <!--TABELA OCORRENCIAS-->
+      <div id="ocorrenciasContainer" style="display:none;">
 
 
-<!-- MODAL ALARME -->
-<div id="modalAlarme" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span onclick="fecharModal('modalAlarme')" class="close">&times;</span>
-    <h2>Gerenciar Alarme</h2>
-    <form action="/produto/salvar" method="post">
-      <input type="hidden" id="idAlarme" name="id">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Data</th>
+              <th>Duração</th>
+              <th>Vigilante</th>
+              <th>Produto</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="ocorrencia : ${ocorrencias}" th:attr="data-id=${ocorrencia.id}">
 
-      <label>Data Instalação:</label>
-      <input type="date" id="dataInstAlarme" name="dataInst" required>
+              <td th:text="${ocorrencia.id}">1</td>
+              <td th:text="${ocorrencia.data}">01/01/2024</td>
+              <td th:text="${ocorrencia.duracao}">00:30:00</td>
+              <td th:text="${ocorrencia.idVigilante}">10</td>
+              <td th:text="${ocorrencia.idProduto}">5</td>
+              <td>
+                <button th:onclick="|abrirModalEditarOcorrencia(${ocorrencia.id})|">Editar</button>
+                <a th:href="@{/dashboard/ocorrencias/excluir/{id}(id=${ocorrencia.id})}"
+                  onclick="return confirm('Deseja excluir esta ocorrência?')">
+                  <button>Excluir</button>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" onclick="abrirModalAdicionarOcorrencia()">Nova Ocorrência</button>
+      </div>
 
-      <label>Data Retirada:</label>
-      <input type="date" id="dataRetAlarme" name="dataRet" required>
+      <!--TABELA ALARMES -->
+      <div id="alarmesContainer" style="display:none;">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Data Instalação</th>
+              <th>Data Retirada</th>
+              <th>Defeito</th>
+              <th>ID Endereço</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="alarme : ${alarmes}" th:attr="data-id=${alarme.id}">
+              <td th:text="${alarme.id}">1</td>
+              <td th:text="${#temporals.format(alarme.dataInst, 'dd/MM/yyyy')}">01/01/2024</td>
+              <td th:text="${#temporals.format(alarme.dataRet, 'dd/MM/yyyy')}">01/02/2024</td>
+              <td th:text="${alarme.defeito}">false</td>
+              <td th:text="${alarme.idEndereco}">10</td>
+              <td>
+                <button type="button" th:onclick="|abrirModalEditarAlarme(${alarme.id})|">Editar</button>
+                <a th:href="@{/produto/excluir/{id}(id=${alarme.id})}"
+                  onclick="return confirm('Deseja excluir este alarme?')">
+                  <button>Excluir</button>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" onclick="abrirModalAdicionarAlarme()">Novo Alarme</button>
+      </div>
 
-      <label>Defeito:</label>
-      <select id="defeitoAlarme" name="defeito" required>
-        <option value="true">Sim</option>
-        <option value="false" selected>Não</option>
-      </select>
+      <!--TABELA CLIENTES-->
+  <div id="clientesContainer" style="display: none;">
 
-      <label>ID Endereço:</label>
-      <input type="number" id="idEnderecoAlarme" name="idEndereco" required>
+        <table>
+      <thead>
+        <tr>
+          <th>Login</th>
+          <th>CPF</th>
+          <th>Data Nasc</th>
+          <th>Fone</th>
+          <th>Email</th>
+          <th>Fone Contato</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="cliente : ${clientes}" th:id="'cliente-' + ${cliente.login}">
+          <td th:text="${cliente.login}"></td>
+          <td th:text="${cliente.cpf}"></td>
+          <td th:text="${#dates.format(cliente.dataNasc, 'dd/MM/yyyy')}"></td>
+      <td th:text="${cliente.contatoInfo != null ? cliente.contatoInfo.fone : ''}"></td>
+  <td th:text="${cliente.contatoInfo != null ? cliente.contatoInfo.email : ''}"></td>
+  <td th:text="${cliente.contatoInfo != null ? cliente.contatoInfo.foneContato : ''}"></td>
 
-      <button type="submit">Salvar</button>
-      <button type="button" onclick="fecharModal('modalAlarme')">Cancelar</button>
+          <td>
+            <button type="button" th:onclick="|abrirModalEditar('${cliente.login}')|">Editar</button>
+            <a th:href="@{/excluirCliente/{cpf}(cpf=${cliente.cpf})}" onclick="return confirm('Deseja excluir este cliente?')">
+              <button>Excluir</button>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table><button onclick="abrirModalNovo()">Novo Cliente</button>
+  </div>
+    
+  </div>  
+  <!-- Modal dinâmico -->
+  <div id="modalCliente" style="display: none;">
+    <form id="formCliente" method="post">
+      <input type="hidden" id="modoCliente" name="modo"> 
+
+      <input type="text" id="clienteLogin" name="login" placeholder="Login" required>
+      <input type="password" id="clienteSenha" name="senha" placeholder="Senha">
+      <input type="text" id="clienteCpf" name="cpf" placeholder="CPF" required>
+      <input type="date" id="clienteDataNasc" name="dataNasc" required>
+      <input type="text" id="clienteFone" name="fone" placeholder="Fone" required>
+      <input type="email" id="clienteEmail" name="email" placeholder="Email" required>
+      <input type="text" id="clienteFoneContato" name="foneContato" placeholder="Fone Contato" required>
+
+      <button type="submit" id="botaoEnviarCliente">Salvar</button>
+      <button type="button" onclick="fecharModalCliente()">Cancelar</button>
     </form>
   </div>
-</div>
-
-  <!-- MODAL RONDAS -->
-  <div id="modalRonda" class="modal">
-    <div class="modal-content">
-      <span onclick="fecharModal('modalRonda')" class="close">&times;</span>
-      <form id="formRonda" th:action="@{/salvar}" method="post">
 
 
-        <input type="hidden" id="id" name="id" value="">
-        <label>Nome:</label>
-        <input type="text" id="nome" name="nome" required><br>
-        <label>Bairro:</label>
-        <input type="text" id="bairro" name="bairro" required><br>
-        <label>Descrição:</label>
-        <input type="text" id="descricao" name="descricao"><br>
-        <label>Observação:</label>
-        <input type="text" id="observacao" name="observacao"><br>
-        <button type="submit">Salvar</button>
+    
 
-        <button type="button" onclick="fecharModal('modalRonda')">Cancelar</button>
-      </form>
     </div>
-  </div>
 
-  <!--MODAL OCORRENCIAS -->
-  <div id="modalOcorrencia" class="modal" style="display:none;">
+  <!-- MODAL GRAVACOES -->
+  <div id="modalGravacao" class="modal" style="display:none;">
     <div class="modal-content">
-      <span onclick="fecharModal('modalOcorrencia')" class="close">&times;</span>
-      <h2>Gerenciar Ocorrência</h2>
-      <form action="/dashboard/ocorrencias/salvar" method="post">
-        <input type="hidden" id="idOcorrencia" name="id">
+      <span onclick="fecharModal('modalGravacao')" class="close">&times;</span>
+      <h2>Gerenciar Gravação</h2>
+      <form action="/admin/gravacao/salvar" method="post">
+        <input type="hidden" id="idGravacao" name="id">
 
-        <label>Data:</label>
-        <input type="date" id="dataOcorrencia" name="data" required>
+        <label>Descrição:</label>
+        <input type="text" id="descricaoGravacao" name="descricao" required>
 
         <label>Duração:</label>
-        <input type="time" id="duracaoOcorrencia" name="duracao" required>
+        <input type="time" id="duracaoGravacao" name="duracao" required>
 
-        <label>ID Vigilante:</label>
-        <input type="number" id="idVigilanteOcorrencia" name="idVigilante" required>
+        <label>Data:</label>
+        <input type="date" id="dataGravacao" name="data" required>
+
+        <label>Arquivo:</label>
+        <input type="text" id="arquivoGravacao" name="arquivo" required>
 
         <label>ID Produto:</label>
-        <input type="number" id="idProdutoOcorrencia" name="idProduto" required>
+        <input type="number" id="idProdutoGravacao" name="idProduto" required>
 
         <button type="submit">Salvar</button>
-        <button type="button" onclick="fecharModal('modalOcorrencia')">Cancelar</button>
+        <button type="button" onclick="fecharModal('modalGravacao')">Cancelar</button>
       </form>
     </div>
   </div>
 
-  <!-- Modal Cadastro/Atualização Vigilante -->
-<div id="modalVigilante" class="modal hidden">
-  <div class="modal-content">
-    <span class="close" onclick="fecharModal('modalVigilante')">&times;</span>
-    <h2 id="tituloModalVigilante">Cadastrar Vigilante</h2>
-   <form th:action="@{/dashboard/vigilantes/salvar}" method="post">
-    <input type="hidden" name="loginAntigo" th:value="${vigilante.login}" />
-    <input type="text" name="login" placeholder="Login" required />
-    <input type="password" name="senha" placeholder="Senha" required />
-    <input type="text" name="turno" placeholder="Turno" required />
-    <input type="text" name="cargaHoraria" placeholder="Carga Horária" required />
-    <input type="number" name="remuneracao" placeholder="Remuneração" required />
-    <input type="date" name="dataContratacao" required />
-    <input type="text" name="fone" placeholder="Fone" required />
-    <input type="email" name="email" placeholder="Email" required />
-    <input type="text" name="foneContato" placeholder="Fone de Contato" required />
-    <button type="submit">Salvar</button>
-</form>
-</div>
-</div>
 
-</body>
-<script>
+    <!-- MODAL ALARME -->
+    <div id="modalAlarme" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span onclick="fecharModal('modalAlarme')" class="close">&times;</span>
+        <h2>Gerenciar Alarme</h2>
+        <form action="/produto/salvar" method="post">
+          <input type="hidden" id="idAlarme" name="id">
 
-  //RONDAS---------------------------------------------------------------
+          <label>Data Instalação:</label>
+          <input type="date" id="dataInstAlarme" name="dataInst" required>
+
+          <label>Data Retirada:</label>
+          <input type="date" id="dataRetAlarme" name="dataRet" required>
+
+          <label>Defeito:</label>
+          <select id="defeitoAlarme" name="defeito" required>
+            <option value="true">Sim</option>
+            <option value="false" selected>Não</option>
+          </select>
+
+          <label>ID Endereço:</label>
+          <input type="number" id="idEnderecoAlarme" name="idEndereco" required>
+
+          <button type="submit">Salvar</button>
+          <button type="button" onclick="fecharModal('modalAlarme')">Cancelar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL RONDAS -->
+    <div id="modalRonda" class="modal">
+      <div class="modal-content">
+        <span onclick="fecharModal('modalRonda')" class="close">&times;</span>
+        <form id="formRonda" th:action="@{/salvar}" method="post">
+
+
+          <input type="hidden" id="id" name="id" value="">
+          <label>Nome:</label>
+          <input type="text" id="nome" name="nome" required><br>
+          <label>Bairro:</label>
+          <input type="text" id="bairro" name="bairro" required><br>
+          <label>Descrição:</label>
+          <input type="text" id="descricao" name="descricao"><br>
+          <label>Observação:</label>
+          <input type="text" id="observacao" name="observacao"><br>
+          <button type="submit">Salvar</button>
+
+          <button type="button" onclick="fecharModal('modalRonda')">Cancelar</button>
+        </form>
+      </div>
+    </div>
+
+    <!--MODAL OCORRENCIAS -->
+    <div id="modalOcorrencia" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span onclick="fecharModal('modalOcorrencia')" class="close">&times;</span>
+        <h2>Gerenciar Ocorrência</h2>
+        <form action="/dashboard/ocorrencias/salvar" method="post">
+          <input type="hidden" id="idOcorrencia" name="id">
+
+          <label>Data:</label>
+          <input type="date" id="dataOcorrencia" name="data" required>
+
+          <label>Duração:</label>
+          <input type="time" id="duracaoOcorrencia" name="duracao" required>
+
+          <label>ID Vigilante:</label>
+          <input type="number" id="idVigilanteOcorrencia" name="idVigilante" required>
+
+          <label>ID Produto:</label>
+          <input type="number" id="idProdutoOcorrencia" name="idProduto" required>
+
+          <button type="submit">Salvar</button>
+          <button type="button" onclick="fecharModal('modalOcorrencia')">Cancelar</button>
+        </form>
+      </div>
+    </div>
+
+
+  </body> 
+
+  <script>
+
+  function esconderTodosContainers() {
+    const containers = [
+      'rondasContainer',
+      'ocorrenciasContainer',
+      'alarmesContainer',
+      'gravacoesContainer'
+    ];
+    containers.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+  }
   function mostrarRondas() {
-    document.getElementById('ocorrenciasContainer').style.display = 'none';
-    document.getElementById('rondasContainer').style.display = 'block'; 
+    esconderTodosContainers();
+    document.getElementById('rondasContainer').style.display = 'block';
   }
 
-  //ronda modal
-
-  function abrirModalEditar(id) {
-    const tr = document.querySelector(`tr[data-id="${id}"]`);
-
-    if (!tr) {
-      alert('Ronda não encontrada!');
-      return;
-    }
-    const tds = tr.querySelectorAll('td');
-
-    document.getElementById('id').value = id;
-    document.getElementById('nome').value = tds[1].innerText.trim();
-    document.getElementById('bairro').value = tds[2].innerText.trim();
-    document.getElementById('descricao').value = tds[3].innerText.trim();
-    document.getElementById('observacao').value = tds[4].innerText.trim();
-
-    document.getElementById('modalRonda').style.display = 'flex';
-  }
-
-  function abrirModalAdicionar() {
-    document.getElementById('id').value = '';
-    document.getElementById('nome').value = '';
-    document.getElementById('bairro').value = '';
-    document.getElementById('descricao').value = '';
-    document.getElementById('observacao').value = '';
-
-    document.getElementById('modalRonda').style.display = 'flex';
-  }
-
-  function fecharModal(idModal) {
-    document.getElementById(idModal).style.display = 'none';
-  }
-
-  //OCORRENCIAS ------------------------------------------------------
   function mostrarOcorrencias() {
+    esconderTodosContainers();
     document.getElementById('ocorrenciasContainer').style.display = 'block';
-    document.getElementById('rondasContainer').style.display = 'none'; 
-  }
-
-
-  function abrirModalAdicionarOcorrencia() {
-    document.getElementById('dataOcorrencia').value = '';
-    document.getElementById('duracaoOcorrencia').value = '';
-    document.getElementById('idVigilanteOcorrencia').value = '';
-    document.getElementById('idProdutoOcorrencia').value = '';
-    document.getElementById('modalOcorrencia').style.display = 'flex';
-  }
-
-  function abrirModalEditarOcorrencia(id) {
-    const tr = document.querySelector(`tr[data-id="${id}"]`);
-    const tds = tr.querySelectorAll('td');
-
-    document.getElementById('idOcorrencia').value = id;
-    document.getElementById('dataOcorrencia').value = formatarData(tds[1].innerText);
-    document.getElementById('duracaoOcorrencia').value = tds[2].innerText;
-    document.getElementById('idVigilanteOcorrencia').value = tds[3].innerText;
-    document.getElementById('idProdutoOcorrencia').value = tds[4].innerText;
-
-    document.getElementById('modalOcorrencia').style.display = 'flex';
   }
 
 
 
-  //VIGILANTES ------------------------------------------------------
-  function mostrarVigilantes() {
-    document.getElementById('vigilantesContainer').style.display = 'block'
-    document.getElementById('ocorrenciasContainer').style.display = 'none';
-    document.getElementById('rondasContainer').style.display = 'none';  }
-
-
-function abrirModalAdicionarVigilante() {
-  document.getElementById('loginAntigo').value = '';
-  document.getElementById('login').value = '';
-  document.getElementById('senha').value = '';
-  document.getElementById('turno').value = '';
-  document.getElementById('cargaHoraria').value = '';
-  document.getElementById('remuneracao').value = '';
-  document.getElementById('dataContratacao').value = '';
-  document.getElementById('fone').value = '';
-  document.getElementById('email').value = '';
-  document.getElementById('foneContato').value = '';
-
-  document.getElementById('modalVigilante').style.display = 'flex';
-}
-function abrirModalEditarVigilante(login) {
-    console.log("Abrindo modal para:", login);
-
-  const tr = document.querySelector(`tr[data-login="${login}"]`);
-  if (!tr) {
-    alert('Vigilante não encontrado!');
-    return;
+  function mostrarAlarmes() {
+    esconderTodosContainers();
+    document.getElementById('alarmesContainer').style.display = 'block';
   }
-  const tds = tr.querySelectorAll('td');
-
-  document.getElementById('loginAntigo').value = login;
-  document.getElementById('login').value = tds[0].innerText.trim();
-
-  document.getElementById('senha').value = '';
-
-  document.getElementById('turno').value = tds[1].innerText.trim();
-  document.getElementById('cargaHoraria').value = tds[2].innerText.trim();
-  document.getElementById('remuneracao').value = tds[3].innerText.trim();
-  document.getElementById('dataContratacao').value = formatarData(tds[4].innerText.trim());
-  document.getElementById('fone').value = tds[5].innerText.trim();
-  document.getElementById('email').value = tds[6].innerText.trim();
-  document.getElementById('foneContato').value = tds[7].innerText.trim();
-
-  document.getElementById('modalVigilante').style.display = 'flex';
-}
 
 
+  function mostrarGravacoes() {
+    esconderTodosContainers();
+    document.getElementById('gravacoesContainer').style.display = 'block';
+  }
+
+    //RONDAS---------------------------------------------------------------
+
+
+    //ronda modal
+
+    function abrirModalEditar(id) {
+      const tr = document.querySelector(`tr[data-id="${id}"]`);
+
+      if (!tr) {
+        alert('Ronda não encontrada!');
+        return;
+      }
+      const tds = tr.querySelectorAll('td');
+
+      document.getElementById('id').value = id;
+      document.getElementById('nome').value = tds[1].innerText.trim();
+      document.getElementById('bairro').value = tds[2].innerText.trim();
+      document.getElementById('descricao').value = tds[3].innerText.trim();
+      document.getElementById('observacao').value = tds[4].innerText.trim();
+
+      document.getElementById('modalRonda').style.display = 'flex';
+    }
+
+    function abrirModalAdicionar() {
+      document.getElementById('id').value = '';
+      document.getElementById('nome').value = '';
+      document.getElementById('bairro').value = '';
+      document.getElementById('descricao').value = '';
+      document.getElementById('observacao').value = '';
+
+      document.getElementById('modalRonda').style.display = 'flex';
+    }
+
+    function fecharModal(idModal) {
+      document.getElementById(idModal).style.display = 'none';
+    }
+
+    //OCORRENCIAS ------------------------------------------------------
+
+
+    function abrirModalAdicionarOcorrencia() {
+      document.getElementById('dataOcorrencia').value = '';
+      document.getElementById('duracaoOcorrencia').value = '';
+      document.getElementById('idVigilanteOcorrencia').value = '';
+      document.getElementById('idProdutoOcorrencia').value = '';
+      document.getElementById('modalOcorrencia').style.display = 'flex';
+    }
+
+    function abrirModalEditarOcorrencia(id) {
+      const tr = document.querySelector(`tr[data-id="${id}"]`);
+      const tds = tr.querySelectorAll('td');
+
+      document.getElementById('idOcorrencia').value = id;
+      document.getElementById('dataOcorrencia').value = formatarData(tds[1].innerText);
+      document.getElementById('duracaoOcorrencia').value = tds[2].innerText;
+      document.getElementById('idVigilanteOcorrencia').value = tds[3].innerText;
+      document.getElementById('idProdutoOcorrencia').value = tds[4].innerText;
+
+      document.getElementById('modalOcorrencia').style.display = 'flex';
+    }
 
 
 
-//alarmes
-function mostrarAlarmes() {
-  document.getElementById('alarmesContainer').style.display = 'block';
-  document.getElementById('rondasContainer').style.display = 'none';
-  document.getElementById('ocorrenciasContainer').style.display = 'none';
+    //VIGILANTES ------------------------------------------------------
+
+
+
+    // function abrirModalAdicionarVigilante() {
+    //   document.getElementById('loginAntigo').value = '';
+    //   document.getElementById('login').value = '';
+    //   document.getElementById('senha').value = '';
+    //   document.getElementById('turno').value = '';
+    //   document.getElementById('cargaHoraria').value = '';
+    //   document.getElementById('remuneracao').value = '';
+    //   document.getElementById('dataContratacao').value = '';
+    //   document.getElementById('fone').value = '';
+    //   document.getElementById('email').value = '';
+    //   document.getElementById('foneContato').value = '';
+
+    //   document.getElementById('modalVigilante').style.display = 'flex';
+    // }
+    // function abrirModalEditarVigilante(login) {
+    //   console.log("Abrindo modal para:", login);
+
+    //   const tr = document.querySelector(`tr[data-login="${login}"]`);
+    //   if (!tr) {
+    //     alert('Vigilante não encontrado!');
+    //     return;
+    //   }
+    //   const tds = tr.querySelectorAll('td');
+
+    //   document.getElementById('loginAntigo').value = login;
+    //   document.getElementById('login').value = tds[0].innerText.trim();
+
+    //   document.getElementById('senha').value = '';
+
+    //   document.getElementById('turno').value = tds[1].innerText.trim();
+    //   document.getElementById('cargaHoraria').value = tds[2].innerText.trim();
+    //   document.getElementById('remuneracao').value = tds[3].innerText.trim();
+    //   document.getElementById('dataContratacao').value = formatarData(tds[4].innerText.trim());
+    //   document.getElementById('fone').value = tds[5].innerText.trim();
+    //   document.getElementById('email').value = tds[6].innerText.trim();
+    //   document.getElementById('foneContato').value = tds[7].innerText.trim();
+
+    //   document.getElementById('modalVigilante').style.display = 'flex';
+    // }
+
+
+
+
+
+    //alarmes
   
-}
-function abrirModalEditarAlarme(id) {
+   function abrirModalEditarAlarme(id) {
   const tr = document.querySelector(`tr[data-id="${id}"]`);
   if (!tr) {
-    alert('Alarme não encontrado!');
+    alert('Alarme não encontrado! ID: ' + id);
+    console.error('Não encontrou tr com data-id:', id);
     return;
   }
   const tds = tr.querySelectorAll('td');
+  
+  if(tds.length < 5) {
+    alert('Dados incompletos para o alarme ID: ' + id);
+    console.error('Quantidade de td insuficiente:', tds.length);
+    return;
+  }
 
   document.getElementById('idAlarme').value = id;
-  document.getElementById('dataInstAlarme').value = formatarData(tds[1].innerText);
-  document.getElementById('dataRetAlarme').value = formatarData(tds[2].innerText);
+  document.getElementById('dataInstAlarme').value = formatarData(tds[1].innerText.trim());
+  document.getElementById('dataRetAlarme').value = formatarData(tds[2].innerText.trim());
   document.getElementById('defeitoAlarme').value = tds[3].innerText.trim();
   document.getElementById('idEnderecoAlarme').value = tds[4].innerText.trim();
 
   document.getElementById('modalAlarme').style.display = 'flex';
 }
 
-function abrirModalAdicionarAlarme() {
-  document.getElementById('idAlarme').value = '';
-  document.getElementById('dataInstAlarme').value = '';
-  document.getElementById('dataRetAlarme').value = '';
-  document.getElementById('defeitoAlarme').value = 'false';
-  document.getElementById('idEnderecoAlarme').value = '';
 
-  document.getElementById('modalAlarme').style.display = 'flex';
-}
+    function abrirModalAdicionarAlarme() {
+      document.getElementById('idAlarme').value = '';
+      document.getElementById('dataInstAlarme').value = '';
+      document.getElementById('dataRetAlarme').value = '';
+      document.getElementById('defeitoAlarme').value = 'false';
+      document.getElementById('idEnderecoAlarme').value = '';
 
-function formatarData(dataStr) {
-  const partes = dataStr.split('/');
-  return `${partes[2]}-${partes[1].padStart(2,'0')}-${partes[0].padStart(2,'0')}`;
-}
-
-
-//CLIENTEDDSAKCNKASNASNDAS
-function mostrarUsuarios() {
-  document.getElementById('clientesContainer').style.display = 'block'
-  document.getElementById('alarmesContainer').style.display = 'none';
-  document.getElementById('rondasContainer').style.display = 'none';
-  document.getElementById('ocorrenciasContainer').style.display = 'none';
-  
-}
-function abrirModalAdicionarCliente() {
-      document.getElementById('loginc').value = '';
-      document.getElementById('senha').value = '';
-      document.getElementById('cpf').value = '';
-      document.getElementById('cpf').removeAttribute('readonly');
-      document.getElementById('dataNasc').value = '';
-      document.getElementById('fone').value = '';
-      document.getElementById('email').value = '';
-      document.getElementById('foneContato').value = '';
-      document.getElementById('modalCliente').style.display = 'flex';
-    }
-
-    function abrirModalEditarCliente(cpf) {
-      const tr = document.querySelector(`tr[data-cpf="${cpf}"]`);
-      if (!tr) {
-        alert('Cliente não encontrado!');
-        return;
-      }
-      const tds = tr.querySelectorAll('td');
-
-      document.getElementById('tituloModalCliente').innerText = 'Editar Cliente';
-      document.getElementById('login').value = tds[0].innerText.trim();
-      document.getElementById('senha').value = ''; 
-      document.getElementById('cpf').value = tds[1].innerText.trim();
-      document.getElementById('cpf').setAttribute('readonly', true);
-      document.getElementById('dataNasc').value = tds[2].innerText.trim();
-      document.getElementById('fone').value = tds[3].innerText.trim();
-      document.getElementById('email').value = tds[4].innerText.trim();
-      document.getElementById('foneContato').value = tds[5].innerText.trim();
-
-      document.getElementById('modalCliente').style.display = 'flex';
+      document.getElementById('modalAlarme').style.display = 'flex';
     }
 
     
-  lucide.createIcons();
-</script>
 
-</html>
+
+    //CLIENTEDDSAKCNKASNASNDAS
+  // function abrirModalNovo() {
+  //   document.getElementById('formCliente').action = '/cadastrarCliente';
+  //   document.getElementById('modoCliente').value = 'novo';
+
+  //   document.getElementById('clienteLogin').readOnly = false;
+  //   document.getElementById('clienteLogin').value = '';
+  //   document.getElementById('clienteSenha').required = true;
+  //   document.getElementById('clienteSenha').value = '';
+  //   document.getElementById('clienteCpf').value = '';
+  //   document.getElementById('clienteDataNasc').value = '';
+  //   document.getElementById('clienteFone').value = '';
+  //   document.getElementById('clienteEmail').value = '';
+  //   document.getElementById('clienteFoneContato').value = '';
+
+  //   document.getElementById('modalCliente').style.display = 'block';
+  // }
+
+  // function abrirModalEditar(login) {
+  //   const linha = document.querySelector(`#cliente-${login}`);
+  //   const tds = linha.getElementsByTagName('td');
+
+  //   document.getElementById('formCliente').action = '/editarCliente';
+  //   document.getElementById('modoCliente').value = 'editar';
+
+  //   document.getElementById('clienteLogin').readOnly = true;
+  //   document.getElementById('clienteLogin').value = tds[0].innerText;
+  //   document.getElementById('clienteSenha').required = false;
+  //   document.getElementById('clienteSenha').value = '';
+  //   document.getElementById('clienteCpf').value = tds[1].innerText;
+  //   document.getElementById('clienteDataNasc').value = tds[2].innerText.split('/').reverse().join('-');
+  //   document.getElementById('clienteFone').value = tds[3].innerText;
+  //   document.getElementById('clienteEmail').value = tds[4].innerText;
+  //   document.getElementById('clienteFoneContato').value = tds[5].innerText;
+
+  //   document.getElementById('modalCliente').style.display = 'block';
+  // }
+
+  // function fecharModalCliente() {
+  //   document.getElementById('modalCliente').style.display = 'none';
+  // }
+
+  // GRAVAÇÕES ---------------------------------------------------------
+
+
+  function abrirModalAdicionarGravacao() {
+    document.getElementById('idGravacao').value = '';
+    document.getElementById('descricaoGravacao').value = '';
+    document.getElementById('duracaoGravacao').value = '';
+    document.getElementById('dataGravacao').value = '';
+    document.getElementById('arquivoGravacao').value = '';
+    document.getElementById('idProdutoGravacao').value = '';
+    document.getElementById('modalGravacao').style.display = 'flex';
+  }
+
+  function abrirModalEditarGravacao(id) {
+    const tr = document.querySelector(`tr[data-id="${id}"]`);
+    if (!tr) {
+      alert('Gravação não encontrada!');
+      return;
+    }
+
+    const tds = tr.querySelectorAll('td');
+    document.getElementById('idGravacao').value = id;
+    document.getElementById('descricaoGravacao').value = tds[1].innerText.trim();
+    document.getElementById('duracaoGravacao').value = tds[2].innerText.trim();
+    document.getElementById('dataGravacao').value = formatarData(tds[3].innerText.trim());
+    document.getElementById('arquivoGravacao').value = tds[4].innerText.trim();
+    document.getElementById('idProdutoGravacao').value = tds[5].innerText.trim();
+
+    document.getElementById('modalGravacao').style.display = 'flex';
+  }
+function formatarData(dataStr) {
+  if (!dataStr) return '';
+  if (dataStr.includes('/')) {
+    const partes = dataStr.split('/');
+    return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+  } else if (dataStr.includes('-')) {
+    return dataStr;
+  }
+  return dataStr;
+}
+
+    lucide.createIcons();
+  </script>
+
+  </html>

@@ -4,9 +4,40 @@
   <meta charset="UTF-8" />
   <title>Escala e Rondas - Vigilante</title>
   <link rel="stylesheet" th:href="@{/style/css/styleRondas.css}" />
+   <link rel="stylesheet" href="./style/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+  <header class="header">
+      <section>
+        <a href="#" class="logo">
+          <img src="" alt="" class="logo-img">
+        </a> 
+        <nav class="navbar">
+          <a href="#">Inicio</a>
+          <a href="#about">Sobre</a>
+          <a href="#contato">Contato</a>
+          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
+          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
+          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
+          <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
+        </nav>
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="fas fa-bars"></i>
+        </div>
+        <div class="perfil" onclick="toggleDropdown()">
+          <i class="fas fa-user-circle"></i>
+          <span id="user-name">Usuário</span>
+          <div class="dropdown-menu" id="dropdown">
+            <a href="#">Meu Perfil</a>
+            <a href="#">Configurações</a>
+            <a href="/logout">Sair</a>
+          </div>
+        </div>
+      </section>
+    </header>
+
   <div class="rondas-container">
     <h1>Rondas do Vigilante</h1>
 
