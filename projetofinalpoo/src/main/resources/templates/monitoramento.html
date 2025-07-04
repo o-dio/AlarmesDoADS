@@ -14,9 +14,9 @@
           <img src="" alt="" class="logo-img">
         </a> 
         <nav class="navbar">
-          <a href="#">Inicio</a>
-          <a href="#about">Sobre</a>
-          <a href="#contato">Contato</a>
+          <a href="/">Inicio</a>
+        <a href="/">Sobre</a>
+        <a href="/">Contato</a>
           <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
           <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
           <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
@@ -69,7 +69,13 @@
     </div>
     <div th:each="g : ${gravacoes}">
       <p><strong th:text="${g.data}"></strong> (<span th:text="${g.duracao}"></span>)</p>
-      <iframe th:src="@{${g.arquivo}}" allowfullscreen></iframe>
+      <iframe src="https://player.vimeo.com/video/3766920" 
+        width="640" 
+        height="360" 
+        frameborder="0" 
+        allow="autoplay; fullscreen; picture-in-picture" 
+        allowfullscreen>
+</iframe>
       <p th:text="${g.descricao}"></p>
     </div>
   </div>
@@ -97,6 +103,28 @@
 </div>
 
 <script>
+    function toggleDropdown() {
+      document.getElementById("dropdown").classList.toggle("show");
+    }
+  
+    // Fecha o menu se clicar fora
+    window.addEventListener("click", function(e) {
+      if (!e.target.closest(".perfil")) {
+        document.getElementById("dropdown").classList.remove("show");
+      }
+    });
+
+    function toggleMenu() {
+      document.querySelector(".navbar").classList.toggle("active");
+    }
+
+    // Fecha o menu ao clicar em um item
+    document.querySelectorAll(".navbar a").forEach(link => {
+      link.addEventListener("click", () => {
+        document.querySelector(".navbar").classList.remove("active");
+      });
+    });
+
   let alarmeAtivo = true;
 
   function toggleAlarme() {

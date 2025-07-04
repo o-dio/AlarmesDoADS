@@ -15,9 +15,9 @@
           <img src="" alt="" class="logo-img">
         </a> 
         <nav class="navbar">
-          <a href="#">Inicio</a>
-          <a href="#about">Sobre</a>
-          <a href="#contato">Contato</a>
+        <a href="/">Inicio</a>
+        <a href="/">Sobre</a>
+        <a href="/">Contato</a>
           <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
           <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
           <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
@@ -111,6 +111,28 @@
   </div>
 
   <script>
+        function toggleDropdown() {
+      document.getElementById("dropdown").classList.toggle("show");
+    }
+  
+    // Fecha o menu se clicar fora
+    window.addEventListener("click", function(e) {
+      if (!e.target.closest(".perfil")) {
+        document.getElementById("dropdown").classList.remove("show");
+      }
+    });
+
+    function toggleMenu() {
+      document.querySelector(".navbar").classList.toggle("active");
+    }
+
+    // Fecha o menu ao clicar em um item
+    document.querySelectorAll(".navbar a").forEach(link => {
+      link.addEventListener("click", () => {
+        document.querySelector(".navbar").classList.remove("active");
+      });
+    });
+    
     lucide.createIcons();
   </script>
 </body>

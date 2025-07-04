@@ -63,7 +63,8 @@ public String exibirDashboard(HttpSession session, Model model) {
     ClienteDAO clienteDAO = new ClienteDAO();
     List<Cliente> clienteList = clienteDAO.buscarTodos();
     model.addAttribute("totalClientes", clienteList.size());
-    
+     
+        model.addAttribute("clientes", clienteList);
 
     VigilanteDAO vigilanteDAO = new VigilanteDAO();
     List<Vigilante> vigilantesList = vigilanteDAO.buscarTodos();

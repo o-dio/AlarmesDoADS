@@ -55,8 +55,8 @@ public class ClienteDAO {
 
             while (rs.next()) {
                    Date dataNasc = rs.getDate("DataNasc");
-            String dataFormatada = dataNasc != null ? new SimpleDateFormat("dd/MM/yyyy").format(dataNasc) : null;
-
+                    String dataFormatada = dataNasc != null ? new SimpleDateFormat("dd/MM/yyyy").format(dataNasc) : null;
+System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")));
                 clientes.add(new Cliente(
                     rs.getString("Login"),
                     rs.getString("Senha"),

@@ -14,12 +14,7 @@ public class ClienteController {
 
     ClienteDAO dao = new ClienteDAO();
 
-    @GetMapping("/clientes")
-    public String listarClientes(Model model) {
-        ArrayList<Cliente> clientes = dao.buscarTodos();
-        model.addAttribute("clientes", clientes);
-        return "clientes";
-    }
+ 
 
     @PostMapping("/cadastrarCliente")
     public String cadastrarCliente(

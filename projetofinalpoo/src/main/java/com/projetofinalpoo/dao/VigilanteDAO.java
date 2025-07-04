@@ -118,7 +118,6 @@ public class VigilanteDAO {
                     rs.getString("Turno"),
                     cargaHorariaStr,
                     rs.getDouble("Remuneracao"),
-
                     rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
                     new ContatoInfo(
                         rs.getString("Fone"),

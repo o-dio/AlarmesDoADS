@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -53,10 +54,10 @@ public class OcorrenciaDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                
+                System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("Data")));
                 Ocorrencia o = new Ocorrencia(
                     rs.getInt("id"),
-                    rs.getDate("Data").toLocalDate().format(dataFormatter),
+                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("Data")),
                     rs.getTime("Duracao").toLocalTime().format(timeFormatter),
                     rs.getInt("IdVigilante"),
                     rs.getInt("IdProduto")
@@ -89,8 +90,8 @@ public class OcorrenciaDAO {
 
             if (rs.next()) {
                 return new Ocorrencia(
-                    rs.getInt("id"),
-                    rs.getDate("Data").toLocalDate().format(dataFormatter),
+                    rs.getInt("id"),  
+                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("Data")),
                     rs.getTime("Duracao").toLocalTime().format(timeFormatter),
                     rs.getInt("IdVigilante"),
                     rs.getInt("IdProduto")

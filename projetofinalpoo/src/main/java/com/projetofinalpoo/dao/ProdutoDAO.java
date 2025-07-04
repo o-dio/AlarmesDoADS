@@ -3,6 +3,7 @@ package com.projetofinalpoo.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -48,10 +49,10 @@ public class ProdutoDAO {
         String sql = "SELECT * FROM \"Produto\"";
         ArrayList<Produto> produtos = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+        System.out.println("oidfdssdfsfdsfds");
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
-
+            
             while (rs.next()) {
                 Produto p = new Produto(
                     rs.getInt("id"),
@@ -87,8 +88,9 @@ public class ProdutoDAO {
             if (rs.next()) {
                 return new Produto(
                     rs.getInt("id"),
-                    rs.getDate("dataInst").toLocalDate().format(formatter),
-                    rs.getDate("dataRet").toLocalDate().format(formatter),
+                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("dataInst")),
+                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("dataRet")),
+                
                     rs.getBoolean("defeito"),
                     rs.getInt("idEndereco")
                 );
