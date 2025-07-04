@@ -15,9 +15,7 @@ public class Cliente implements Usuario {
     private String senha;
     private String cpf;
     private LocalDate dataNasc;
-    private String fone;
-    private String email;
-    private String foneContato;
+    private ContatoInfo contatoInfo;
 
     /**
      * Construtor padrão. Inicializa um cliente vazio.
@@ -35,15 +33,13 @@ public class Cliente implements Usuario {
      * @param email       o email do cliente
      * @param foneContato o telefone de contato alternativo
      */
-    public Cliente(String login, String senha, String cpf, String dataNasc, String fone, String email, String foneContato) {
+    public Cliente(String login, String senha, String cpf, String dataNasc, ContatoInfo contatoInfo) {
         super();
         this.login = login;
         this.senha = senha;
         this.cpf = cpf;
         this.dataNasc = LocalDate.parse(dataNasc, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        this.fone = fone;
-        this.email = email;
-        this.foneContato = foneContato;
+        this.contatoInfo = contatoInfo;
     }
 
     /**
@@ -118,58 +114,12 @@ public class Cliente implements Usuario {
         this.dataNasc = dataNasc;
     }
 
-    /**
-     * Retorna o telefone principal do cliente.
-     *
-     * @return o telefone principal
-     */
-    public String getFone() {
-        return fone;
+    public ContatoInfo getContatoInfo() {
+        return contatoInfo;
     }
 
-    /**
-     * Define o telefone principal do cliente.
-     *
-     * @param fone o novo telefone
-     */
-    public void setFone(String fone) {
-        this.fone = fone;
-    }
-
-    /**
-     * Retorna o email do cliente.
-     *
-     * @return o email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Define o email do cliente.
-     *
-     * @param email o novo email
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Retorna o telefone de contato alternativo do cliente.
-     *
-     * @return o telefone de contato
-     */
-    public String getFoneContato() {
-        return foneContato;
-    }
-
-    /**
-     * Define o telefone de contato alternativo do cliente.
-     *
-     * @param foneContato o novo telefone de contato
-     */
-    public void setFoneContato(String foneContato) {
-        this.foneContato = foneContato;
+    public void setContatoInfo(ContatoInfo contatoInfo) {
+        this.contatoInfo = contatoInfo;
     }
 
     /**
@@ -185,9 +135,6 @@ public class Cliente implements Usuario {
         result = prime * result + ((senha == null) ? 0 : senha.hashCode());
         result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
         result = prime * result + ((dataNasc == null) ? 0 : dataNasc.hashCode());
-        result = prime * result + ((fone == null) ? 0 : fone.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((foneContato == null) ? 0 : foneContato.hashCode());
         return result;
     }
 
@@ -226,21 +173,6 @@ public class Cliente implements Usuario {
                 return false;
         } else if (!dataNasc.equals(other.dataNasc))
             return false;
-        if (fone == null) {
-            if (other.fone != null)
-                return false;
-        } else if (!fone.equals(other.fone))
-            return false;
-        if (email == null) {
-            if (other.email != null)
-                return false;
-        } else if (!email.equals(other.email))
-            return false;
-        if (foneContato == null) {
-            if (other.foneContato != null)
-                return false;
-        } else if (!foneContato.equals(other.foneContato))
-            return false;
         return true;
     }
 
@@ -251,7 +183,7 @@ public class Cliente implements Usuario {
      */
     @Override
     public String toString() {
-        return "Cliente [login=" + login + ", senha=" + senha + ", cpf=" + cpf + ", dataNasc=" + dataNasc + ", fone="
-                + fone + ", email=" + email + ", foneContato=" + foneContato + "]";
+        return "Cliente [login=" + login + ", senha=" + senha + ", cpf=" + cpf + ", dataNasc=" + dataNasc
+                + ", contatoInfo=" + contatoInfo + "]";
     }
 }

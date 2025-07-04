@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.sql.Date;
 
 import com.projetofinalpoo.models.Cliente;
+import com.projetofinalpoo.models.ContatoInfo;
 
 /**
  * Classe responsável por realizar operações de acesso a dados (DAO) da entidade Cliente.
@@ -30,9 +31,9 @@ public class ClienteDAO {
             stmt.setString(2, cliente.getSenha());
             stmt.setString(3, cliente.getCpf());
             stmt.setDate(4, Date.valueOf(cliente.getDataNasc()));
-            stmt.setString(5, cliente.getFone());
-            stmt.setString(6, cliente.getEmail());
-            stmt.setString(7, cliente.getFoneContato());
+            stmt.setString(5, cliente.getContatoInfo().getFone());
+            stmt.setString(6, cliente.getContatoInfo().getEmail());
+            stmt.setString(7, cliente.getContatoInfo().getFoneContato());
             stmt.executeUpdate();
             System.out.println("Cliente cadastrado com sucesso!");
         } catch (Exception e) {
@@ -58,9 +59,11 @@ public class ClienteDAO {
                     rs.getString("Senha"),
                     rs.getString("CPF"),
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 ));
             }
 
@@ -95,9 +98,11 @@ public class ClienteDAO {
                     rs.getString("Senha"),
                     rs.getString("CPF"),
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 );
                 return findClient;
             } else {
@@ -130,9 +135,11 @@ public class ClienteDAO {
                     rs.getString("Senha"),
                     rs.getString("CPF"),
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 );
                 return findClient;
             } else {
@@ -164,9 +171,11 @@ public class ClienteDAO {
                     rs.getString("Senha"),
                     rs.getString("CPF"),
                     new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 );
                 return findClient;
             } else {
@@ -201,9 +210,9 @@ public class ClienteDAO {
             stmt.setString(2, cliente.getSenha());
             stmt.setString(3, cliente.getCpf());
             stmt.setDate(4, Date.valueOf(cliente.getDataNasc()));
-            stmt.setString(5, cliente.getFone());
-            stmt.setString(6, cliente.getEmail());
-            stmt.setString(7, cliente.getFoneContato());
+            stmt.setString(5, cliente.getContatoInfo().getFone());
+            stmt.setString(6, cliente.getContatoInfo().getEmail());
+            stmt.setString(7, cliente.getContatoInfo().getFoneContato());
             stmt.setString(8, cliente.getCpf());
 
             int linhasAfetadas = stmt.executeUpdate();

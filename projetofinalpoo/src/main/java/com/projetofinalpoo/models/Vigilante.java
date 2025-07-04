@@ -17,9 +17,7 @@ public class Vigilante implements Usuario {
     private LocalTime cargaHoraria;
     private double remuneracao;
     private LocalDate dataContratacao;
-    private String fone;
-    private String email;
-    private String foneContato;
+    private ContatoInfo contatoInfo;
 
     /**
      * Construtor da classe Vigilante.
@@ -35,16 +33,14 @@ public class Vigilante implements Usuario {
      * @param foneContato      telefone para contato de emergência
      */
     public Vigilante(String login, String senha, String turno, String cargaHoraria, double remuneracao,
-                     String dataContratacao, String fone, String email, String foneContato) {
+                     String dataContratacao, ContatoInfo contatoInfo) {
         this.login = login;
         this.senha = senha;
         this.turno = turno;
         this.cargaHoraria = LocalTime.parse(cargaHoraria, DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.remuneracao = remuneracao;
         this.dataContratacao = LocalDate.parse(dataContratacao, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        this.fone = fone;
-        this.email = email;
-        this.foneContato = foneContato;
+        this.contatoInfo = contatoInfo;
     }
 
     /**
@@ -155,58 +151,12 @@ public class Vigilante implements Usuario {
         this.dataContratacao = dataContratacao;
     }
 
-    /**
-     * Retorna o telefone pessoal do vigilante.
-     *
-     * @return número de telefone
-     */
-    public String getFone() {
-        return fone;
+    public ContatoInfo getContatoInfo() {
+        return contatoInfo;
     }
 
-    /**
-     * Define o telefone pessoal do vigilante.
-     *
-     * @param fone novo número de telefone
-     */
-    public void setFone(String fone) {
-        this.fone = fone;
-    }
-
-    /**
-     * Retorna o e-mail do vigilante.
-     *
-     * @return e-mail
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Define o e-mail do vigilante.
-     *
-     * @param email novo e-mail
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Retorna o telefone de contato de emergência do vigilante.
-     *
-     * @return telefone de emergência
-     */
-    public String getFoneContato() {
-        return foneContato;
-    }
-
-    /**
-     * Define o telefone de contato de emergência do vigilante.
-     *
-     * @param foneContato novo telefone de emergência
-     */
-    public void setFoneContato(String foneContato) {
-        this.foneContato = foneContato;
+    public void setContatoInfo(ContatoInfo contatoInfo) {
+        this.contatoInfo = contatoInfo;
     }
 
     /**
@@ -226,9 +176,7 @@ public class Vigilante implements Usuario {
         temp = Double.doubleToLongBits(remuneracao);
         result = prime * result + (int) (temp ^ (temp >>> 32));
         result = prime * result + ((dataContratacao == null) ? 0 : dataContratacao.hashCode());
-        result = prime * result + ((fone == null) ? 0 : fone.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((foneContato == null) ? 0 : foneContato.hashCode());
+        result = prime * result + ((contatoInfo == null) ? 0 : contatoInfo.hashCode());
         return result;
     }
 
@@ -274,24 +222,14 @@ public class Vigilante implements Usuario {
                 return false;
         } else if (!dataContratacao.equals(other.dataContratacao))
             return false;
-        if (fone == null) {
-            if (other.fone != null)
+        if (contatoInfo == null) {
+            if (other.contatoInfo != null)
                 return false;
-        } else if (!fone.equals(other.fone))
-            return false;
-        if (email == null) {
-            if (other.email != null)
-                return false;
-        } else if (!email.equals(other.email))
-            return false;
-        if (foneContato == null) {
-            if (other.foneContato != null)
-                return false;
-        } else if (!foneContato.equals(other.foneContato))
+        } else if (!contatoInfo.equals(other.contatoInfo))
             return false;
         return true;
     }
-
+    
     /**
      * Retorna uma representação textual do objeto Vigilante.
      *
@@ -300,7 +238,11 @@ public class Vigilante implements Usuario {
     @Override
     public String toString() {
         return "Vigilante [login=" + login + ", senha=" + senha + ", turno=" + turno + ", cargaHoraria=" + cargaHoraria
-                + ", remuneracao=" + remuneracao + ", dataContratacao=" + dataContratacao + ", fone=" + fone
-                + ", email=" + email + ", foneContato=" + foneContato + "]";
+                + ", remuneracao=" + remuneracao + ", dataContratacao=" + dataContratacao + ", contatoInfo="
+                + contatoInfo + "]";
     }
+
+   
+
+    
 }

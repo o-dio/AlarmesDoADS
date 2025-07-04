@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.projetofinalpoo.enums.Turno;
 import com.projetofinalpoo.models.Cliente;
+import com.projetofinalpoo.models.ContatoInfo;
 import com.projetofinalpoo.models.Vigilante;
 import com.projetofinalpoo.services.CacheClienteService;
 import com.projetofinalpoo.services.CacheVigilanteService;
@@ -34,9 +35,11 @@ public class RegistroController {
                     HashMD5Service.gerarMD5(request.getParameter("senha")),
                     request.getParameter("cpf"),
                     formatarData(request.getParameter("dataNasc")),
-                    request.getParameter("fone"),
-                    request.getParameter("email"),
-                    request.getParameter("foneContato")
+                    new ContatoInfo(
+                        request.getParameter("fone"),
+                        request.getParameter("email"),
+                        request.getParameter("foneContato")
+                    )
             );
             System.out.println("Cliente registrado: " + cliente);
             CacheClienteService clienteCache = new CacheClienteService();
@@ -63,9 +66,11 @@ public class RegistroController {
                     "00:00:00",
                     0.0,
                     formatarData(request.getParameter("dataContratacao")),
-                    request.getParameter("fone"),
-                    request.getParameter("email"),
-                    request.getParameter("foneContato")
+                    new ContatoInfo(
+                        request.getParameter("fone"),
+                        request.getParameter("email"),
+                        request.getParameter("foneContato")
+                    )
             );
             System.out.println("Vigilante registrado: " + vigilante);
             CacheVigilanteService vigilanteCache = new CacheVigilanteService();
