@@ -5,10 +5,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.projetofinalpoo.dao.ClienteDAO;
-import com.projetofinalpoo.dao.VigilanteDAO;
+import com.projetofinalpoo.models.Admin;
 import com.projetofinalpoo.models.Cliente;
 import com.projetofinalpoo.models.Vigilante;
+import com.projetofinalpoo.services.CacheAdminService;
+import com.projetofinalpoo.services.CacheClienteService;
+import com.projetofinalpoo.services.CacheVigilanteService;
 
 import jakarta.servlet.http.HttpSession; 
 
@@ -32,25 +34,34 @@ public class LoginController {
 							HttpSession session) {	
 		System.out.println(role);
 		if(role.equals("cliente")) {
-			ClienteDAO clienteDao = new ClienteDAO();
-			Cliente findCliente = clienteDao.buscarPeloLoginSenha(nome, senha);
+			CacheClienteService clienteCache = new CacheClienteService();
+			clienteCache.carregarDoBanco();
+			Cliente findCliente = clienteCache.buscarPeloLoginSenha(nome, senha);
 			if(findCliente != null) {
 				session.setAttribute("usuarioLogado", findCliente);
 				session.setAttribute("tipo", "cliente");
 				return "redirect:/";
 			}
 		} else if(role.equals("vigilante")) {
-			VigilanteDAO vigilanteDao = new VigilanteDAO();
-			Vigilante findVigilante = vigilanteDao.buscarPeloLoginSenha(nome, senha);
+			CacheVigilanteService vigilanteCache = new CacheVigilanteService();
+			vigilanteCache.carregarDoBanco();
+			Vigilante findVigilante = vigilanteCache.buscarPeloLoginSenha(nome, senha);
 			if(findVigilante != null) {
 				session.setAttribute("usuarioLogado", findVigilante);
 				session.setAttribute("tipo", "vigilante");
 				return "redirect:/";
 			}
 		} else if(role == "admin") {
-			
+			CacheAdminService adminCache = new CacheAdminService();
+			adminCache.carregarDoBanco();
+			Admin findAdmin = adminCache.buscarPeloLoginSenha(nome, senha);
+			if(findAdmin != null) {
+				session.setAttribute("usuarioLogado", findAdmin);
+				session.setAttribute("tipo", "vigilante");
+				return "redirect:/";
+			}
 		}
-			
+		
 		return "login";
     }
 

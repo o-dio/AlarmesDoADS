@@ -34,6 +34,7 @@ public class indexController {
 							@RequestParam("nome") String nome,
 							@RequestParam("email") String email,
 							@RequestParam("mensagem") String mensagem) {
+								
 		Object usuario = session.getAttribute("usuarioLogado");
 		if (usuario == null) {
 			return "redirect:/login";

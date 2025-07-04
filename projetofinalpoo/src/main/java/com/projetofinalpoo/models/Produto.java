@@ -5,13 +5,15 @@ import java.time.format.DateTimeFormatter;
 
 public class Produto {
     //Atributos
+    private int id;
     private LocalDate dataInst;
     private LocalDate dataRet;
     private boolean defeito;
     private int idEndereco;
 
     //Construtor
-    public Produto(String dataInst, String dataRet, boolean defeito, int idEndereco) {
+    public Produto(int id, String dataInst, String dataRet, boolean defeito, int idEndereco) {
+        this.id = id;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         this.dataInst = (dataInst != null && !dataInst.isEmpty()) ? LocalDate.parse(dataInst, formatter) : null;
         this.dataRet = (dataRet != null && !dataRet.isEmpty()) ? LocalDate.parse(dataRet, formatter) : null;
@@ -20,6 +22,14 @@ public class Produto {
     }
 
     //Metodos
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public LocalDate getDataInst() {
         return dataInst;
     }
@@ -56,6 +66,7 @@ public class Produto {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + id;
         result = prime * result + ((dataInst == null) ? 0 : dataInst.hashCode());
         result = prime * result + ((dataRet == null) ? 0 : dataRet.hashCode());
         result = prime * result + (defeito ? 1231 : 1237);
@@ -72,6 +83,8 @@ public class Produto {
         if (getClass() != obj.getClass())
             return false;
         Produto other = (Produto) obj;
+        if (id != other.id)
+            return false;
         if (dataInst == null) {
             if (other.dataInst != null)
                 return false;
@@ -91,7 +104,8 @@ public class Produto {
 
     @Override
     public String toString() {
-        return "Produto [dataInst=" + dataInst + ", dataRet=" + dataRet +
-                ", defeito=" + defeito + ", idEndereco=" + idEndereco + "]";
+        return "Produto [id=" + id + ", dataInst=" + dataInst + ", dataRet=" + dataRet + ", defeito=" + defeito
+                + ", idEndereco=" + idEndereco + "]";
     }
+    
 }

@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Gravacao {
     //Atributos
+    private int id;
     private LocalDate data;
     private LocalTime duracao;
     private String arquivo;
@@ -13,7 +14,8 @@ public class Gravacao {
     private int idProduto;
 
     //Construtor
-    public Gravacao(String data, String duracao, String arquivo, String descricao, int idProduto) {
+    public Gravacao(int id, String data, String duracao, String arquivo, String descricao, int idProduto) {
+        this.id = id;
         this.data = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         this.duracao = LocalTime.parse(duracao, DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.arquivo = arquivo;
@@ -22,6 +24,14 @@ public class Gravacao {
     }
 
     //Metodos
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public LocalDate getData() {
         return data;
     }
@@ -62,11 +72,11 @@ public class Gravacao {
         this.idProduto = idProduto;
     }
 
-    // hashCode, equals e toString
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + id;
         result = prime * result + ((data == null) ? 0 : data.hashCode());
         result = prime * result + ((duracao == null) ? 0 : duracao.hashCode());
         result = prime * result + ((arquivo == null) ? 0 : arquivo.hashCode());
@@ -84,6 +94,8 @@ public class Gravacao {
         if (getClass() != obj.getClass())
             return false;
         Gravacao other = (Gravacao) obj;
+        if (id != other.id)
+            return false;
         if (data == null) {
             if (other.data != null)
                 return false;
@@ -111,7 +123,8 @@ public class Gravacao {
 
     @Override
     public String toString() {
-        return "Gravacao [data=" + data + ", duracao=" + duracao + ", arquivo=" + arquivo +
-               ", descricao=" + descricao + ", idProduto=" + idProduto + "]";
+        return "Gravacao [id=" + id + ", data=" + data + ", duracao=" + duracao + ", arquivo=" + arquivo
+                + ", descricao=" + descricao + ", idProduto=" + idProduto + "]";
     }
+    
 }

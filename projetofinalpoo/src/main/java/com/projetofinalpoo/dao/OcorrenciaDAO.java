@@ -43,6 +43,7 @@ public class OcorrenciaDAO {
 
             while (rs.next()) {
                 Ocorrencia o = new Ocorrencia(
+                    rs.getInt("id"),
                     rs.getDate("Data").toLocalDate().format(dataFormatter),
                     rs.getTime("Duracao").toLocalTime().format(timeFormatter),
                     rs.getInt("IdVigilante"),
@@ -58,8 +59,38 @@ public class OcorrenciaDAO {
         }
     }
 
-    public Ocorrencia buscar(Ocorrencia ocorrencia) {
-        String sql = "SELECT * FROM \"Ocorrencia\" WHERE \"Data\" = ? AND \"Duracao\" = ? AND \"IdVigilante\" = ? AND \"IdProduto\" = ?";
+    public Ocorrencia buscarPorId(int id) {
+        String sql = "SELECT * FROM \"Ocorrencia\" WHERE id = ?";
+        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Ocorrencia(
+                    rs.getInt("id"),
+                    rs.getDate("Data").toLocalDate().format(dataFormatter),
+                    rs.getTime("Duracao").toLocalTime().format(timeFormatter),
+                    rs.getInt("IdVigilante"),
+                    rs.getInt("IdProduto")
+                );
+            } else {
+                System.out.println("Ocorrencia nao encontrada com ID: " + id);
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar ocorrencia por ID: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public void atualizar(int id, Ocorrencia ocorrencia) {
+        String sql = "UPDATE \"Ocorrencia\" SET \"Data\" = ?, \"Duracao\" = ?, \"IdVigilante\" = ?, \"IdProduto\" = ? " +
+                     "WHERE id = ?";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -67,40 +98,7 @@ public class OcorrenciaDAO {
             stmt.setTime(2, Time.valueOf(ocorrencia.getDuracao()));
             stmt.setInt(3, ocorrencia.getIdVigilante());
             stmt.setInt(4, ocorrencia.getIdProduto());
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Ocorrencia(
-                    rs.getDate("Data").toLocalDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                    rs.getTime("Duracao").toLocalTime().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")),
-                    rs.getInt("IdVigilante"),
-                    rs.getInt("IdProduto")
-                );
-            } else {
-                System.out.println("Ocorrencia nao encontrada.");
-                return null;
-            }
-        } catch (Exception e) {
-            System.out.println("Erro ao buscar ocorrencia: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public void atualizar(Ocorrencia oldOcorrencia, Ocorrencia newOcorrencia) {
-        String sql = "UPDATE \"Ocorrencia\" SET \"Data\" = ?, \"Duracao\" = ?, \"IdVigilante\" = ?, \"IdProduto\" = ? " +
-                     "WHERE \"Data\" = ? AND \"Duracao\" = ? AND \"IdVigilante\" = ? AND \"IdProduto\" = ?";
-
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, Date.valueOf(newOcorrencia.getData()));
-            stmt.setTime(2, Time.valueOf(newOcorrencia.getDuracao()));
-            stmt.setInt(3, newOcorrencia.getIdVigilante());
-            stmt.setInt(4, newOcorrencia.getIdProduto());      
-            stmt.setDate(5, Date.valueOf(oldOcorrencia.getData()));
-            stmt.setTime(6, Time.valueOf(oldOcorrencia.getDuracao()));
-            stmt.setInt(7, oldOcorrencia.getIdVigilante());
-            stmt.setInt(8, oldOcorrencia.getIdProduto());
+            stmt.setInt(5, id);
 
             int linhasAfetadas = stmt.executeUpdate();
             if (linhasAfetadas > 0) {
@@ -113,15 +111,12 @@ public class OcorrenciaDAO {
         }
     }
 
-    public void deletar(Ocorrencia ocorrencia) {
-        String sql = "DELETE FROM \"Ocorrencia\" WHERE \"Data\" = ? AND \"Duracao\" = ? AND \"IdVigilante\" = ? AND \"IdProduto\" = ?";
+    public void deletar(int id) {
+        String sql = "DELETE FROM \"Ocorrencia\" WHERE id = ?";
 
         try {
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, Date.valueOf(ocorrencia.getData()));
-            stmt.setTime(2, Time.valueOf(ocorrencia.getDuracao()));
-            stmt.setInt(3, ocorrencia.getIdVigilante());
-            stmt.setInt(4, ocorrencia.getIdProduto());
+            stmt.setInt(1, id);
 
             int linhasAfetadas = stmt.executeUpdate();
             if (linhasAfetadas > 0) {
