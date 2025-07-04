@@ -44,6 +44,7 @@ public class GravacaoDAO {
 
             while (rs.next()) {
                 Gravacao g = new Gravacao(
+                    rs.getInt("id"),
                     rs.getDate("Data").toLocalDate().format(dataFormatter),
                     rs.getTime("Duracao").toLocalTime().format(timeFormatter),
                     rs.getString("Arquivo"),
@@ -72,6 +73,7 @@ public class GravacaoDAO {
 
             if (rs.next()) {
                 return new Gravacao(
+                    rs.getInt("id"),
                     rs.getDate("Data").toLocalDate().format(dataFormatter),
                     rs.getTime("Duracao").toLocalTime().format(timeFormatter),
                     rs.getString("Arquivo"),

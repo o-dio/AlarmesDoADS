@@ -7,10 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.projetofinalpoo.dao.ClienteDAO;
-import com.projetofinalpoo.dao.VigilanteDAO;
 import com.projetofinalpoo.models.Cliente;
 import com.projetofinalpoo.models.Vigilante;
+import com.projetofinalpoo.services.CacheClienteService;
+import com.projetofinalpoo.services.CacheVigilanteService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -37,8 +37,9 @@ public class RegistroController {
                     request.getParameter("foneContato")
             );
             System.out.println("Cliente registrado: " + cliente);
-            ClienteDAO clienteDao = new ClienteDAO();
-            clienteDao.cadastrar(cliente);
+            CacheClienteService clienteCache = new CacheClienteService();
+            clienteCache.cadastrar(cliente);
+            clienteCache.sincronizarComBanco();
 
         } else if ("vigilante".equalsIgnoreCase(role)) {
             Vigilante vigilante = new Vigilante(
@@ -53,15 +54,16 @@ public class RegistroController {
                     request.getParameter("foneContato")
             );
             System.out.println("Vigilante registrado: " + vigilante);
-            VigilanteDAO vigilanteDao = new VigilanteDAO();
-            vigilanteDao.cadastrar(vigilante);
+            CacheVigilanteService vigilanteCache = new CacheVigilanteService();
+            vigilanteCache.cadastrar(vigilante);
+            vigilanteCache.sincronizarComBanco();
         }
 
         return "redirect:/login";
     }
 
     private String formatarData(String dataISO) {
-        LocalDate data = LocalDate.parse(dataISO); // yyyy-MM-dd
+        LocalDate data = LocalDate.parse(dataISO);
         return data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 }

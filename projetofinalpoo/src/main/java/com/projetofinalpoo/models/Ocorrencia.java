@@ -6,13 +6,15 @@ import java.time.format.DateTimeFormatter;
 
 public class Ocorrencia {
     //Atributos
+    private int id;
     private LocalDate data;
     private LocalTime duracao;
     private int idVigilante;
     private int idProduto;
 
     //Construtor
-    public Ocorrencia(String data, String duracao, int idVigilante, int idProduto) {
+    public Ocorrencia(int id, String data, String duracao, int idVigilante, int idProduto) {
+        this.id = id;
         this.data = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         this.duracao = LocalTime.parse(duracao, DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.idVigilante = idVigilante;
@@ -20,6 +22,14 @@ public class Ocorrencia {
     }
 
     //Metodos
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public LocalDate getData() {
         return data;
     }
@@ -56,6 +66,7 @@ public class Ocorrencia {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + id;
         result = prime * result + ((data == null) ? 0 : data.hashCode());
         result = prime * result + ((duracao == null) ? 0 : duracao.hashCode());
         result = prime * result + idVigilante;
@@ -72,6 +83,8 @@ public class Ocorrencia {
         if (getClass() != obj.getClass())
             return false;
         Ocorrencia other = (Ocorrencia) obj;
+        if (id != other.id)
+            return false;
         if (data == null) {
             if (other.data != null)
                 return false;
@@ -91,7 +104,8 @@ public class Ocorrencia {
 
     @Override
     public String toString() {
-        return "Ocorrencia [data=" + data + ", duracao=" + duracao +
-               ", idVigilante=" + idVigilante + ", idProduto=" + idProduto + "]";
+        return "Ocorrencia [id=" + id + ", data=" + data + ", duracao=" + duracao + ", idVigilante=" + idVigilante
+                + ", idProduto=" + idProduto + "]";
     }
+    
 }

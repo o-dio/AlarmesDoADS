@@ -77,6 +77,30 @@ public class AdminDAO {
         }
     }
 
+    public Admin buscarPeloLoginSenha(String login, String senha) {
+        String sql = "SELECT * FROM \"Admin\" WHERE \"Login\" = ? AND \"Senha\" = ?";
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, login);
+            stmt.setString(2, senha);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Admin findAdmin = new Admin(
+                    rs.getString("Login"),
+                    rs.getString("Senha")
+                );
+                return findAdmin;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar admin: " + e.getMessage());
+            return null;
+        }
+    }
+
     public void atualizar(Admin oldAdmin, Admin newAdmin) {
         String sql = "UPDATE \"Admin\" SET " +
         "\"Login\" = ?, " +
