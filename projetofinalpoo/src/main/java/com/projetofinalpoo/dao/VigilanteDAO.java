@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import com.projetofinalpoo.models.ContatoInfo;
 import com.projetofinalpoo.models.Vigilante;
 
 public class VigilanteDAO {
@@ -27,9 +28,9 @@ public class VigilanteDAO {
             stmt.setTime(4, Time.valueOf(vigilante.getCargaHoraria()));
             stmt.setDouble(5, vigilante.getRemuneracao());
             stmt.setDate(6, Date.valueOf(vigilante.getDataContratacao()));
-            stmt.setString(7, vigilante.getFone());
-            stmt.setString(8, vigilante.getEmail());
-            stmt.setString(9, vigilante.getFoneContato());
+            stmt.setString(7, vigilante.getContatoInfo().getFone());
+            stmt.setString(8, vigilante.getContatoInfo().getEmail());
+            stmt.setString(9, vigilante.getContatoInfo().getFoneContato());
 
             stmt.executeUpdate();
             System.out.println("Vigilante cadastrado com sucesso!");
@@ -56,9 +57,11 @@ public class VigilanteDAO {
                     rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
                     rs.getDouble("Remuneracao"),
                     rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 );
                 vigilantes.add(v);
             }
@@ -88,9 +91,11 @@ public class VigilanteDAO {
                     rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
                     rs.getDouble("Remuneracao"),
                     rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 );
                 return v;
             } else {
@@ -121,9 +126,11 @@ public class VigilanteDAO {
                     rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
                     rs.getDouble("Remuneracao"),
                     rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 );
             } else {
                 System.out.println("Vigilante nao encontrado");
@@ -153,9 +160,11 @@ public class VigilanteDAO {
                     rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
                     rs.getDouble("Remuneracao"),
                     rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
+                    new ContatoInfo(
+                        rs.getString("Fone"),
+                        rs.getString("Email"),
+                        rs.getString("FoneContato")
+                    )
                 );
             }
 
@@ -180,9 +189,9 @@ public class VigilanteDAO {
             stmt.setTime(4, Time.valueOf(newVigilante.getCargaHoraria()));
             stmt.setDouble(5, newVigilante.getRemuneracao());
             stmt.setDate(6, Date.valueOf(newVigilante.getDataContratacao()));
-            stmt.setString(7, newVigilante.getFone());
-            stmt.setString(8, newVigilante.getEmail());
-            stmt.setString(9, newVigilante.getFoneContato());
+            stmt.setString(7, newVigilante.getContatoInfo().getFone());
+            stmt.setString(8, newVigilante.getContatoInfo().getEmail());
+            stmt.setString(9, newVigilante.getContatoInfo().getFoneContato());
             stmt.setString(10, oldVigilante.getLogin());
 
             int linhas = stmt.executeUpdate();
