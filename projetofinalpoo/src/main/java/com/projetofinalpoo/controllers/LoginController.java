@@ -51,13 +51,13 @@ public class LoginController {
 				session.setAttribute("tipo", "vigilante");
 				return "redirect:/";
 			}
-		} else if(role == "admin") {
+		} else if(role.equals("admin")) {
 			CacheAdminService adminCache = new CacheAdminService();
 			adminCache.carregarDoBanco();
 			Admin findAdmin = adminCache.buscarPeloLoginSenha(nome, senha);
 			if(findAdmin != null) {
 				session.setAttribute("usuarioLogado", findAdmin);
-				session.setAttribute("tipo", "vigilante");
+				session.setAttribute("tipo", "admin");
 				return "redirect:/";
 			}
 		}

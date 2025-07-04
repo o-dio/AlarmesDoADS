@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.projetofinalpoo.controllers.OcorrenciaController.ProdutoMonitoradoViewModel;
-
+import com.projetofinalpoo.models.Endereco;
 import com.projetofinalpoo.models.Produto;
 
 public class ProdutoDAO {
@@ -51,13 +51,13 @@ public class ProdutoDAO {
                 );
                 produtos.add(p);
             }
-
-            return produtos;
         } catch (Exception e) {
-            System.out.println("Erro ao buscar produtos: " + e.getMessage());
-            return null;
-        }
+        System.out.println("Erro: " + e.getMessage());
     }
+    
+    return produtos; 
+}
+
 
     public Produto buscarPorId(int id) {
         String sql = "SELECT * FROM \"Produto\" WHERE \"id\" = ?";
@@ -169,4 +169,65 @@ public class ProdutoDAO {
 
     return lista;
 }
+
+ public List<Produto> buscarPorVigilante(int idVigilante) {
+    List<Produto> lista = new ArrayList<>();
+    String sql = "SELECT * FROM \"Produto\" WHERE \"IdVigilante\" = ?";  // Atenção no nome da coluna
+    
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, idVigilante);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            // Ler os dados do produto diretamente do ResultSet
+            int id = rs.getInt("id");
+            String dataInst = rs.getString("DataInst");  // ou getDate e converter
+            String dataRet = rs.getString("DataRet");
+            boolean defeito = rs.getBoolean("Defeito");
+            int idEndereco = rs.getInt("IdEndereco");
+
+            Produto p = new Produto(id, dataInst, dataRet, defeito, idEndereco);
+
+            // Não chame setEndereco pois Produto não tem esse método
+            lista.add(p);
+        }
+    } catch (Exception e) {
+        System.out.println("Erro ao buscar produtos por vigilante: " + e.getMessage());
+    }
+    return lista;
+}
+
+
+    public List<Endereco> buscarEnderecosDoVigilante(int idVigilante) {
+        List<Endereco> lista = new ArrayList<>();
+
+String sql = """
+    SELECT DISTINCT e.id, e."Rua", e."Numero", e."Bairro", e."Cidade", e."Estado"
+    FROM "Produto" p
+    JOIN "Endereco" e ON p."IdEndereco" = e.id
+    JOIN "Trajeto" t ON t."IdVigilante" = ?
+    JOIN "Endereco_Rota" er ON er."IdEndereco" = e.id AND er."IdRota" = t."IdRota"
+""";
+
+try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+    stmt.setInt(1, idVigilante);
+    ResultSet rs = stmt.executeQuery();
+
+    while (rs.next()) {
+        Endereco e = new Endereco();
+        e.setId(rs.getInt("id"));
+        e.setRua(rs.getString("Rua"));
+        e.setNumero(rs.getString("Numero"));
+        e.setBairro(rs.getString("Bairro"));
+        e.setCidade(rs.getString("Cidade"));
+        e.setEstado(rs.getString("Estado"));
+        lista.add(e);
+    }
+} catch (Exception e) {
+    System.out.println("Erro ao buscar endereços monitorados: " + e.getMessage());
+}
+
+        return lista;
+    }
+
 }

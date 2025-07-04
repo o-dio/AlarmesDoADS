@@ -42,6 +42,7 @@ public class OcorrenciaDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
+                
                 Ocorrencia o = new Ocorrencia(
                     rs.getInt("id"),
                     rs.getDate("Data").toLocalDate().format(dataFormatter),

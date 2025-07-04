@@ -7,6 +7,7 @@ import java.sql.Time;
 import java.sql.Date;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.projetofinalpoo.models.Gravacao;
 
@@ -133,4 +134,38 @@ public class GravacaoDAO {
             System.out.println("Erro ao deletar gravacao: " + e.getMessage());
         }
     }
+ public List<Gravacao> buscarPorEndereco(int idEndereco) {
+    List<Gravacao> lista = new ArrayList<>();
+
+    String sql = """
+        SELECT g.* FROM "Gravacao" g
+        JOIN "Produto" p ON g."IdProduto" = p.id
+        WHERE p."IdEndereco" = ?
+    """;
+
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, idEndereco);
+        ResultSet rs = stmt.executeQuery();
+
+        DateTimeFormatter formatterData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String data = rs.getDate("Data").toLocalDate().format(formatterData);
+            String duracao = rs.getTime("Duracao").toLocalTime().format(formatterHora);
+            String arquivo = rs.getString("Arquivo");
+            String descricao = rs.getString("Descricao");
+            int idProduto = rs.getInt("IdProduto");
+
+            Gravacao g = new Gravacao(id, data, duracao, arquivo, descricao, idProduto);
+            lista.add(g);
+        }
+    } catch (Exception e) {
+        System.out.println("Erro ao buscar gravações: " + e.getMessage());
+    }
+
+    return lista;
+}
+
 }

@@ -48,27 +48,27 @@ public class VigilanteDAO {
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
     
-            while (rs.next()) {
-                Vigilante v = new Vigilante(
-                    rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("Turno"),
-                    rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
-                    rs.getDouble("Remuneracao"),
-                    rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
-                    rs.getString("Fone"),
-                    rs.getString("Email"),
-                    rs.getString("FoneContato")
-                );
-                vigilantes.add(v);
-            }
-    
-            return vigilantes;
-        } catch (Exception e) {
-            System.out.println("Erro ao buscar vigilantes: " + e.getMessage());
-            return null;
+        while (rs.next()) {
+            Vigilante v = new Vigilante(
+                rs.getString("Login"),
+                rs.getString("Senha"),
+                rs.getString("Turno"),
+                rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
+                rs.getDouble("Remuneracao"),
+                rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
+                rs.getString("Fone"),
+                rs.getString("Email"),
+                rs.getString("FoneContato")
+            );
+            vigilantes.add(v);
         }
+
+    } catch (Exception e) {
+        System.out.println("Erro ao buscar vigilantes: " + e.getMessage());
+        
     }
+    return vigilantes;
+}
 
     public Vigilante buscar(Vigilante vigilante) {
         String sql = "SELECT * FROM \"Vigilante\" WHERE \"Login\" = ?";
@@ -80,14 +80,24 @@ public class VigilanteDAO {
             stmt.setString(1, vigilante.getLogin());
             ResultSet rs = stmt.executeQuery();
     
+            Date dataContratacaoDate = rs.getDate("DataContratacao");
+    String dataContratacaoStr = null;
+    if (dataContratacaoDate != null) {
+        dataContratacaoStr = dataContratacaoDate.toLocalDate().format(dataFormatter);
+    }
+    Time cargaHorariaTime = rs.getTime("CargaHoraria");
+    String cargaHorariaStr = null;
+    if (cargaHorariaTime != null) {
+        cargaHorariaStr = cargaHorariaTime.toLocalTime().format(timeFormatter);
+    }
             if (rs.next()) {
                 Vigilante v = new Vigilante(
                     rs.getString("Login"),
                     rs.getString("Senha"),
                     rs.getString("Turno"),
-                    rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
+                    cargaHorariaStr,
                     rs.getDouble("Remuneracao"),
-                    rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
+                    dataContratacaoStr,
                     rs.getString("Fone"),
                     rs.getString("Email"),
                     rs.getString("FoneContato")

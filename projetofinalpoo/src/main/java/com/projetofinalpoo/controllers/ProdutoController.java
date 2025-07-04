@@ -1,0 +1,51 @@
+package com.projetofinalpoo.controllers;
+
+import com.projetofinalpoo.dao.ProdutoDAO;
+import com.projetofinalpoo.models.Produto;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Controller
+public class ProdutoController {
+
+    private ProdutoDAO produtoDAO = new ProdutoDAO();
+    @PostMapping("/produto/salvar")
+    public String salvar(@RequestParam(required = false) Integer id,
+                         @RequestParam String dataInst,
+                         @RequestParam String dataRet,
+                         @RequestParam boolean defeito,
+                         @RequestParam int idEndereco) {
+
+        Produto produto = new Produto();
+        if (id != null) {
+            produto.setId(id);
+        }
+
+        produto.setDataInst(LocalDate.parse(dataInst));
+        produto.setDataRet(LocalDate.parse(dataRet));
+        produto.setDefeito(defeito);
+        produto.setIdEndereco(idEndereco);
+
+        if (id == null || id == 0) {
+            produtoDAO.cadastrar(produto);
+        } else {
+            produtoDAO.atualizar(id, produto);
+        }
+
+        return "redirect:/dashboard";
+    }
+
+    @GetMapping("/produto/excluir/{id}")
+    public String excluir(@PathVariable int id) {
+        produtoDAO.deletar(id);
+        return "redirect:/dashboard";
+        }
+}

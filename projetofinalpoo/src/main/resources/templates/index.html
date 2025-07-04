@@ -21,6 +21,8 @@
           <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
           <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
           <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
+          <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
+
         </nav>
         <div class="menu-toggle" onclick="toggleMenu()">
           <i class="fas fa-bars"></i>

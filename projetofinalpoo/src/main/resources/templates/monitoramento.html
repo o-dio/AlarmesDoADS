@@ -1,72 +1,91 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <title>Painel de Monitoramento</title>
-  <link rel="stylesheet" href="../style/css/stylePainel.css" />
-</head>
-<body>
-  <div class="container-monitoramento">
-    <h2>Painel de Monitoramento</h2>
+  <!DOCTYPE html>
+  <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Painel de Monitoramento</title>
+    <link rel="stylesheet" href="../style/css/stylePainel.css" />
+   
+  </head>
+  <body>
+    <div class="container-monitoramento">
+      <h2>Painel de Monitoramento</h2>
+<form method="GET" action="/monitoramento">
+  <label for="select-local">Selecione um endereço monitorado:</label>
+  <select name="idEndereco" id="select-local" onchange="this.form.submit()">
+    <option value="">-- Selecione --</option>
+    <option th:each="endereco : ${enderecos}"
+            th:value="${endereco.id}"
+            th:selected="${endereco.id == idEnderecoSelecionado}"
+            th:text="${endereco.rua + ', ' + endereco.numero + ' - ' + endereco.bairro + ', ' + endereco.cidade + ' - ' + endereco.estado}">
+    </option>
+  </select>
+</form>
 
-    <label for="select-local">Selecione um endereço monitorado:</label>
-    <select id="select-local" onchange="exibirPainel()">
-      <option value="">-- Selecione --</option>
-      <option value="1">Rua das Gravações, 123</option>
-      <option value="2">General Osorio, 148</option>
-    </select>
-
-    <div class="painel-dinamico" id="painelDinamico" style="display: none;">
-       <div class="status-box">
-        <div class="status-item">
-          <span>Status do Alarme:</span>
-          <span class="alarme-status ativo">Ativado</span>
-        </div>
-        <div class="status-item">
-          <span>Vigilante em campo:</span>
-          <span>João Silva (ID: 004)</span>
-        </div>
-      </div>
-
-      <div class="cameras-section">
-        <h3>Gravações de câmeras no local</h3>
-        <div class="camera-grid">
-          <iframe src="https://www.youtube.com/embed/wa1O35CMJ48" allowfullscreen></iframe>
-          <iframe src="https://player.vimeo.com/video/76979871" allowfullscreen></iframe>
-        </div>
-      </div>
-
-      <div class="mapa-section">
-        <h3>Mapa do local</h3>
-        <iframe
-          width="100%"
-          height="300"
-          style="border-radius: 10px;"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3452.129582991756!2d-50.27112388488561!3d-29.888276681935803!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9519328c9ec79cf3%3A0x502d8e1f7021376a!2sOs%C3%B3rio%2C%20RS!5e0!3m2!1spt-BR!2sbr!4v1719889721505!5m2!1spt-BR!2sbr">
-        </iframe>
-      </div>
-
-      <div class="atalhos-section">
-        <button class="btn-acoes">🔴 Desativar Alarme</button>
-        <button class="btn-acoes">📞 Acionar Suporte</button>
-        <button class="btn-acoes">🎥 Ver Câmeras ao Vivo</button>
-      </div>
+<div class="painel-dinamico" th:if="${enderecos.size() > 0}">
+  <div class="status-box">
+    <div class="status-item">
+      <span>Status do Alarme:</span>
+      <span id="statusAlarme" class="alarme-status ativo">Ativado</span>
+    </div>
+    <div class="status-item">
+      <span>Vigilante em campo:</span>
+      <span id="vigilanteInfo" th:text="${vigilante.login}">Carregando...</span>
     </div>
   </div>
 
-  <script>
-    function exibirPainel() {
-      const valor = document.getElementById("select-local").value;
-      const painel = document.getElementById("painelDinamico");
+  <div class="camera-grid" id="cameraGrid">
+    <div th:if="${gravacoes.size() == 0}">
+      <p>Nenhuma gravação disponível.</p>
+    </div>
+    <div th:each="g : ${gravacoes}">
+      <p><strong th:text="${g.data}"></strong> (<span th:text="${g.duracao}"></span>)</p>
+      <iframe th:src="@{${g.arquivo}}" allowfullscreen></iframe>
+      <p th:text="${g.descricao}"></p>
+    </div>
+  </div>
 
-      if (valor) {
-        painel.style.display = "block";
-      } else {
-        painel.style.display = "none";
-      }
+  <div class="mapa-section">
+    <h3>Mapa do local</h3>
+ <iframe
+    th:if="${enderecoSelecionado != null}"
+    th:src="|https://maps.google.com/maps?q=${#strings.replace(enderecoSelecionado.rua + ' ' + enderecoSelecionado.numero + ' ' + enderecoSelecionado.bairro + ' ' + enderecoSelecionado.cidade + ' ' + enderecoSelecionado.estado, ' ', '+')}&output=embed|"
+    width="100%"
+    height="300"
+    style="border-radius: 10px;"
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+
+
+  </div>
+
+  <div class="atalhos-section">
+    <button class="btn-acoes alarme-toggle" onclick="toggleAlarme()">🔴 Desativar Alarme</button>
+    <button class="btn-acoes">📞 Acionar Suporte</button>
+    <button class="btn-acoes">🎥 Ver Câmeras ao Vivo</button>
+  </div>
+</div>
+
+<script>
+  let alarmeAtivo = true;
+
+  function toggleAlarme() {
+    alarmeAtivo = !alarmeAtivo;
+    const status = document.getElementById("statusAlarme");
+    const botao = document.querySelector(".btn-acoes.alarme-toggle");
+
+    if (alarmeAtivo) {
+      status.textContent = "Ativado";
+      status.classList.remove("inativo");
+      status.classList.add("ativo");
+      botao.textContent = "🔴 Desativar Alarme";
+    } else {
+      status.textContent = "Desativado";
+      status.classList.remove("ativo");
+      status.classList.add("inativo");
+      botao.textContent = "🟢 Ativar Alarme";
     }
-  </script>
-</body>
-</html>
+  }
+</script>
+  </body>
+  </html>

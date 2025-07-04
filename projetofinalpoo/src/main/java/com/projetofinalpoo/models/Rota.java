@@ -1,14 +1,14 @@
 package com.projetofinalpoo.models;
 
 public class Rota {
-    private int id;               
+    private Integer id;               
     private String nome;
     private String bairro;
     private String descricao;
     private String observacao;
 
     // construtor
-    public Rota(int id, String nome, String bairro, String descricao, String observacao) {
+    public Rota(Integer id, String nome, String bairro, String descricao, String observacao) {
         this.id = id;
         this.nome = nome;
         this.bairro = bairro;
@@ -18,7 +18,7 @@ public class Rota {
     
     //Metodos
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

@@ -12,6 +12,8 @@ public class Produto {
     private int idEndereco;
 
     //Construtor
+    public Produto(){}
+    
     public Produto(int id, String dataInst, String dataRet, boolean defeito, int idEndereco) {
         this.id = id;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

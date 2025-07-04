@@ -42,11 +42,14 @@ public class ClienteDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
+                   Date dataNasc = rs.getDate("DataNasc");
+            String dataFormatada = dataNasc != null ? new SimpleDateFormat("dd/MM/yyyy").format(dataNasc) : null;
+
                 clientes.add(new Cliente(
                     rs.getString("Login"),
                     rs.getString("Senha"),
                     rs.getString("CPF"),
-                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
+                    dataFormatada,
                     rs.getString("Fone"),
                     rs.getString("Email"),
                     rs.getString("FoneContato")

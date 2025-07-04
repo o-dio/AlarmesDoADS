@@ -13,6 +13,8 @@ public class Ocorrencia {
     private int idProduto;
 
     //Construtor
+    public Ocorrencia(){}
+    
     public Ocorrencia(int id, String data, String duracao, int idVigilante, int idProduto) {
         this.id = id;
         this.data = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -20,7 +22,12 @@ public class Ocorrencia {
         this.idVigilante = idVigilante;
         this.idProduto = idProduto;
     }
-
+public Ocorrencia(String data, String duracao, int idVigilante, int idProduto) {
+    this.data = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    this.duracao = LocalTime.parse(duracao, DateTimeFormatter.ofPattern("HH:mm:ss"));
+    this.idVigilante = idVigilante;
+    this.idProduto = idProduto;
+}
     //Metodos
     public int getId() {
         return id;
