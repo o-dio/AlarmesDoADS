@@ -196,7 +196,7 @@ public class ClienteDAO {
     /**
      * Atualiza os dados de um cliente existente.
      *
-     * @param Cliente Objeto Cliente a ser alterado.
+     * @param cliente Objeto Cliente a ser alterado.
      */
     public void atualizar(Cliente cliente) {
         String sql = "UPDATE \"Cliente\" SET " +
@@ -236,7 +236,6 @@ public class ClienteDAO {
      * Remove um cliente do banco de dados.
      *
      * @param cliente Objeto Cliente a ser deletado.
-     * @throws Exception Caso ocorra algum erro durante a exclusão.
      */
     public void deletar(Cliente cliente) {
         String sql = "DELETE FROM \"Cliente\" WHERE \"CPF\" = ?";
