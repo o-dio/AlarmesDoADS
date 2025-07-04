@@ -1,9 +1,12 @@
 package com.projetofinalpoo.models;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Cliente {
+public class Cliente implements Usuario{
 	//Atributos
 	private String login;
 	private String senha;
@@ -42,9 +45,14 @@ public class Cliente {
 		return senha;
 	}
 	
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
+	public void setSenha(String senha) throws NoSuchAlgorithmException {
+        MessageDigest m;
+        m = MessageDigest.getInstance("MD5");
+        m.update(senha.getBytes(), 0, senha.length());
+        BigInteger senha1 = new BigInteger(1, m.digest());
+        senha = String.format("%1$032X", senha1);
+        this.senha = senha;
+    }
 	
 	public String getCpf() {
 		return cpf;

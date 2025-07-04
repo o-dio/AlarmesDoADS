@@ -1,6 +1,10 @@
 package com.projetofinalpoo.models;
 
-public class Admin {
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public class Admin implements Usuario {
     //Atributos
     private String login;
 	private String senha;
@@ -25,7 +29,12 @@ public class Admin {
         return senha;
     }
 
-    public void setSenha(String senha) {
+    public void setSenha(String senha) throws NoSuchAlgorithmException {
+        MessageDigest m;
+        m = MessageDigest.getInstance("MD5");
+        m.update(senha.getBytes(), 0, senha.length());
+        BigInteger senha1 = new BigInteger(1, m.digest());
+        senha = String.format("%1$032X", senha1);
         this.senha = senha;
     }
 

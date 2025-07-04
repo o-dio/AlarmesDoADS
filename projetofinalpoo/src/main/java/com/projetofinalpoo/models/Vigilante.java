@@ -1,10 +1,13 @@
 package com.projetofinalpoo.models;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class Vigilante {
+public class Vigilante implements Usuario{
     //Atributos
     private String login;
     private String senha;
@@ -43,7 +46,12 @@ public class Vigilante {
         return senha;
     }
 
-    public void setSenha(String senha) {
+    public void setSenha(String senha) throws NoSuchAlgorithmException {
+        MessageDigest m;
+        m = MessageDigest.getInstance("MD5");
+        m.update(senha.getBytes(), 0, senha.length());
+        BigInteger senha1 = new BigInteger(1, m.digest());
+        senha = String.format("%1$032X", senha1);
         this.senha = senha;
     }
 
