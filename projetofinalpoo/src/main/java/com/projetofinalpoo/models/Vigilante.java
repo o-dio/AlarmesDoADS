@@ -28,9 +28,7 @@ public class Vigilante implements Usuario {
      * @param cargaHoraria     carga horária diária no formato "HH:mm:ss"
      * @param remuneracao      valor da remuneração mensal
      * @param dataContratacao  data de contratação no formato "dd/MM/yyyy"
-     * @param fone             telefone pessoal
-     * @param email            e-mail institucional ou pessoal
-     * @param foneContato      telefone para contato de emergência
+     * @param contatoInfo      informações para contatar o vigilante 
      */
     public Vigilante(String login, String senha, String turno, String cargaHoraria, double remuneracao,
                      String dataContratacao, ContatoInfo contatoInfo) {
@@ -151,10 +149,20 @@ public class Vigilante implements Usuario {
         this.dataContratacao = dataContratacao;
     }
 
+    /**
+     * Retorna um objeto ContatoInfo com as informações de contato de um vigilante
+     * 
+     * @return Objeto ContatoInfo
+     */
     public ContatoInfo getContatoInfo() {
         return contatoInfo;
     }
 
+    /**
+     * Define as informações para contato de um vigilante 
+     * 
+     * @param contatoInfo informações de contato
+     */
     public void setContatoInfo(ContatoInfo contatoInfo) {
         this.contatoInfo = contatoInfo;
     }
@@ -242,7 +250,4 @@ public class Vigilante implements Usuario {
                 + contatoInfo + "]";
     }
 
-   
-
-    
 }

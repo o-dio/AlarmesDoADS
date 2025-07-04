@@ -29,9 +29,7 @@ public class Cliente implements Usuario {
      * @param senha       a senha do cliente (texto puro)
      * @param cpf         o CPF do cliente
      * @param dataNasc    a data de nascimento no formato "dd/MM/yyyy"
-     * @param fone        o telefone principal
-     * @param email       o email do cliente
-     * @param foneContato o telefone de contato alternativo
+     * @param contatoInfo objeto que armazena as informações para contatos
      */
     public Cliente(String login, String senha, String cpf, String dataNasc, ContatoInfo contatoInfo) {
         super();
@@ -114,10 +112,20 @@ public class Cliente implements Usuario {
         this.dataNasc = dataNasc;
     }
 
+    /**
+     * Retorna as informações dos contatos do cliente.
+     *
+     * @return a objeto de ContatoInfo
+     */
     public ContatoInfo getContatoInfo() {
         return contatoInfo;
     }
 
+    /**
+     * Define os contatos de um cliente
+     * 
+     * @param contatoInfo
+     */
     public void setContatoInfo(ContatoInfo contatoInfo) {
         this.contatoInfo = contatoInfo;
     }
