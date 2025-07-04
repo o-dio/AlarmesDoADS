@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.projetofinalpoo.enums.Turno;
 import com.projetofinalpoo.models.Cliente;
 import com.projetofinalpoo.models.Vigilante;
 import com.projetofinalpoo.services.CacheClienteService;
@@ -43,10 +44,22 @@ public class RegistroController {
             clienteCache.sincronizarComBanco();
 
         } else if ("vigilante".equalsIgnoreCase(role)) {
+            Turno turno;
+            try {
+                String turnoParam = request.getParameter("turno");
+                if (turnoParam == null) {
+                    throw new IllegalArgumentException("Parametro 'turno' nao informado.");
+                }
+                turno = Turno.valueOf(turnoParam.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                turno = Turno.D;
+                System.out.println("Valor invalido para turno recebido: " + e.getMessage());
+            }
+
             Vigilante vigilante = new Vigilante(
                     request.getParameter("login"),
                     HashMD5Service.gerarMD5(request.getParameter("senha")),
-                    request.getParameter("turno"),
+                    turno.name(),
                     "00:00:00",
                     0.0,
                     formatarData(request.getParameter("dataContratacao")),
