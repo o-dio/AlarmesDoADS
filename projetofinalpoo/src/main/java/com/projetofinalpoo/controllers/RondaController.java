@@ -18,10 +18,22 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controlador responsável por gerenciar as operações relacionadas às rondas,
+ * incluindo check-in, check-out e listagem das rondas do vigilante logado.
+ */
 @Controller
 public class RondaController {
     private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+    /**
+     * Realiza o check-in do vigilante em uma rota específica,
+     * criando um novo trajeto com data inicial.
+     *
+     * @param idRota Identificador da rota.
+     * @param session Sessão HTTP para obter o vigilante logado.
+     * @return Redireciona para a página de rondas ou login se não autenticado.
+     */
     @RequestMapping("/rondas/checkin")
     public String realizarCheckin(@RequestParam("idRota") int idRota, HttpSession session) {
         Vigilante vigilante = (Vigilante) session.getAttribute("usuarioLogado");
@@ -39,6 +51,14 @@ public class RondaController {
         return "redirect:/rondas";
     }
 
+    /**
+     * Realiza o check-out do vigilante em uma rota específica,
+     * atualizando a data final do trajeto em andamento.
+     *
+     * @param idRota Identificador da rota.
+     * @param session Sessão HTTP para obter o vigilante logado.
+     * @return Redireciona para a página de rondas ou login se não autenticado.
+     */
     @RequestMapping("/rondas/checkout")
     public String realizarCheckout(@RequestParam("idRota") int idRota, HttpSession session) {
         Vigilante vigilante = (Vigilante) session.getAttribute("usuarioLogado");
@@ -62,6 +82,14 @@ public class RondaController {
         return "redirect:/rondas";
     }
 
+    /**
+     * Exibe a lista de rondas do vigilante logado, indicando quais estão em andamento
+     * e as rotas disponíveis para iniciar novas rondas.
+     *
+     * @param session Sessão HTTP para obter o vigilante logado.
+     * @param model Objeto Model para passagem de dados para a view.
+     * @return Nome da view de rondas ou redireciona para login se não autenticado.
+     */
     @RequestMapping("/rondas")
     public String exibirRondas(HttpSession session, Model model) {
         Vigilante vigilante = (Vigilante) session.getAttribute("usuarioLogado");
@@ -112,7 +140,9 @@ public class RondaController {
         return "rondas";
     }
 
-    // Ronda 
+    /**
+     * ViewModel usada para encapsular dados da ronda que serão exibidos na interface.
+     */
     public static class RondaViewModel {
         private String dataIni, dataFim, local, bairro, descricao, status, enderecoCompleto;
         private int idRota;

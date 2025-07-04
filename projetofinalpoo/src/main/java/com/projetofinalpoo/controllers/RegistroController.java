@@ -17,14 +17,30 @@ import com.projetofinalpoo.services.HashMD5Service;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+/**
+ * Controlador responsável pelo registro de novos usuários no sistema,
+ * incluindo clientes e vigilantes.
+ */
 @Controller
 public class RegistroController {
     
+    /**
+     * Exibe a página de registro para o usuário escolher seu tipo (cliente ou vigilante).
+     * 
+     * @return Nome da view de registro.
+     */
     @RequestMapping(value="/registro", method=RequestMethod.GET)
     public String registro() {
         return "registro";
     }
 
+    /**
+     * Processa o formulário de registro submetido via POST.
+     * Cria um novo cliente ou vigilante conforme o parâmetro 'role' recebido.
+     * 
+     * @param request Objeto HttpServletRequest para acessar parâmetros do formulário.
+     * @return Redirecionamento para a página de login após o registro.
+     */
     @RequestMapping(value="/registrar", method=RequestMethod.POST)
     public String registrar(HttpServletRequest request) {
         String role = request.getParameter("role");
@@ -81,6 +97,12 @@ public class RegistroController {
         return "redirect:/login";
     }
 
+    /**
+     * Converte uma data em formato ISO (yyyy-MM-dd) para o formato dd/MM/yyyy.
+     * 
+     * @param dataISO Data em formato ISO.
+     * @return Data formatada no padrão dd/MM/yyyy.
+     */
     private String formatarData(String dataISO) {
         LocalDate data = LocalDate.parse(dataISO);
         return data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
