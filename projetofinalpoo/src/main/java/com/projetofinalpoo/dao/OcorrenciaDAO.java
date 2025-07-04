@@ -10,15 +10,22 @@ import java.util.ArrayList;
 
 import com.projetofinalpoo.models.Ocorrencia;
 
+/**
+ * Classe responsável por realizar operações de acesso a dados (DAO) da entidade Ocorrencia.
+ */
 public class OcorrenciaDAO {
     private Connection conn = new ConexaoDAO().conectar();
 
+    /**
+     * Cadastra uma nova ocorrência no banco de dados.
+     *
+     * @param ocorrencia Objeto Ocorrencia a ser cadastrado.
+     */
     public void cadastrar(Ocorrencia ocorrencia) {
         String sql = "INSERT INTO \"Ocorrencia\" (\"Data\", \"Duracao\", \"IdVigilante\", \"IdProduto\") " +
                      "VALUES (?, ?, ?, ?)";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(ocorrencia.getData()));
             stmt.setTime(2, Time.valueOf(ocorrencia.getDuracao()));
             stmt.setInt(3, ocorrencia.getIdVigilante());
@@ -31,14 +38,18 @@ public class OcorrenciaDAO {
         }
     }
 
+    /**
+     * Retorna uma lista com todas as ocorrências cadastradas.
+     *
+     * @return Lista de objetos Ocorrencia ou null em caso de erro.
+     */
     public ArrayList<Ocorrencia> buscarTodos() {
         String sql = "SELECT * FROM \"Ocorrencia\"";
         ArrayList<Ocorrencia> ocorrencias = new ArrayList<>();
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -59,13 +70,18 @@ public class OcorrenciaDAO {
         }
     }
 
+    /**
+     * Busca uma ocorrência pelo ID.
+     *
+     * @param id Identificador da ocorrência.
+     * @return Objeto Ocorrencia correspondente ou null se não encontrado.
+     */
     public Ocorrencia buscarPorId(int id) {
         String sql = "SELECT * FROM \"Ocorrencia\" WHERE id = ?";
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, id);
 
             ResultSet rs = stmt.executeQuery();
@@ -88,12 +104,17 @@ public class OcorrenciaDAO {
         }
     }
 
+    /**
+     * Atualiza os dados de uma ocorrência existente.
+     *
+     * @param id ID da ocorrência a ser atualizada.
+     * @param ocorrencia Objeto Ocorrencia com os novos dados.
+     */
     public void atualizar(int id, Ocorrencia ocorrencia) {
         String sql = "UPDATE \"Ocorrencia\" SET \"Data\" = ?, \"Duracao\" = ?, \"IdVigilante\" = ?, \"IdProduto\" = ? " +
                      "WHERE id = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(ocorrencia.getData()));
             stmt.setTime(2, Time.valueOf(ocorrencia.getDuracao()));
             stmt.setInt(3, ocorrencia.getIdVigilante());
@@ -111,11 +132,15 @@ public class OcorrenciaDAO {
         }
     }
 
+    /**
+     * Remove uma ocorrência do banco de dados.
+     *
+     * @param id ID da ocorrência a ser removida.
+     */
     public void deletar(int id) {
         String sql = "DELETE FROM \"Ocorrencia\" WHERE id = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, id);
 
             int linhasAfetadas = stmt.executeUpdate();

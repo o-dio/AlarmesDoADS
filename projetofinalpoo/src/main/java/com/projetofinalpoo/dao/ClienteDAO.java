@@ -9,16 +9,23 @@ import java.sql.Date;
 
 import com.projetofinalpoo.models.Cliente;
 
+/**
+ * Classe responsável por realizar operações de acesso a dados (DAO) da entidade Cliente.
+ */
 public class ClienteDAO {
     private Connection conn = new ConexaoDAO().conectar();
 
+    /**
+     * Cadastra um novo cliente no banco de dados.
+     *
+     * @param cliente Objeto Cliente a ser cadastrado.
+     */
     public void cadastrar(Cliente cliente) {
         String sql = "INSERT INTO \"Cliente\" " +
         "(\"Login\", \"Senha\", \"CPF\", \"DataNasc\", \"Fone\", \"Email\", \"FoneContato\")" +
         "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, cliente.getLogin());
             stmt.setString(2, cliente.getSenha());
             stmt.setString(3, cliente.getCpf());
@@ -33,12 +40,16 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Retorna uma lista com todos os clientes cadastrados.
+     *
+     * @return Lista de objetos Cliente ou null se nenhum cliente for encontrado.
+     */
     public ArrayList<Cliente> buscarTodos() {
         String sql = "SELECT * FROM \"Cliente\"";
         ArrayList<Cliente> clientes = new ArrayList<Cliente>();
-        
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -65,11 +76,16 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Busca um cliente pelo login.
+     *
+     * @param cliente Objeto Cliente com o login preenchido.
+     * @return Cliente correspondente ou null se não encontrado.
+     */
     public Cliente buscar(Cliente cliente) {
         String sql = "SELECT * FROM \"Cliente\" WHERE \"CPF\" = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, cliente.getCpf());
             ResultSet rs = stmt.executeQuery();
 
@@ -93,11 +109,17 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Busca um cliente pelo login e senha.
+     *
+     * @param login Login do cliente.
+     * @param senha Senha do cliente.
+     * @return Cliente correspondente ou null se não encontrado.
+     */
     public Cliente buscarPeloLoginSenha(String login, String senha) {
         String sql = "SELECT * FROM \"Cliente\" WHERE \"Login\" = ? AND \"Senha\" = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, login);
             stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
@@ -123,11 +145,16 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Busca um Cliente pelo CPF.
+     *
+     * @param cpf String CPF a ser consultada no banco.
+     * @return Objeto Cliente completo ou null se não encontrado.
+     */
     public Cliente buscarPeloCpf(String cpf) {
         String sql = "SELECT * FROM \"Cliente\" WHERE \"CPF\" = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, cpf);
             ResultSet rs = stmt.executeQuery();
 
@@ -153,6 +180,11 @@ public class ClienteDAO {
     }
 
 
+    /**
+     * Atualiza os dados de um cliente existente.
+     *
+     * @param Cliente Objeto Cliente a ser alterado.
+     */
     public void atualizar(Cliente cliente) {
         String sql = "UPDATE \"Cliente\" SET " +
         "\"Login\" = ?, " +
@@ -164,8 +196,7 @@ public class ClienteDAO {
         "\"FoneContato\" = ? "+
         "WHERE \"CPF\" = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, cliente.getLogin());
             stmt.setString(2, cliente.getSenha());
             stmt.setString(3, cliente.getCpf());
@@ -188,22 +219,27 @@ public class ClienteDAO {
         }
     }
 
+    /**
+     * Remove um cliente do banco de dados.
+     *
+     * @param cliente Objeto Cliente a ser deletado.
+     * @throws Exception Caso ocorra algum erro durante a exclusão.
+     */
     public void deletar(Cliente cliente) {
         String sql = "DELETE FROM \"Cliente\" WHERE \"CPF\" = ?";
-    
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
 
             stmt.setString(1, cliente.getCpf());
-    
+
             int linhasAfetadas = stmt.executeUpdate();
-    
+
             if (linhasAfetadas > 0) {
                 System.out.println("Cliente deletado com sucesso!");
             } else {
                 System.out.println("Cliente nao encontrado para excluir.");
             }
-    
+
         } catch (Exception e) {
             System.out.println("Erro ao deletar cliente: " + e.getMessage());
         }

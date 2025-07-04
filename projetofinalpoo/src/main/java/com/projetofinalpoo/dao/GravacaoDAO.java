@@ -10,15 +10,22 @@ import java.util.ArrayList;
 
 import com.projetofinalpoo.models.Gravacao;
 
+/**
+ * Classe responsável por realizar operações de acesso a dados (DAO) da entidade Gravacao.
+ */
 public class GravacaoDAO {
     private Connection conn = new ConexaoDAO().conectar();
 
+    /**
+     * Cadastra uma nova gravação no banco de dados.
+     *
+     * @param gravacao Objeto Gravacao a ser cadastrado.
+     */
     public void cadastrar(Gravacao gravacao) {
         String sql = "INSERT INTO \"Gravacao\" (\"Data\", \"Duracao\", \"Arquivo\", \"Descricao\", \"IdProduto\") " +
                      "VALUES (?, ?, ?, ?, ?)";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(gravacao.getData()));
             stmt.setTime(2, Time.valueOf(gravacao.getDuracao()));
             stmt.setString(3, gravacao.getArquivo());
@@ -32,14 +39,18 @@ public class GravacaoDAO {
         }
     }
 
+    /**
+     * Retorna uma lista com todas as gravações cadastradas.
+     *
+     * @return Lista de objetos Gravacao ou null em caso de erro.
+     */
     public ArrayList<Gravacao> buscarTodos() {
         String sql = "SELECT * FROM \"Gravacao\"";
         ArrayList<Gravacao> gravacoes = new ArrayList<>();
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -61,13 +72,18 @@ public class GravacaoDAO {
         }
     }
 
+    /**
+     * Busca uma gravação pelo ID.
+     *
+     * @param id Identificador da gravação.
+     * @return Objeto Gravacao correspondente ou null se não encontrado.
+     */
     public Gravacao buscarPorId(int id) {
         String sql = "SELECT * FROM \"Gravacao\" WHERE id = ?";
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
@@ -89,13 +105,18 @@ public class GravacaoDAO {
         }
     }
 
+    /**
+     * Atualiza os dados de uma gravação existente.
+     *
+     * @param id ID da gravação a ser atualizada.
+     * @param gravacao Objeto Gravacao com os novos dados.
+     */
     public void atualizar(int id, Gravacao gravacao) {
         String sql = "UPDATE \"Gravacao\" SET " +
                      "\"Data\" = ?, \"Duracao\" = ?, \"Arquivo\" = ?, \"Descricao\" = ?, \"IdProduto\" = ? " +
                      "WHERE id = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(gravacao.getData()));
             stmt.setTime(2, Time.valueOf(gravacao.getDuracao()));
             stmt.setString(3, gravacao.getArquivo());
@@ -115,11 +136,15 @@ public class GravacaoDAO {
         }
     }
 
+    /**
+     * Remove uma gravação do banco de dados.
+     *
+     * @param id ID da gravação a ser removida.
+     */
     public void deletar(int id) {
         String sql = "DELETE FROM \"Gravacao\" WHERE id = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, id);
 
             int linhas = stmt.executeUpdate();

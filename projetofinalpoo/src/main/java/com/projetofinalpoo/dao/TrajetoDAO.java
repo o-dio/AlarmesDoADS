@@ -10,14 +10,22 @@ import java.util.ArrayList;
 
 import com.projetofinalpoo.models.Trajeto;
 
+/**
+ * Classe responsável pelo acesso aos dados da entidade Trajeto.
+ * Realiza operações de CRUD e consultas específicas sobre trajetos.
+ */
 public class TrajetoDAO {
     private Connection conn = new ConexaoDAO().conectar();
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    /**
+     * Cadastra um novo trajeto no banco de dados.
+     *
+     * @param trajeto Objeto Trajeto a ser cadastrado.
+     */
     public void cadastrar(Trajeto trajeto) {
         String sql = "INSERT INTO \"Trajeto\" (\"DataIni\", \"DataFim\", \"IdVigilante\", \"IdRota\") VALUES (?, ?, ?, ?)";
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, java.sql.Date.valueOf(trajeto.getDataIni()));
 
             if (trajeto.getDataFim() != null) {
@@ -34,11 +42,15 @@ public class TrajetoDAO {
         }
     }
 
+    /**
+     * Retorna todos os trajetos cadastrados.
+     *
+     * @return Lista de objetos Trajeto.
+     */
     public ArrayList<Trajeto> buscarTodos() {
         String sql = "SELECT * FROM \"Trajeto\"";
         ArrayList<Trajeto> trajetos = new ArrayList<>();
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Date dataFimSql = rs.getDate("DataFim");
@@ -56,11 +68,19 @@ public class TrajetoDAO {
         }
     }
 
+    /**
+     * Atualiza um trajeto existente com base nos dados antigos.
+     *
+     * @param trajeto Novo trajeto com os dados atualizados.
+     * @param dataIniOld Data inicial original no formato dd/MM/yyyy.
+     * @param dataFimOld Data final original no formato dd/MM/yyyy.
+     * @param idVigilanteOld ID original do vigilante.
+     * @param idRotaOld ID original da rota.
+     */
     public void atualizar(Trajeto trajeto, String dataIniOld, String dataFimOld, int idVigilanteOld, int idRotaOld) {
         String sql = "UPDATE \"Trajeto\" SET \"DataIni\" = ?, \"DataFim\" = ?, \"IdVigilante\" = ?, \"IdRota\" = ? " +
                 "WHERE \"DataIni\" = ? AND \"DataFim\" = ? AND \"IdVigilante\" = ? AND \"IdRota\" = ?";
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, trajeto.getDataIni().format(formatter));
             stmt.setString(2, trajeto.getDataFim().format(formatter));
             stmt.setInt(3, trajeto.getIdVigilante());
@@ -75,10 +95,17 @@ public class TrajetoDAO {
         }
     }
 
+    /**
+     * Deleta um trajeto com base nos dados fornecidos.
+     *
+     * @param dataIni Data inicial no formato dd/MM/yyyy.
+     * @param dataFim Data final no formato dd/MM/yyyy.
+     * @param idVigilante ID do vigilante.
+     * @param idRota ID da rota.
+     */
     public void deletar(String dataIni, String dataFim, int idVigilante, int idRota) {
         String sql = "DELETE FROM \"Trajeto\" WHERE \"DataIni\" = ? AND \"DataFim\" = ? AND \"IdVigilante\" = ? AND \"IdRota\" = ?";
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, LocalDate.parse(dataIni, DateTimeFormatter.ofPattern("dd/MM/yyyy")).format(formatter));
             stmt.setString(2, LocalDate.parse(dataFim, DateTimeFormatter.ofPattern("dd/MM/yyyy")).format(formatter));
             stmt.setInt(3, idVigilante);
@@ -89,12 +116,18 @@ public class TrajetoDAO {
         }
     }
 
+    /**
+     * Retorna todos os trajetos de um vigilante a partir do login.
+     *
+     * @param login Login do vigilante.
+     * @return Lista de trajetos.
+     */
     public ArrayList<Trajeto> buscarPorLoginVigilante(String login) {
         ArrayList<Trajeto> trajetos = new ArrayList<>();
         String sql = "SELECT t.* FROM \"Trajeto\" t JOIN \"Vigilante\" v " +
                      "ON t.\"IdVigilante\" = v.\"Id\" " +
                      "WHERE v.\"Login\" = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, login);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -112,11 +145,17 @@ public class TrajetoDAO {
         }
         return trajetos;
     }
-//---------------------------------------------------------------------------------
 
+    /**
+     * Busca um trajeto aberto (sem DataFim) por vigilante e rota.
+     *
+     * @param idVigilante ID do vigilante.
+     * @param idRota ID da rota.
+     * @return Trajeto correspondente ou null se não encontrado.
+     */
     public Trajeto buscarTrajetoPorVigilanteERota(int idVigilante, int idRota) {
         String sql = "SELECT * FROM \"Trajeto\" WHERE \"IdVigilante\" = ? AND \"IdRota\" = ? AND \"DataFim\" IS NULL";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, idVigilante);
             stmt.setInt(2, idRota);
             ResultSet rs = stmt.executeQuery();
@@ -135,9 +174,14 @@ public class TrajetoDAO {
         return null;
     }
 
+    /**
+     * Atualiza a DataFim de um trajeto aberto.
+     *
+     * @param trajeto Objeto Trajeto contendo a nova data de fim.
+     */
     public void atualizarDataFim(Trajeto trajeto) {
         String sql = "UPDATE \"Trajeto\" SET \"DataFim\" = ? WHERE \"IdVigilante\" = ? AND \"IdRota\" = ? AND \"DataFim\" IS NULL";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, java.sql.Date.valueOf(trajeto.getDataFim()));
             stmt.setInt(2, trajeto.getIdVigilante());
             stmt.setInt(3, trajeto.getIdRota());
@@ -148,10 +192,16 @@ public class TrajetoDAO {
         }
     }
 
+    /**
+     * Busca todos os trajetos realizados por um vigilante com base no ID.
+     *
+     * @param idVigilante ID do vigilante.
+     * @return Lista de trajetos.
+     */
     public ArrayList<Trajeto> buscarPorIdVigilante(int idVigilante) {
         ArrayList<Trajeto> lista = new ArrayList<>();
         String sql = "SELECT * FROM \"Trajeto\" WHERE \"IdVigilante\" = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, idVigilante);
             ResultSet rs = stmt.executeQuery();
 

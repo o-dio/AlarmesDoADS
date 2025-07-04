@@ -10,17 +10,25 @@ import java.util.ArrayList;
 
 import com.projetofinalpoo.models.Vigilante;
 
+/**
+ * Classe responsável por realizar operações de banco de dados relacionadas à entidade Vigilante.
+ * Fornece métodos para criar, ler, atualizar e deletar vigilantes, além de buscas específicas.
+ */
 public class VigilanteDAO {
     private Connection conn = new ConexaoDAO().conectar();
 
+    /**
+     * Cadastra um novo vigilante no banco de dados.
+     * 
+     * @param vigilante objeto Vigilante com os dados a serem inseridos.
+     */
     public void cadastrar(Vigilante vigilante) {
         String sql = "INSERT INTO \"Vigilante\" " +
                 "(\"Login\", \"Senha\", \"Turno\", \"CargaHoraria\", \"Remuneracao\", " +
                 "\"DataContratacao\", \"Fone\", \"Email\", \"FoneContato\") " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);){
             stmt.setString(1, vigilante.getLogin());
             stmt.setString(2, vigilante.getSenha());
             stmt.setString(3, vigilante.getTurno());
@@ -38,14 +46,18 @@ public class VigilanteDAO {
         }
     }
 
+    /**
+     * Busca todos os vigilantes cadastrados no banco.
+     * 
+     * @return uma lista contendo todos os vigilantes encontrados. Retorna null em caso de erro.
+     */
     public ArrayList<Vigilante> buscarTodos() {
         String sql = "SELECT * FROM \"Vigilante\"";
         ArrayList<Vigilante> vigilantes = new ArrayList<Vigilante>();
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);){
             ResultSet rs = stmt.executeQuery();
     
             while (rs.next()) {
@@ -70,13 +82,18 @@ public class VigilanteDAO {
         }
     }
 
+    /**
+     * Busca um vigilante no banco pelo login do vigilante.
+     * 
+     * @param vigilante objeto Vigilante contendo o login para busca.
+     * @return um objeto Vigilante com os dados encontrados ou null se não encontrado.
+     */
     public Vigilante buscar(Vigilante vigilante) {
         String sql = "SELECT * FROM \"Vigilante\" WHERE \"Login\" = ?";
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);){
             stmt.setString(1, vigilante.getLogin());
             ResultSet rs = stmt.executeQuery();
     
@@ -102,13 +119,19 @@ public class VigilanteDAO {
         }
     }
 
+    /**
+     * Busca um vigilante pelo login e senha.
+     * 
+     * @param login  login do vigilante.
+     * @param senha  senha do vigilante.
+     * @return objeto Vigilante correspondente ou null se não encontrado.
+     */
     public Vigilante buscarPeloLoginSenha(String login, String senha) {
         String sql = "SELECT * FROM \"Vigilante\" WHERE \"Login\" = ? AND \"Senha\" = ?";
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);){
             stmt.setString(1, login);
             stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
@@ -135,13 +158,18 @@ public class VigilanteDAO {
         }
     }
 
+    /**
+     * Busca um vigilante pelo login.
+     * 
+     * @param login login do vigilante.
+     * @return objeto Vigilante correspondente ou null se não encontrado.
+     */
     public Vigilante buscarPeloLogin(String login) {
         String sql = "SELECT * FROM \"Vigilante\" WHERE \"Login\" = ?";
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);){
             stmt.setString(1, login);
             ResultSet rs = stmt.executeQuery();
 
@@ -166,14 +194,19 @@ public class VigilanteDAO {
         }
     }
 
+    /**
+     * Atualiza os dados de um vigilante existente no banco.
+     * 
+     * @param oldVigilante objeto Vigilante contendo o login atual (identificador).
+     * @param newVigilante objeto Vigilante com os novos dados para atualização.
+     */
     public void atualizar(Vigilante oldVigilante, Vigilante newVigilante) {
         String sql = "UPDATE \"Vigilante\" SET " +
                 "\"Login\" = ?, \"Senha\" = ?, \"Turno\" = ?, \"CargaHoraria\" = ?, \"Remuneracao\" = ?, " +
                 "\"DataContratacao\" = ?, \"Fone\" = ?, \"Email\" = ?, \"FoneContato\" = ? " +
                 "WHERE \"Login\" = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);){
             stmt.setString(1, newVigilante.getLogin());
             stmt.setString(2, newVigilante.getSenha());
             stmt.setString(3, newVigilante.getTurno());
@@ -197,11 +230,15 @@ public class VigilanteDAO {
         }
     }
 
+    /**
+     * Remove um vigilante do banco com base no login.
+     * 
+     * @param login login do vigilante a ser removido.
+     */
     public void deletar(String login) {
         String sql = "DELETE FROM \"Vigilante\" WHERE \"Login\" = ?";
 
-        try {
-            PreparedStatement stmt = conn.prepareStatement(sql);
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, login);
 
             int linhas = stmt.executeUpdate();
@@ -215,10 +252,16 @@ public class VigilanteDAO {
             System.out.println("Erro ao deletar vigilante: " + e.getMessage());
         }
     }
-    //metodo id
+    
+    /**
+     * Busca o ID do vigilante pelo login.
+     * 
+     * @param login login do vigilante.
+     * @return o ID do vigilante encontrado ou -1 caso não exista ou ocorra erro.
+     */
     public int buscarIdPorLogin(String login) {
     String sql = "SELECT id FROM \"Vigilante\" WHERE \"Login\" = ?";
-    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+    try (PreparedStatement stmt = conn.prepareStatement(sql);) {
         stmt.setString(1, login);
         ResultSet rs = stmt.executeQuery();
         if (rs.next()) {
