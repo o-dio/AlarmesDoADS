@@ -8,8 +8,7 @@ public class ConexaoDAO {
 
     private static final String URL = "jdbc:postgresql://localhost:5432/alarmeadsbd";
     private static final String USUARIO = "postgres";
-//SENHA DIFERENTE NAO DAR COMMIT
-    private static final String SENHA = "gustavo";
+    private static final String SENHA = "Ab#123456";
 
 
     public Connection conectar() {

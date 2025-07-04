@@ -9,6 +9,8 @@ public class Endereco {
     private String estado;
     private String cep;
 
+    
+
     // Getters e setters
     public int getId() {
         return id;

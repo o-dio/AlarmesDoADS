@@ -21,6 +21,13 @@ public class Ocorrencia {
         this.idProduto = idProduto;
     }
 
+    public Ocorrencia(String data, String duracao, int idVigilante, int idProduto) {
+        this.data = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        this.duracao = LocalTime.parse(duracao, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        this.idVigilante = idVigilante;
+        this.idProduto = idProduto;
+    }
+
     //Metodos
     public int getId() {
         return id;
