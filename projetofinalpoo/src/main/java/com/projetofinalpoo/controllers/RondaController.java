@@ -30,7 +30,7 @@ public class RondaController {
      * Realiza o check-in do vigilante em uma rota específica,
      * criando um novo trajeto com data inicial.
      *
-     * @param idRota Identificador da rota.
+     * @param idRota  Identificador da rota.
      * @param session Sessão HTTP para obter o vigilante logado.
      * @return Redireciona para a página de rondas ou login se não autenticado.
      */
@@ -55,7 +55,7 @@ public class RondaController {
      * Realiza o check-out do vigilante em uma rota específica,
      * atualizando a data final do trajeto em andamento.
      *
-     * @param idRota Identificador da rota.
+     * @param idRota  Identificador da rota.
      * @param session Sessão HTTP para obter o vigilante logado.
      * @return Redireciona para a página de rondas ou login se não autenticado.
      */
@@ -71,10 +71,10 @@ public class RondaController {
         TrajetoDAO trajDao = new TrajetoDAO();
 
         Trajeto trajetoEmAndamento = trajDao.buscarTrajetoPorVigilanteERota(idVigilante, idRota);
-        
+
         if (trajetoEmAndamento != null) {
             trajetoEmAndamento.setDataFim(LocalDate.now());
-            trajDao.atualizarDataFim(trajetoEmAndamento); 
+            trajDao.atualizarDataFim(trajetoEmAndamento);
         } else {
             System.out.println("Nenhum trajeto aberto encontrado para checkout.");
         }
@@ -83,11 +83,12 @@ public class RondaController {
     }
 
     /**
-     * Exibe a lista de rondas do vigilante logado, indicando quais estão em andamento
+     * Exibe a lista de rondas do vigilante logado, indicando quais estão em
+     * andamento
      * e as rotas disponíveis para iniciar novas rondas.
      *
      * @param session Sessão HTTP para obter o vigilante logado.
-     * @param model Objeto Model para passagem de dados para a view.
+     * @param model   Objeto Model para passagem de dados para a view.
      * @return Nome da view de rondas ou redireciona para login se não autenticado.
      */
     @RequestMapping("/rondas")
@@ -109,7 +110,7 @@ public class RondaController {
         RotaDAO rotaDAO = new RotaDAO();
 
         for (Trajeto t : trajetos) {
-           
+
             Rota r = rotaDAO.buscarPorId(t.getIdRota());
             if (r == null)
                 continue;
@@ -141,7 +142,8 @@ public class RondaController {
     }
 
     /**
-     * ViewModel usada para encapsular dados da ronda que serão exibidos na interface.
+     * ViewModel usada para encapsular dados da ronda que serão exibidos na
+     * interface.
      */
     public static class RondaViewModel {
         private String dataIni, dataFim, local, bairro, descricao, status, enderecoCompleto;

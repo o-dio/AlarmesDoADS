@@ -54,7 +54,7 @@ public class Admin implements Usuario {
      *
      * @param senha a nova senha em texto puro
      */
-    public void setSenha(String senha){
+    public void setSenha(String senha) {
         this.senha = HashMD5Service.gerarMD5(senha);
     }
 
@@ -76,7 +76,8 @@ public class Admin implements Usuario {
      * Compara este objeto com outro para verificar igualdade.
      *
      * @param obj o objeto a ser comparado
-     * @return {@code true} se os objetos forem iguais; caso contrário, {@code false}
+     * @return {@code true} se os objetos forem iguais; caso contrário,
+     *         {@code false}
      */
     @Override
     public boolean equals(Object obj) {

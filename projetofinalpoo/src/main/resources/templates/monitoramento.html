@@ -1,149 +1,143 @@
-  <!DOCTYPE html>
-  <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Painel de Monitoramento</title>
-    <link rel="stylesheet" href="../style/css/stylePainel.css" />
-    <link rel="stylesheet" href="./style/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  </head>
-  <body>
-   <header class="header">
-      <section>
-        <a href="#" class="logo">
-          <img src="" alt="" class="logo-img">
-        </a> 
-        <nav class="navbar">
-          <a href="/">Inicio</a>
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel de Monitoramento</title>
+  <link rel="stylesheet" href="../style/css/stylePainel.css" />
+  <link rel="stylesheet" href="./style/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+  <header class="header">
+    <section>
+      <a href="#" class="logo">
+        <img src="" alt="" class="logo-img">
+      </a>
+      <nav class="navbar">
+        <a href="/">Inicio</a>
         <a href="/">Sobre</a>
         <a href="/">Contato</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
-          <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
-        </nav>
-        <div class="menu-toggle" onclick="toggleMenu()">
-          <i class="fas fa-bars"></i>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
+        <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
+      </nav>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="perfil" onclick="toggleDropdown()">
+        <i class="fas fa-user-circle"></i>
+        <span id="user-name">Usuário</span>
+        <div class="dropdown-menu" id="dropdown">
+          <a href="#">Meu Perfil</a>
+          <a href="#">Configurações</a>
+          <a href="/logout">Sair</a>
         </div>
-        <div class="perfil" onclick="toggleDropdown()">
-          <i class="fas fa-user-circle"></i>
-          <span id="user-name">Usuário</span>
-          <div class="dropdown-menu" id="dropdown">
-            <a href="#">Meu Perfil</a>
-            <a href="#">Configurações</a>
-            <a href="/logout">Sair</a>
-          </div>
+      </div>
+    </section>
+  </header>
+
+  <div class="container-monitoramento">
+    <h2>Painel de Monitoramento</h2>
+    <form method="GET" action="/monitoramento">
+      <label for="select-local">Selecione um endereço monitorado:</label>
+      <select name="idEndereco" id="select-local" onchange="this.form.submit()">
+        <option value="">-- Selecione --</option>
+        <option th:each="endereco : ${enderecos}" th:value="${endereco.id}"
+          th:selected="${endereco.id == idEnderecoSelecionado}"
+          th:text="${endereco.rua + ', ' + endereco.numero + ' - ' + endereco.bairro + ', ' + endereco.cidade + ' - ' + endereco.estado}">
+        </option>
+      </select>
+    </form>
+
+    <div class="painel-dinamico" th:if="${enderecos.size() > 0}">
+      <div class="status-box">
+        <div class="status-item">
+          <span>Status do Alarme:</span>
+          <span id="statusAlarme" class="alarme-status ativo">Ativado</span>
         </div>
-      </section>
-    </header>
+        <div class="status-item">
+          <span>Vigilante em campo:</span>
+          <span id="vigilanteInfo" th:text="${vigilante.login}">Carregando...</span>
+        </div>
+      </div>
 
-    <div class="container-monitoramento">
-      <h2>Painel de Monitoramento</h2>
-<form method="GET" action="/monitoramento">
-  <label for="select-local">Selecione um endereço monitorado:</label>
-  <select name="idEndereco" id="select-local" onchange="this.form.submit()">
-    <option value="">-- Selecione --</option>
-    <option th:each="endereco : ${enderecos}"
-            th:value="${endereco.id}"
-            th:selected="${endereco.id == idEnderecoSelecionado}"
-            th:text="${endereco.rua + ', ' + endereco.numero + ' - ' + endereco.bairro + ', ' + endereco.cidade + ' - ' + endereco.estado}">
-    </option>
-  </select>
-</form>
+      <div class="camera-grid" id="cameraGrid">
+        <div th:if="${gravacoes.size() == 0}">
+          <p>Nenhuma gravação disponível.</p>
+        </div>
+        <div th:each="g : ${gravacoes}">
+          <p><strong th:text="${g.data}"></strong> (<span th:text="${g.duracao}"></span>)</p>
+          <iframe src="https://player.vimeo.com/video/3766920" width="640" height="360" frameborder="0"
+            allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
+          </iframe>
+          <p th:text="${g.descricao}"></p>
+        </div>
+      </div>
 
-<div class="painel-dinamico" th:if="${enderecos.size() > 0}">
-  <div class="status-box">
-    <div class="status-item">
-      <span>Status do Alarme:</span>
-      <span id="statusAlarme" class="alarme-status ativo">Ativado</span>
+      <div class="mapa-section">
+        <h3>Mapa do local</h3>
+        <iframe th:if="${enderecoSelecionado != null}"
+          th:src="|https://maps.google.com/maps?q=${#strings.replace(enderecoSelecionado.rua + ' ' + enderecoSelecionado.numero + ' ' + enderecoSelecionado.bairro + ' ' + enderecoSelecionado.cidade + ' ' + enderecoSelecionado.estado, ' ', '+')}&output=embed|"
+          width="100%" height="300" style="border-radius: 10px;" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+
+
+      </div>
+
+      <div class="atalhos-section">
+        <button class="btn-acoes alarme-toggle" onclick="toggleAlarme()">🔴 Desativar Alarme</button>
+        <button class="btn-acoes">📞 Acionar Suporte</button>
+        <button class="btn-acoes">🎥 Ver Câmeras ao Vivo</button>
+      </div>
     </div>
-    <div class="status-item">
-      <span>Vigilante em campo:</span>
-      <span id="vigilanteInfo" th:text="${vigilante.login}">Carregando...</span>
-    </div>
-  </div>
 
-  <div class="camera-grid" id="cameraGrid">
-    <div th:if="${gravacoes.size() == 0}">
-      <p>Nenhuma gravação disponível.</p>
-    </div>
-    <div th:each="g : ${gravacoes}">
-      <p><strong th:text="${g.data}"></strong> (<span th:text="${g.duracao}"></span>)</p>
-      <iframe src="https://player.vimeo.com/video/3766920" 
-        width="640" 
-        height="360" 
-        frameborder="0" 
-        allow="autoplay; fullscreen; picture-in-picture" 
-        allowfullscreen>
-</iframe>
-      <p th:text="${g.descricao}"></p>
-    </div>
-  </div>
-
-  <div class="mapa-section">
-    <h3>Mapa do local</h3>
- <iframe
-    th:if="${enderecoSelecionado != null}"
-    th:src="|https://maps.google.com/maps?q=${#strings.replace(enderecoSelecionado.rua + ' ' + enderecoSelecionado.numero + ' ' + enderecoSelecionado.bairro + ' ' + enderecoSelecionado.cidade + ' ' + enderecoSelecionado.estado, ' ', '+')}&output=embed|"
-    width="100%"
-    height="300"
-    style="border-radius: 10px;"
-    loading="lazy"
-    referrerpolicy="no-referrer-when-downgrade">
-</iframe>
-
-
-  </div>
-
-  <div class="atalhos-section">
-    <button class="btn-acoes alarme-toggle" onclick="toggleAlarme()">🔴 Desativar Alarme</button>
-    <button class="btn-acoes">📞 Acionar Suporte</button>
-    <button class="btn-acoes">🎥 Ver Câmeras ao Vivo</button>
-  </div>
-</div>
-
-<script>
-    function toggleDropdown() {
-      document.getElementById("dropdown").classList.toggle("show");
-    }
-  
-    // Fecha o menu se clicar fora
-    window.addEventListener("click", function(e) {
-      if (!e.target.closest(".perfil")) {
-        document.getElementById("dropdown").classList.remove("show");
+    <script>
+      function toggleDropdown() {
+        document.getElementById("dropdown").classList.toggle("show");
       }
-    });
 
-    function toggleMenu() {
-      document.querySelector(".navbar").classList.toggle("active");
-    }
-
-    // Fecha o menu ao clicar em um item
-    document.querySelectorAll(".navbar a").forEach(link => {
-      link.addEventListener("click", () => {
-        document.querySelector(".navbar").classList.remove("active");
+      // Fecha o menu se clicar fora
+      window.addEventListener("click", function (e) {
+        if (!e.target.closest(".perfil")) {
+          document.getElementById("dropdown").classList.remove("show");
+        }
       });
-    });
 
-  let alarmeAtivo = true;
+      function toggleMenu() {
+        document.querySelector(".navbar").classList.toggle("active");
+      }
 
-  function toggleAlarme() {
-    alarmeAtivo = !alarmeAtivo;
-    const status = document.getElementById("statusAlarme");
-    const botao = document.querySelector(".btn-acoes.alarme-toggle");
+      // Fecha o menu ao clicar em um item
+      document.querySelectorAll(".navbar a").forEach(link => {
+        link.addEventListener("click", () => {
+          document.querySelector(".navbar").classList.remove("active");
+        });
+      });
 
-    if (alarmeAtivo) {
-      status.textContent = "Ativado";
-      status.classList.remove("inativo");
-      status.classList.add("ativo");
-      botao.textContent = "🔴 Desativar Alarme";
-    } else {
-      status.textContent = "Desativado";
-      status.classList.remove("ativo");
-      status.classList.add("inativo");
-      botao.textContent = "🟢 Ativar Alarme";
-    }
-  }
-</script>
-  </body>
-  </html>
+      let alarmeAtivo = true;
+
+      function toggleAlarme() {
+        alarmeAtivo = !alarmeAtivo;
+        const status = document.getElementById("statusAlarme");
+        const botao = document.querySelector(".btn-acoes.alarme-toggle");
+
+        if (alarmeAtivo) {
+          status.textContent = "Ativado";
+          status.classList.remove("inativo");
+          status.classList.add("ativo");
+          botao.textContent = "🔴 Desativar Alarme";
+        } else {
+          status.textContent = "Desativado";
+          status.classList.remove("ativo");
+          status.classList.add("inativo");
+          botao.textContent = "🟢 Ativar Alarme";
+        }
+      }
+    </script>
+</body>
+
+</html>

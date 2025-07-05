@@ -43,18 +43,21 @@ body {
   margin-top: 0.5rem;
 }
 
-/* Modal */.modal {
+/* Modal */
+.modal {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   z-index: 1000;
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  overflow-y: auto; /* permite scroll se modal for alto */
+  overflow-y: auto;
 }
 
 .modal-content {
@@ -63,18 +66,17 @@ body {
   border-radius: 10px;
   width: 380px;
   max-width: 100%;
-  max-height: 90vh; /* não ultrapassa altura da tela */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  max-height: 90vh;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
   color: #eee;
   font-family: 'Roboto', sans-serif;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  overflow-y: auto; /* scroll interno se precisar */
+  overflow-y: auto;
   position: relative;
 }
 
-/* fechar modal no canto */
 .modal-content .close {
   position: absolute;
   top: 12px;
@@ -85,25 +87,23 @@ body {
   cursor: pointer;
   transition: color 0.3s ease;
 }
+
 .modal-content .close:hover {
   color: var(--hover-color);
 }
 
-/* Form container com pouco gap */
 .modal-content form {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Alinhando label + input com pouco espaço */
-.modal-content form > div {
+.modal-content form>div {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* Label pequeno e próximo */
 .modal-content label {
   flex: 0 0 110px;
   font-weight: 600;
@@ -112,7 +112,6 @@ body {
   user-select: none;
 }
 
-/* Inputs e selects mais compactos */
 .modal-content input[type="date"],
 .modal-content input[type="number"],
 .modal-content select {
@@ -135,7 +134,6 @@ body {
   box-shadow: 0 0 6px var(--main-color);
 }
 
-/* Botões alinhados à direita com espaçamento */
 .modal-content .button-group {
   display: flex;
   justify-content: flex-end;
@@ -143,7 +141,6 @@ body {
   margin-top: 10px;
 }
 
-/* Botões com tamanho padronizado */
 .modal-content button {
   padding: 9px 18px;
   font-size: 1rem;
@@ -155,7 +152,6 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Botão salvar */
 .modal-content button[type="submit"] {
   background-color: var(--main-color);
   color: var(--dark-bg);
@@ -166,7 +162,6 @@ body {
   color: var(--light-color);
 }
 
-/* Botão cancelar */
 .modal-content button[type="button"] {
   background-color: #393e46;
   color: #ccc;
@@ -192,15 +187,15 @@ body {
   padding: 1rem 1.2rem;
   border-radius: 0.8rem;
   text-align: center;
-  box-shadow: 0 0 8px rgba(0,0,0,0.25);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  flex: 1 1 30%;     
+  flex: 1 1 30%;
   box-sizing: border-box;
   min-width: 180px;
   max-width: 32%;
-  
-  margin-right: 1rem;  
-  margin-top: 1rem;    
+
+  margin-right: 1rem;
+  margin-top: 1rem;
 }
 
 .dashboard-indicators .card:nth-child(3n) {
@@ -284,20 +279,22 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   font-size: 0.95rem;
 }
+
 .card i {
   color: var(--main-color);
   font-size: 2.2rem;
   margin-bottom: 0.7rem;
   display: block;
 }
-/* --- Tabela de alarmes --- */
+
+/* Tabela*/
 table {
   width: 100%;
   border-collapse: collapse;
   background-color: var(--card-bg);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 
 thead tr {
@@ -306,7 +303,8 @@ thead tr {
   text-align: left;
 }
 
-thead th, tbody td {
+thead th,
+tbody td {
   padding: 12px 15px;
   border-bottom: 1px solid var(--border-color);
   font-size: 0.9rem;
@@ -317,7 +315,7 @@ tbody tr:hover {
   cursor: pointer;
 }
 
-/* --- Botões da tabela e modal --- */
+/* Botões da tabela e modal*/
 button {
   cursor: pointer;
   border: none;
@@ -351,29 +349,25 @@ button[type="submit"]:hover {
 }
 
 /* Botão Excluir */
-button + a button {
+button+a button {
   background-color: #a33a3a;
   color: var(--light-color);
   padding: 6px 10px;
 }
 
-button + a button:hover {
+button+a button:hover {
   background-color: #7b2e2e;
   color: #fff;
 }
 
-/* Botão Novo Alarme */
-#alarmesContainer > button {
+/* Botão Novo  */
+#alarmesContainer>button {
   margin-top: 15px;
   font-weight: 700;
   width: 150px;
   letter-spacing: 0.04em;
 }
 
-/* --- Formulário do modal --- */
-
-
-/* --- Fechar modal (X) --- */
 .close {
   position: absolute;
   top: 12px;
@@ -390,7 +384,6 @@ button + a button:hover {
   color: var(--main-color);
 }
 
-/* --- Scroll da tabela, caso necessário --- */
 tbody {
   max-height: 300px;
   overflow-y: auto;
@@ -403,34 +396,45 @@ tbody tr {
   table-layout: fixed;
 }
 
-thead, tbody tr {
+thead,
+tbody tr {
   display: table;
   width: 100%;
   table-layout: fixed;
 }
 
-/* --- Responsividade (opcional) --- */
+/* Responsividade  */
 @media (max-width: 600px) {
   .modal-content {
     width: 90%;
   }
-  table, thead, tbody, tr, th, td {
+
+  table,
+  thead,
+  tbody,
+  tr,
+  th,
+  td {
     display: block;
   }
+
   thead tr {
     display: none;
   }
+
   tbody tr {
     margin-bottom: 15px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 10px;
   }
+
   tbody td {
     padding: 6px 10px;
     text-align: right;
     position: relative;
   }
+
   tbody td::before {
     content: attr(data-label);
     position: absolute;

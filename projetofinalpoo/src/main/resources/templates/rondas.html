@@ -1,42 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8" />
   <title>Escala e Rondas - Vigilante</title>
   <link rel="stylesheet" th:href="@{/style/css/styleRondas.css}" />
-   <link rel="stylesheet" href="./style/css/style.css">
+  <link rel="stylesheet" href="./style/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
   <header class="header">
-      <section>
-        <a href="#" class="logo">
-          <img src="" alt="" class="logo-img">
-        </a> 
-        <nav class="navbar">
+    <section>
+      <a href="#" class="logo">
+        <img src="" alt="" class="logo-img">
+      </a>
+      <nav class="navbar">
         <a href="/">Inicio</a>
         <a href="/">Sobre</a>
         <a href="/">Contato</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
-          <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
-        </nav>
-        <div class="menu-toggle" onclick="toggleMenu()">
-          <i class="fas fa-bars"></i>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
+        <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
+      </nav>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="perfil" onclick="toggleDropdown()">
+        <i class="fas fa-user-circle"></i>
+        <span id="user-name">Usuário</span>
+        <div class="dropdown-menu" id="dropdown">
+          <a href="#">Meu Perfil</a>
+          <a href="#">Configurações</a>
+          <a href="/logout">Sair</a>
         </div>
-        <div class="perfil" onclick="toggleDropdown()">
-          <i class="fas fa-user-circle"></i>
-          <span id="user-name">Usuário</span>
-          <div class="dropdown-menu" id="dropdown">
-            <a href="#">Meu Perfil</a>
-            <a href="#">Configurações</a>
-            <a href="/logout">Sair</a>
-          </div>
-        </div>
-      </section>
-    </header>
+      </div>
+    </section>
+  </header>
 
   <div class="rondas-container">
     <h1>Rondas do Vigilante</h1>
@@ -44,17 +46,15 @@
     <!-- CHECK‑OUT-->
     <div class="ronda-card" th:if="${emRonda}">
       <h3>Ronda em andamento</h3>
-    <form th:action="@{/rondas/checkout}" method="post">
-    <label for="idRota">Finalizar Ronda Atual:</label>
-    <select name="idRota" required>
-        <option th:each="ronda : ${rondas}" 
-                th:if="${ronda.status == 'Em andamento'}"
-                th:value="${ronda.idRota}" 
-                th:text="${ronda.enderecoCompleto}">
-        </option>
-    </select>
-    <button type="submit">Finalizar Ronda</button>
-</form>
+      <form th:action="@{/rondas/checkout}" method="post">
+        <label for="idRota">Finalizar Ronda Atual:</label>
+        <select name="idRota" required>
+          <option th:each="ronda : ${rondas}" th:if="${ronda.status == 'Em andamento'}" th:value="${ronda.idRota}"
+            th:text="${ronda.enderecoCompleto}">
+          </option>
+        </select>
+        <button type="submit">Finalizar Ronda</button>
+      </form>
     </div>
 
     <!-- CHECK‑IN-->
@@ -63,9 +63,8 @@
       <form th:action="@{/rondas/checkin}" th:method="post">
         <label for="idRotaCheckin">Selecionar Rota:</label>
         <select name="idRota" id="idRotaCheckin" required>
-          <option th:each="rota : ${rotasDisponiveis}"
-                  th:value="${rota.id}"
-                  th:text="${rota.nome} + ' – ' + ${rota.bairro}">
+          <option th:each="rota : ${rotasDisponiveis}" th:value="${rota.id}"
+            th:text="${rota.nome} + ' – ' + ${rota.bairro}">
           </option>
         </select>
         <button type="submit" class="checkin-btn">
@@ -104,19 +103,19 @@
     <div class="ronda-mapa" th:if="${enderecoRondaAtual != null}">
       <h2><i data-lucide="route"></i> Rota Atual</h2>
       <iframe width="100%" height="300" frameborder="0" style="border:0; border-radius:0.5rem;"
-              th:src="'https://www.google.com/maps?q=' + ${enderecoRondaAtual} + '&output=embed'"
-              allowfullscreen loading="lazy">
+        th:src="'https://www.google.com/maps?q=' + ${enderecoRondaAtual} + '&output=embed'" allowfullscreen
+        loading="lazy">
       </iframe>
     </div>
   </div>
 
   <script>
-        function toggleDropdown() {
+    function toggleDropdown() {
       document.getElementById("dropdown").classList.toggle("show");
     }
-  
+
     // Fecha o menu se clicar fora
-    window.addEventListener("click", function(e) {
+    window.addEventListener("click", function (e) {
       if (!e.target.closest(".perfil")) {
         document.getElementById("dropdown").classList.remove("show");
       }
@@ -132,8 +131,9 @@
         document.querySelector(".navbar").classList.remove("active");
       });
     });
-    
+
     lucide.createIcons();
   </script>
 </body>
+
 </html>

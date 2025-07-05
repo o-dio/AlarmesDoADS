@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import com.projetofinalpoo.models.Ocorrencia;
 
 /**
- * Classe responsável por realizar operações de acesso a dados (DAO) da entidade Ocorrencia.
+ * Classe responsável por realizar operações de acesso a dados (DAO) da entidade
+ * Ocorrencia.
  */
 public class OcorrenciaDAO {
     private Connection conn = new ConexaoDAO().conectar();
@@ -24,7 +25,7 @@ public class OcorrenciaDAO {
      */
     public void cadastrar(Ocorrencia ocorrencia) {
         String sql = "INSERT INTO \"Ocorrencia\" (\"Data\", \"Duracao\", \"IdVigilante\", \"IdProduto\") " +
-                     "VALUES (?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(ocorrencia.getData()));
@@ -49,19 +50,18 @@ public class OcorrenciaDAO {
         ArrayList<Ocorrencia> ocorrencias = new ArrayList<>();
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        
+
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("Data")));
                 Ocorrencia o = new Ocorrencia(
-                    rs.getInt("id"),
-                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("Data")),
-                    rs.getTime("Duracao").toLocalTime().format(timeFormatter),
-                    rs.getInt("IdVigilante"),
-                    rs.getInt("IdProduto")
-                );
+                        rs.getInt("id"),
+                        new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("Data")),
+                        rs.getTime("Duracao").toLocalTime().format(timeFormatter),
+                        rs.getInt("IdVigilante"),
+                        rs.getInt("IdProduto"));
                 ocorrencias.add(o);
             }
 
@@ -90,12 +90,11 @@ public class OcorrenciaDAO {
 
             if (rs.next()) {
                 return new Ocorrencia(
-                    rs.getInt("id"),  
-                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("Data")),
-                    rs.getTime("Duracao").toLocalTime().format(timeFormatter),
-                    rs.getInt("IdVigilante"),
-                    rs.getInt("IdProduto")
-                );
+                        rs.getInt("id"),
+                        new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("Data")),
+                        rs.getTime("Duracao").toLocalTime().format(timeFormatter),
+                        rs.getInt("IdVigilante"),
+                        rs.getInt("IdProduto"));
             } else {
                 System.out.println("Ocorrencia nao encontrada com ID: " + id);
                 return null;
@@ -109,12 +108,13 @@ public class OcorrenciaDAO {
     /**
      * Atualiza os dados de uma ocorrência existente.
      *
-     * @param id ID da ocorrência a ser atualizada.
+     * @param id         ID da ocorrência a ser atualizada.
      * @param ocorrencia Objeto Ocorrencia com os novos dados.
      */
     public void atualizar(int id, Ocorrencia ocorrencia) {
-        String sql = "UPDATE \"Ocorrencia\" SET \"Data\" = ?, \"Duracao\" = ?, \"IdVigilante\" = ?, \"IdProduto\" = ? " +
-                     "WHERE id = ?";
+        String sql = "UPDATE \"Ocorrencia\" SET \"Data\" = ?, \"Duracao\" = ?, \"IdVigilante\" = ?, \"IdProduto\" = ? "
+                +
+                "WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(ocorrencia.getData()));

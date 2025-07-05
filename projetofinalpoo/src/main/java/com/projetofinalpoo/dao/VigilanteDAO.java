@@ -12,8 +12,10 @@ import com.projetofinalpoo.models.ContatoInfo;
 import com.projetofinalpoo.models.Vigilante;
 
 /**
- * Classe responsável por realizar operações de banco de dados relacionadas à entidade Vigilante.
- * Fornece métodos para criar, ler, atualizar e deletar vigilantes, além de buscas específicas.
+ * Classe responsável por realizar operações de banco de dados relacionadas à
+ * entidade Vigilante.
+ * Fornece métodos para criar, ler, atualizar e deletar vigilantes, além de
+ * buscas específicas.
  */
 public class VigilanteDAO {
     private Connection conn = new ConexaoDAO().conectar();
@@ -29,7 +31,7 @@ public class VigilanteDAO {
                 "\"DataContratacao\", \"Fone\", \"Email\", \"FoneContato\") " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);){
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, vigilante.getLogin());
             stmt.setString(2, vigilante.getSenha());
             stmt.setString(3, vigilante.getTurno());
@@ -50,81 +52,78 @@ public class VigilanteDAO {
     /**
      * Busca todos os vigilantes cadastrados no banco.
      * 
-     * @return uma lista contendo todos os vigilantes encontrados. Retorna null em caso de erro.
+     * @return uma lista contendo todos os vigilantes encontrados. Retorna null em
+     *         caso de erro.
      */
     public ArrayList<Vigilante> buscarTodos() {
         String sql = "SELECT * FROM \"Vigilante\"";
         ArrayList<Vigilante> vigilantes = new ArrayList<Vigilante>();
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    
-        try (PreparedStatement stmt = conn.prepareStatement(sql);){
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
-    
 
             while (rs.next()) {
                 Vigilante v = new Vigilante(
-                    rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("Turno"),
-                    rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
-                    rs.getDouble("Remuneracao"),
-                    rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
-                    new ContatoInfo(
-                        rs.getString("Fone"),
-                        rs.getString("Email"),
-                        rs.getString("FoneContato")
-                    )
-                );
+                        rs.getString("Login"),
+                        rs.getString("Senha"),
+                        rs.getString("Turno"),
+                        rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
+                        rs.getDouble("Remuneracao"),
+                        rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
+                        new ContatoInfo(
+                                rs.getString("Fone"),
+                                rs.getString("Email"),
+                                rs.getString("FoneContato")));
                 vigilantes.add(v);
             }
-    
+
             return vigilantes;
         } catch (Exception e) {
             System.out.println("Erro ao buscar vigilantes: " + e.getMessage());
             return null;
         }
-}
+    }
 
     /**
      * Busca um vigilante no banco pelo login do vigilante.
      * 
      * @param vigilante objeto Vigilante contendo o login para busca.
-     * @return um objeto Vigilante com os dados encontrados ou null se não encontrado.
+     * @return um objeto Vigilante com os dados encontrados ou null se não
+     *         encontrado.
      */
     public Vigilante buscar(Vigilante vigilante) {
         String sql = "SELECT * FROM \"Vigilante\" WHERE \"Login\" = ?";
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    
-        try (PreparedStatement stmt = conn.prepareStatement(sql);){
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, vigilante.getLogin());
             ResultSet rs = stmt.executeQuery();
-    
+
             Date dataContratacaoDate = rs.getDate("DataContratacao");
-    String dataContratacaoStr = null;
-    if (dataContratacaoDate != null) {
-        dataContratacaoStr = dataContratacaoDate.toLocalDate().format(dataFormatter);
-    }
-    Time cargaHorariaTime = rs.getTime("CargaHoraria");
-    String cargaHorariaStr = null;
-    if (cargaHorariaTime != null) {
-        cargaHorariaStr = cargaHorariaTime.toLocalTime().format(timeFormatter);
-    }
+            String dataContratacaoStr = null;
+            if (dataContratacaoDate != null) {
+                dataContratacaoStr = dataContratacaoDate.toLocalDate().format(dataFormatter);
+            }
+            Time cargaHorariaTime = rs.getTime("CargaHoraria");
+            String cargaHorariaStr = null;
+            if (cargaHorariaTime != null) {
+                cargaHorariaStr = cargaHorariaTime.toLocalTime().format(timeFormatter);
+            }
             if (rs.next()) {
                 Vigilante v = new Vigilante(
-                    rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("Turno"),
-                    cargaHorariaStr,
-                    rs.getDouble("Remuneracao"),
-                    rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
-                    new ContatoInfo(
-                        rs.getString("Fone"),
-                        rs.getString("Email"),
-                        rs.getString("FoneContato")
-                    )
-                );
+                        rs.getString("Login"),
+                        rs.getString("Senha"),
+                        rs.getString("Turno"),
+                        cargaHorariaStr,
+                        rs.getDouble("Remuneracao"),
+                        rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
+                        new ContatoInfo(
+                                rs.getString("Fone"),
+                                rs.getString("Email"),
+                                rs.getString("FoneContato")));
                 return v;
             } else {
                 return null;
@@ -138,8 +137,8 @@ public class VigilanteDAO {
     /**
      * Busca um vigilante pelo login e senha.
      * 
-     * @param login  login do vigilante.
-     * @param senha  senha do vigilante.
+     * @param login login do vigilante.
+     * @param senha senha do vigilante.
      * @return objeto Vigilante correspondente ou null se não encontrado.
      */
     public Vigilante buscarPeloLoginSenha(String login, String senha) {
@@ -147,25 +146,23 @@ public class VigilanteDAO {
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);){
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, login);
             stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 return new Vigilante(
-                    rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("Turno"),
-                    rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
-                    rs.getDouble("Remuneracao"),
-                    rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
-                    new ContatoInfo(
-                        rs.getString("Fone"),
-                        rs.getString("Email"),
-                        rs.getString("FoneContato")
-                    )
-                );
+                        rs.getString("Login"),
+                        rs.getString("Senha"),
+                        rs.getString("Turno"),
+                        rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
+                        rs.getDouble("Remuneracao"),
+                        rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
+                        new ContatoInfo(
+                                rs.getString("Fone"),
+                                rs.getString("Email"),
+                                rs.getString("FoneContato")));
             } else {
                 System.out.println("Vigilante nao encontrado");
                 return null;
@@ -187,24 +184,22 @@ public class VigilanteDAO {
         DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);){
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, login);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 return new Vigilante(
-                    rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("Turno"),
-                    rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
-                    rs.getDouble("Remuneracao"),
-                    rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
-                    new ContatoInfo(
-                        rs.getString("Fone"),
-                        rs.getString("Email"),
-                        rs.getString("FoneContato")
-                    )
-                );
+                        rs.getString("Login"),
+                        rs.getString("Senha"),
+                        rs.getString("Turno"),
+                        rs.getTime("CargaHoraria").toLocalTime().format(timeFormatter),
+                        rs.getDouble("Remuneracao"),
+                        rs.getDate("DataContratacao").toLocalDate().format(dataFormatter),
+                        new ContatoInfo(
+                                rs.getString("Fone"),
+                                rs.getString("Email"),
+                                rs.getString("FoneContato")));
             }
 
             return null;
@@ -226,7 +221,7 @@ public class VigilanteDAO {
                 "\"DataContratacao\" = ?, \"Fone\" = ?, \"Email\" = ?, \"FoneContato\" = ? " +
                 "WHERE \"Login\" = ?";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);){
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, newVigilante.getLogin());
             stmt.setString(2, newVigilante.getSenha());
             stmt.setString(3, newVigilante.getTurno());
@@ -272,7 +267,7 @@ public class VigilanteDAO {
             System.out.println("Erro ao deletar vigilante: " + e.getMessage());
         }
     }
-    
+
     /**
      * Busca o ID do vigilante pelo login.
      * 
@@ -280,17 +275,17 @@ public class VigilanteDAO {
      * @return o ID do vigilante encontrado ou -1 caso não exista ou ocorra erro.
      */
     public int buscarIdPorLogin(String login) {
-    String sql = "SELECT id FROM \"Vigilante\" WHERE \"Login\" = ?";
-    try (PreparedStatement stmt = conn.prepareStatement(sql);) {
-        stmt.setString(1, login);
-        ResultSet rs = stmt.executeQuery();
-        if (rs.next()) {
-            return rs.getInt("id");
+        String sql = "SELECT id FROM \"Vigilante\" WHERE \"Login\" = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+            stmt.setString(1, login);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar ID do vigilante: " + e.getMessage());
         }
-    } catch (Exception e) {
-        System.out.println("Erro ao buscar ID do vigilante: " + e.getMessage());
+        return -1;
     }
-    return -1; 
-}
 
 }

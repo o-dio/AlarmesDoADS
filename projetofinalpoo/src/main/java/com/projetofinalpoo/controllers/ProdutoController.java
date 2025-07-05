@@ -17,12 +17,13 @@ import java.util.List;
 public class ProdutoController {
 
     private ProdutoDAO produtoDAO = new ProdutoDAO();
+
     @PostMapping("/produto/salvar")
     public String salvar(@RequestParam(required = false) Integer id,
-                         @RequestParam String dataInst,
-                         @RequestParam String dataRet,
-                         @RequestParam boolean defeito,
-                         @RequestParam int idEndereco) {
+            @RequestParam String dataInst,
+            @RequestParam String dataRet,
+            @RequestParam String defeito,
+            @RequestParam int idEndereco) {
 
         Produto produto = new Produto();
         if (id != null) {
@@ -31,8 +32,10 @@ public class ProdutoController {
 
         produto.setDataInst(LocalDate.parse(dataInst));
         produto.setDataRet(LocalDate.parse(dataRet));
-        produto.setDefeito(defeito);
+        produto.setDefeito(Boolean.parseBoolean(defeito));
         produto.setIdEndereco(idEndereco);
+
+        System.out.println("Salvando produto: " + produto);
 
         if (id == null || id == 0) {
             produtoDAO.cadastrar(produto);
@@ -47,5 +50,5 @@ public class ProdutoController {
     public String excluir(@PathVariable int id) {
         produtoDAO.deletar(id);
         return "redirect:/dashboard";
-        }
+    }
 }

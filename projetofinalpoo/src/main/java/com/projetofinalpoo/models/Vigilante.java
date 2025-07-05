@@ -22,16 +22,16 @@ public class Vigilante implements Usuario {
     /**
      * Construtor da classe Vigilante.
      *
-     * @param login            nome de usuário para login
-     * @param senha            senha em texto plano (será criptografada)
-     * @param turno            turno de trabalho (ex: manhã, tarde, noite)
-     * @param cargaHoraria     carga horária diária no formato "HH:mm:ss"
-     * @param remuneracao      valor da remuneração mensal
-     * @param dataContratacao  data de contratação no formato "dd/MM/yyyy"
-     * @param contatoInfo      informações para contatar o vigilante 
+     * @param login           nome de usuário para login
+     * @param senha           senha em texto plano (será criptografada)
+     * @param turno           turno de trabalho (ex: manhã, tarde, noite)
+     * @param cargaHoraria    carga horária diária no formato "HH:mm:ss"
+     * @param remuneracao     valor da remuneração mensal
+     * @param dataContratacao data de contratação no formato "dd/MM/yyyy"
+     * @param contatoInfo     informações para contatar o vigilante
      */
     public Vigilante(String login, String senha, String turno, String cargaHoraria, double remuneracao,
-                     String dataContratacao, ContatoInfo contatoInfo) {
+            String dataContratacao, ContatoInfo contatoInfo) {
         this.login = login;
         this.senha = senha;
         this.turno = turno;
@@ -159,7 +159,7 @@ public class Vigilante implements Usuario {
     }
 
     /**
-     * Define as informações para contato de um vigilante 
+     * Define as informações para contato de um vigilante
      * 
      * @param contatoInfo informações de contato
      */
@@ -237,7 +237,7 @@ public class Vigilante implements Usuario {
             return false;
         return true;
     }
-    
+
     /**
      * Retorna uma representação textual do objeto Vigilante.
      *

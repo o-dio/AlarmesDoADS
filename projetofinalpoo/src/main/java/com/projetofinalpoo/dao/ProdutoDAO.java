@@ -14,7 +14,8 @@ import com.projetofinalpoo.models.Endereco;
 import com.projetofinalpoo.models.Produto;
 
 /**
- * Classe responsável por realizar operações de acesso a dados (DAO) da entidade Produto.
+ * Classe responsável por realizar operações de acesso a dados (DAO) da entidade
+ * Produto.
  */
 public class ProdutoDAO {
     private Connection conn = new ConexaoDAO().conectar();
@@ -25,8 +26,7 @@ public class ProdutoDAO {
      * @param produto Objeto Produto a ser cadastrado.
      */
     public void cadastrar(Produto produto) {
-        String sql = "INSERT INTO \"Produto\" (\"dataInst\", \"dataRet\", \"defeito\", \"idEndereco\") VALUES (?, ?, ?, ?)";
-
+        String sql = "INSERT INTO \"Produto\" (\"DataInst\", \"DataRet\", \"Defeito\", \"IdEndereco\") VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(produto.getDataInst()));
             stmt.setDate(2, Date.valueOf(produto.getDataRet()));
@@ -52,24 +52,22 @@ public class ProdutoDAO {
         System.out.println("oidfdssdfsfdsfds");
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
-            
+
             while (rs.next()) {
                 Produto p = new Produto(
-                    rs.getInt("id"),
-                    rs.getDate("dataInst").toLocalDate().format(formatter),
-                    rs.getDate("dataRet").toLocalDate().format(formatter),
-                    rs.getBoolean("defeito"),
-                    rs.getInt("idEndereco")
-                );
+                        rs.getInt("id"),
+                        rs.getDate("dataInst").toLocalDate().format(formatter),
+                        rs.getDate("dataRet").toLocalDate().format(formatter),
+                        rs.getBoolean("defeito"),
+                        rs.getInt("idEndereco"));
                 produtos.add(p);
             }
         } catch (Exception e) {
-        System.out.println("Erro: " + e.getMessage());
-    }
-    
-    return produtos; 
-}
+            System.out.println("Erro: " + e.getMessage());
+        }
 
+        return produtos;
+    }
 
     /**
      * Busca um produto pelo ID.
@@ -87,13 +85,12 @@ public class ProdutoDAO {
 
             if (rs.next()) {
                 return new Produto(
-                    rs.getInt("id"),
-                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("dataInst")),
-                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("dataRet")),
-                
-                    rs.getBoolean("defeito"),
-                    rs.getInt("idEndereco")
-                );
+                        rs.getInt("id"),
+                        new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("dataInst")),
+                        new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("dataRet")),
+
+                        rs.getBoolean("defeito"),
+                        rs.getInt("idEndereco"));
             } else {
                 return null;
             }
@@ -106,12 +103,11 @@ public class ProdutoDAO {
     /**
      * Atualiza os dados de um produto existente.
      *
-     * @param id ID do produto a ser atualizado.
+     * @param id      ID do produto a ser atualizado.
      * @param produto Objeto Produto com os novos dados.
      */
     public void atualizar(int id, Produto produto) {
-        String sql = "UPDATE \"Produto\" SET \"dataInst\" = ?, \"dataRet\" = ?, \"defeito\" = ?, \"idEndereco\" = ? WHERE \"id\" = ?";
-
+        String sql = "UPDATE \"Produto\" SET \"DataInst\" = ?, \"DataRet\" = ?, \"Defeito\" = ?, \"IdEndereco\" = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(produto.getDataInst()));
             stmt.setDate(2, Date.valueOf(produto.getDataRet()));
@@ -155,19 +151,21 @@ public class ProdutoDAO {
     }
 
     /**
-     * Busca todos os produtos monitorados, incluindo informações do cliente e endereço.
+     * Busca todos os produtos monitorados, incluindo informações do cliente e
+     * endereço.
      *
-     * @return Lista de ProdutoMonitoradoViewModel com dados de produto, cliente e endereço.
+     * @return Lista de ProdutoMonitoradoViewModel com dados de produto, cliente e
+     *         endereço.
      */
     public List<ProdutoMonitoradoViewModel> buscarProdutosComClienteEndereco() {
         List<ProdutoMonitoradoViewModel> lista = new ArrayList<>();
 
         String sql = "SELECT p.id AS produto_id, " +
-                     "c.\"Login\" AS cliente_nome, c.\"Fone\" AS cliente_telefone, " +
-                     "e.\"Rua\", e.\"Numero\", e.\"Bairro\", e.\"Cidade\", e.\"Estado\" " +
-                     "FROM \"Produto\" p " +
-                     "JOIN \"Endereco\" e ON p.\"IdEndereco\" = e.id " +
-                     "JOIN \"Cliente\" c ON e.\"IdCliente\" = c.id";
+                "c.\"Login\" AS cliente_nome, c.\"Fone\" AS cliente_telefone, " +
+                "e.\"Rua\", e.\"Numero\", e.\"Bairro\", e.\"Cidade\", e.\"Estado\" " +
+                "FROM \"Produto\" p " +
+                "JOIN \"Endereco\" e ON p.\"IdEndereco\" = e.id " +
+                "JOIN \"Cliente\" c ON e.\"IdCliente\" = c.id";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
@@ -188,73 +186,68 @@ public class ProdutoDAO {
                         idProduto,
                         nomeCliente,
                         telefoneCliente,
-                        enderecoCompleto
-                );
+                        enderecoCompleto);
 
                 lista.add(p);
             }
         } catch (Exception e) {
             System.out.println("Erro ao buscar produtos monitorados: " + e.getMessage());
         }
-    return lista;
-}
-
- public List<Produto> buscarPorVigilante(int idVigilante) {
-    List<Produto> lista = new ArrayList<>();
-    String sql = "SELECT * FROM \"Produto\" WHERE \"IdVigilante\" = ?";  // Atenção no nome da coluna
-    
-    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setInt(1, idVigilante);
-        ResultSet rs = stmt.executeQuery();
-
-        while (rs.next()) {
-            // Ler os dados do produto diretamente do ResultSet
-            int id = rs.getInt("id");
-            String dataInst = rs.getString("DataInst");  // ou getDate e converter
-            String dataRet = rs.getString("DataRet");
-            boolean defeito = rs.getBoolean("Defeito");
-            int idEndereco = rs.getInt("IdEndereco");
-
-            Produto p = new Produto(id, dataInst, dataRet, defeito, idEndereco);
-
-            // Não chame setEndereco pois Produto não tem esse método
-            lista.add(p);
-        }
-    } catch (Exception e) {
-        System.out.println("Erro ao buscar produtos por vigilante: " + e.getMessage());
+        return lista;
     }
-    return lista;
-}
 
+    public List<Produto> buscarPorVigilante(int idVigilante) {
+        List<Produto> lista = new ArrayList<>();
+        String sql = "SELECT * FROM \"Produto\" WHERE \"IdVigilante\" = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idVigilante);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String dataInst = rs.getString("DataInst");
+                String dataRet = rs.getString("DataRet");
+                boolean defeito = rs.getBoolean("Defeito");
+                int idEndereco = rs.getInt("IdEndereco");
+
+                Produto p = new Produto(id, dataInst, dataRet, defeito, idEndereco);
+                lista.add(p);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar produtos por vigilante: " + e.getMessage());
+        }
+        return lista;
+    }
 
     public List<Endereco> buscarEnderecosDoVigilante(int idVigilante) {
         List<Endereco> lista = new ArrayList<>();
 
-String sql = """
-    SELECT DISTINCT e.id, e."Rua", e."Numero", e."Bairro", e."Cidade", e."Estado"
-    FROM "Produto" p
-    JOIN "Endereco" e ON p."IdEndereco" = e.id
-    JOIN "Trajeto" t ON t."IdVigilante" = ?
-    JOIN "Endereco_Rota" er ON er."IdEndereco" = e.id AND er."IdRota" = t."IdRota"
-""";
+        String sql = """
+                    SELECT DISTINCT e.id, e."Rua", e."Numero", e."Bairro", e."Cidade", e."Estado"
+                    FROM "Produto" p
+                    JOIN "Endereco" e ON p."IdEndereco" = e.id
+                    JOIN "Trajeto" t ON t."IdVigilante" = ?
+                    JOIN "Endereco_Rota" er ON er."IdEndereco" = e.id AND er."IdRota" = t."IdRota"
+                """;
 
-try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-    stmt.setInt(1, idVigilante);
-    ResultSet rs = stmt.executeQuery();
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idVigilante);
+            ResultSet rs = stmt.executeQuery();
 
-    while (rs.next()) {
-        Endereco e = new Endereco();
-        e.setId(rs.getInt("id"));
-        e.setRua(rs.getString("Rua"));
-        e.setNumero(rs.getString("Numero"));
-        e.setBairro(rs.getString("Bairro"));
-        e.setCidade(rs.getString("Cidade"));
-        e.setEstado(rs.getString("Estado"));
-        lista.add(e);
-    }
-} catch (Exception e) {
-    System.out.println("Erro ao buscar endereços monitorados: " + e.getMessage());
-}
+            while (rs.next()) {
+                Endereco e = new Endereco();
+                e.setId(rs.getInt("id"));
+                e.setRua(rs.getString("Rua"));
+                e.setNumero(rs.getString("Numero"));
+                e.setBairro(rs.getString("Bairro"));
+                e.setCidade(rs.getString("Cidade"));
+                e.setEstado(rs.getString("Estado"));
+                lista.add(e);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar endereços monitorados: " + e.getMessage());
+        }
 
         return lista;
     }

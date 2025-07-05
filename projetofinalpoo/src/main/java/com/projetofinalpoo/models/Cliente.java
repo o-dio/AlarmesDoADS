@@ -7,7 +7,8 @@ import com.projetofinalpoo.services.HashMD5Service;
 
 /**
  * Representa um cliente do sistema.
- * Implementa a interface {@code Usuario} e armazena informações pessoais e de contato.
+ * Implementa a interface {@code Usuario} e armazena informações pessoais e de
+ * contato.
  */
 public class Cliente implements Usuario {
     // Atributos
@@ -20,7 +21,8 @@ public class Cliente implements Usuario {
     /**
      * Construtor padrão. Inicializa um cliente vazio.
      */
-    public Cliente() {}
+    public Cliente() {
+    }
 
     /**
      * Construtor que inicializa o cliente com todos os dados.
@@ -72,7 +74,7 @@ public class Cliente implements Usuario {
      *
      * @param senha a nova senha em texto puro
      */
-    public void setSenha(String senha){
+    public void setSenha(String senha) {
         this.senha = HashMD5Service.gerarMD5(senha);
     }
 
@@ -150,7 +152,8 @@ public class Cliente implements Usuario {
      * Compara este cliente com outro para verificar igualdade.
      *
      * @param obj o objeto a ser comparado
-     * @return {@code true} se os objetos forem iguais; caso contrário, {@code false}
+     * @return {@code true} se os objetos forem iguais; caso contrário,
+     *         {@code false}
      */
     @Override
     public boolean equals(Object obj) {

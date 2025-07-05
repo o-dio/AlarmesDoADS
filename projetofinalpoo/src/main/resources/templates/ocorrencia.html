@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <title>Registro de Ocorrência</title>
@@ -7,71 +8,72 @@
   <link rel="stylesheet" href="../style/css/styleOcorrencia.css">
   <link rel="stylesheet" href="./style/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  
+
 </head>
+
 <body>
   <header class="header">
-      <section>
-        <a href="#" class="logo">
-          <img src="" alt="" class="logo-img">
-        </a> 
-        <nav class="navbar">
-          <a href="/">Inicio</a>
+    <section>
+      <a href="#" class="logo">
+        <img src="" alt="" class="logo-img">
+      </a>
+      <nav class="navbar">
+        <a href="/">Inicio</a>
         <a href="/">Sobre</a>
         <a href="/">Contato</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
-          <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
-        </nav>
-        <div class="menu-toggle" onclick="toggleMenu()">
-          <i class="fas fa-bars"></i>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
+        <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
+      </nav>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="perfil" onclick="toggleDropdown()">
+        <i class="fas fa-user-circle"></i>
+        <span id="user-name">Usuário</span>
+        <div class="dropdown-menu" id="dropdown">
+          <a href="#">Meu Perfil</a>
+          <a href="#">Configurações</a>
+          <a href="/logout">Sair</a>
         </div>
-        <div class="perfil" onclick="toggleDropdown()">
-          <i class="fas fa-user-circle"></i>
-          <span id="user-name">Usuário</span>
-          <div class="dropdown-menu" id="dropdown">
-            <a href="#">Meu Perfil</a>
-            <a href="#">Configurações</a>
-            <a href="/logout">Sair</a>
-          </div>
-        </div>
-      </section>
-    </header>
+      </div>
+    </section>
+  </header>
 
   <div class="container-ocorrencia">
     <h2><i class="fas fa-bell"></i> Registro de Ocorrência</h2>
- <table>
-    <tr>
+    <table>
+      <tr>
         <th>ID Produto</th>
         <th>Cliente</th>
         <th>Telefone</th>
         <th>Endereço</th>
         <th>Tempo de Ocorrência</th>
-    </tr>
-    <tr th:each="p : ${produtosMonitorados}">
+      </tr>
+      <tr th:each="p : ${produtosMonitorados}">
         <td th:text="${p.idProduto}"></td>
         <td th:text="${p.nomeCliente}"></td>
         <td th:text="${p.telefoneCliente}"></td>
         <td th:text="${p.enderecoCompleto}"></td>
         <td>
-            <form th:action="@{/ocorrencia/cadastrar}" method="post">
-                <input type="hidden" name="idProduto" th:value="${p.idProduto}" />
-                <input type="text" name="duracao" placeholder="HH:mm:ss" required />
-                <button type="submit">Registrar</button>
-            </form>
+          <form th:action="@{/ocorrencia/cadastrar}" method="post">
+            <input type="hidden" name="idProduto" th:value="${p.idProduto}" />
+            <input type="text" name="duracao" placeholder="HH:mm:ss" required />
+            <button type="submit">Registrar</button>
+          </form>
         </td>
-    </tr>
-</table>
-</div>
+      </tr>
+    </table>
+  </div>
 
-<script>
-      function toggleDropdown() {
+  <script>
+    function toggleDropdown() {
       document.getElementById("dropdown").classList.toggle("show");
     }
-  
+
     // Fecha o menu se clicar fora
-    window.addEventListener("click", function(e) {
+    window.addEventListener("click", function (e) {
       if (!e.target.closest(".perfil")) {
         document.getElementById("dropdown").classList.remove("show");
       }
@@ -87,6 +89,7 @@
         document.querySelector(".navbar").classList.remove("active");
       });
     });
-</script>
+  </script>
 </body>
+
 </html>

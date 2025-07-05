@@ -29,49 +29,49 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class DashboardController {
 
-@GetMapping("/dashboard")
-public String exibirDashboard(HttpSession session, Model model) {
-    Admin admin = (Admin) session.getAttribute("usuarioLogado");
-    String tipo = (String) session.getAttribute("tipo");
-    if (admin == null || !"admin".equals(tipo)) {
-        return "redirect:/login";
-    }
+    @GetMapping("/dashboard")
+    public String exibirDashboard(HttpSession session, Model model) {
+        Admin admin = (Admin) session.getAttribute("usuarioLogado");
+        String tipo = (String) session.getAttribute("tipo");
+        if (admin == null || !"admin".equals(tipo)) {
+            return "redirect:/login";
+        }
 
-    RotaDAO rotaDAO = new RotaDAO();
-    List<Rota> rondasList = rotaDAO.buscarTodos();
-    model.addAttribute("totalRondas", rondasList.size());
-    model.addAttribute("rondas", rondasList);
+        RotaDAO rotaDAO = new RotaDAO();
+        List<Rota> rondasList = rotaDAO.buscarTodos();
+        model.addAttribute("totalRondas", rondasList.size());
+        model.addAttribute("rondas", rondasList);
 
-    OcorrenciaDAO ocorrenciaDAO = new OcorrenciaDAO();
-    List<Ocorrencia> ocorrenciasList = ocorrenciaDAO.buscarTodos();
-    model.addAttribute("totalOcorrencias", ocorrenciasList.size());
-    model.addAttribute("ocorrencias", ocorrenciasList);
+        OcorrenciaDAO ocorrenciaDAO = new OcorrenciaDAO();
+        List<Ocorrencia> ocorrenciasList = ocorrenciaDAO.buscarTodos();
+        model.addAttribute("totalOcorrencias", ocorrenciasList.size());
+        model.addAttribute("ocorrencias", ocorrenciasList);
 
-    ProdutoDAO produtoDAO = new ProdutoDAO();
-    List<Produto> alarmesList = produtoDAO.buscarTodos();
-    model.addAttribute("totalAlarmes", alarmesList.size());
-    model.addAttribute("alarmes", alarmesList);
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        List<Produto> alarmesList = produtoDAO.buscarTodos();
+        model.addAttribute("totalAlarmes", alarmesList.size());
+        model.addAttribute("alarmes", alarmesList);
 
-    GravacaoDAO gravacaoDao = new GravacaoDAO();
-    List<Gravacao> gravacoes = gravacaoDao.buscarTodos();
+        GravacaoDAO gravacaoDao = new GravacaoDAO();
+        List<Gravacao> gravacoes = gravacaoDao.buscarTodos();
         if (gravacoes == null) {
             gravacoes = new ArrayList<>();
         }
-    model.addAttribute("totalRelatos", gravacoes.size());
-    model.addAttribute("gravacoes", gravacoes);
+        model.addAttribute("totalRelatos", gravacoes.size());
+        model.addAttribute("gravacoes", gravacoes);
 
-    ClienteDAO clienteDAO = new ClienteDAO();
-    List<Cliente> clienteList = clienteDAO.buscarTodos();
-    model.addAttribute("totalClientes", clienteList.size());
-     
+        ClienteDAO clienteDAO = new ClienteDAO();
+        List<Cliente> clienteList = clienteDAO.buscarTodos();
+        model.addAttribute("totalClientes", clienteList.size());
+
         model.addAttribute("clientes", clienteList);
 
-    VigilanteDAO vigilanteDAO = new VigilanteDAO();
-    List<Vigilante> vigilantesList = vigilanteDAO.buscarTodos();
-    model.addAttribute("totalVigilantes", vigilantesList.size());
-    model.addAttribute("vigilantes", vigilantesList);
+        VigilanteDAO vigilanteDAO = new VigilanteDAO();
+        List<Vigilante> vigilantesList = vigilanteDAO.buscarTodos();
+        model.addAttribute("totalVigilantes", vigilantesList.size());
+        model.addAttribute("vigilantes", vigilantesList);
 
-    return "dashboardAdmin";
-}
+        return "dashboardAdmin";
+    }
 
 }

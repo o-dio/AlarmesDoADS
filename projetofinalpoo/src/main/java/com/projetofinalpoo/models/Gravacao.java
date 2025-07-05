@@ -5,7 +5,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Representa uma gravação relacionada a um produto, contendo informações como data, duração e arquivo.
+ * Representa uma gravação relacionada a um produto, contendo informações como
+ * data, duração e arquivo.
  */
 public class Gravacao {
     private int id;
@@ -18,15 +19,17 @@ public class Gravacao {
     /**
      * Cria uma instância de Gravacao com os dados informados.
      *
-     * @param id o identificador da gravação
-     * @param data a data da gravação no formato "dd/MM/yyyy"
-     * @param duracao a duração da gravação no formato "HH:mm:ss"
-     * @param arquivo o nome ou caminho do arquivo da gravação
+     * @param id        o identificador da gravação
+     * @param data      a data da gravação no formato "dd/MM/yyyy"
+     * @param duracao   a duração da gravação no formato "HH:mm:ss"
+     * @param arquivo   o nome ou caminho do arquivo da gravação
      * @param descricao a descrição da gravação
      * @param idProduto o identificador do produto associado
      */
-    public Gravacao(){}
-   public Gravacao(int id, LocalDate data, LocalTime duracao, String arquivo, String descricao, int idProduto) {
+    public Gravacao() {
+    }
+
+    public Gravacao(int id, LocalDate data, LocalTime duracao, String arquivo, String descricao, int idProduto) {
         this.id = id;
         this.data = data;
         this.duracao = duracao;
@@ -165,7 +168,8 @@ public class Gravacao {
      * Compara este objeto com outro para verificar igualdade.
      *
      * @param obj o objeto a ser comparado
-     * @return {@code true} se os objetos forem iguais; caso contrário, {@code false}
+     * @return {@code true} se os objetos forem iguais; caso contrário,
+     *         {@code false}
      */
     @Override
     public boolean equals(Object obj) {

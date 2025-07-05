@@ -1,42 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <title>Index</title>
+  <title>Index</title>
 </head>
+
 <body>
-    <header class="header">
-      <section>
-        <a href="#" class="logo">
-          <img src="" alt="" class="logo-img">
-        </a> 
-        <nav class="navbar">
-          <a href="#">Inicio</a>
-          <a href="#about">Sobre</a>
-          <a href="#contato">Contato</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
-          <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
-          <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
-        </nav>
-        <div class="menu-toggle" onclick="toggleMenu()">
-          <i class="fas fa-bars"></i>
+  <header class="header">
+    <section>
+      <a href="#" class="logo">
+        <img src="" alt="" class="logo-img">
+      </a>
+      <nav class="navbar">
+        <a href="#">Inicio</a>
+        <a href="#about">Sobre</a>
+        <a href="#contato">Contato</a>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/ocorrencia}">Ocorrência</a>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/rondas}">Rondas</a>
+        <a th:if="${session.tipo == 'vigilante'}" th:href="@{/monitoramento}">Monitoramento</a>
+        <a th:if="${session.tipo == 'admin'}" th:href="@{/dashboard}">Admin</a>
+      </nav>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="perfil" onclick="toggleDropdown()">
+        <i class="fas fa-user-circle"></i>
+        <span id="user-name">Usuário</span>
+        <div class="dropdown-menu" id="dropdown">
+          <a href="#">Meu Perfil</a>
+          <a href="#">Configurações</a>
+          <a href="/logout">Sair</a>
         </div>
-        <div class="perfil" onclick="toggleDropdown()">
-          <i class="fas fa-user-circle"></i>
-          <span id="user-name">Usuário</span>
-          <div class="dropdown-menu" id="dropdown">
-            <a href="#">Meu Perfil</a>
-            <a href="#">Configurações</a>
-            <a href="/logout">Sair</a>
-          </div>
-        </div>
-      </section>
-    </header>
+      </div>
+    </section>
+  </header>
 
   <section class="hero">
     <div class="hero-content">
@@ -52,21 +54,22 @@
 
   <main>
 
-  <!-- SOBRE -->
-  <section id="about" class="about section-wrapper">
-    <div class="about-content">
-      <img src="../style/images/about-img.png" alt="Imagem">
-      <div>
-        <h2>Sobre Nós</h2>
-        <p>Somos uma empresa dedicada à segurança. Atuamos com tecnologia de ponta, vigilância especializada e soluções customizadas para garantir a tranquilidade de nossos clientes 24 horas por dia.</p>
+    <!-- SOBRE -->
+    <section id="about" class="about section-wrapper">
+      <div class="about-content">
+        <img src="../style/images/about-img.png" alt="Imagem">
+        <div>
+          <h2>Sobre Nós</h2>
+          <p>Somos uma empresa dedicada à segurança. Atuamos com tecnologia de ponta, vigilância especializada e
+            soluções customizadas para garantir a tranquilidade de nossos clientes 24 horas por dia.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
 
-  <!-- ACESSOS -->
-  <!-- <section class="acessos section-wrapper alt">
+    <!-- ACESSOS -->
+    <!-- <section class="acessos section-wrapper alt">
     <h2>Acessos Rápidos</h2>
     <div class="cards">
       <a href="#" class="card">Relatórios de Rondas</a>
@@ -79,19 +82,19 @@
   </section> -->
 
 
-  <!-- CONTATO -->
- <section id="contato" class="contato section-wrapper">
-    <h2>Entre em Contato</h2>
-    <form method="POST" action="/enviarEmail">
-      <input type="text" name="nome" placeholder="Seu nome" required>
-      <input type="email" name="email" placeholder="Seu e-mail" required>
-      <textarea name="mensagem" placeholder="Mensagem" required></textarea>
-      <button type="submit">Enviar</button>
-    </form>
-  </section>
-  
+    <!-- CONTATO -->
+    <section id="contato" class="contato section-wrapper">
+      <h2>Entre em Contato</h2>
+      <form method="POST" action="/enviarEmail">
+        <input type="text" name="nome" placeholder="Seu nome" required>
+        <input type="email" name="email" placeholder="Seu e-mail" required>
+        <textarea name="mensagem" placeholder="Mensagem" required></textarea>
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
 
-</main>
+
+  </main>
 
   <footer>
     <p>&copy; 2025 Segurança</p>
@@ -103,9 +106,9 @@
     function toggleDropdown() {
       document.getElementById("dropdown").classList.toggle("show");
     }
-  
+
     // Fecha o menu se clicar fora
-    window.addEventListener("click", function(e) {
+    window.addEventListener("click", function (e) {
       if (!e.target.closest(".perfil")) {
         document.getElementById("dropdown").classList.remove("show");
       }
@@ -123,4 +126,5 @@
     });
   </script>
 </body>
+
 </html>

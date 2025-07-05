@@ -20,21 +20,20 @@ public class VigilanteAdminController {
 
     private final VigilanteDAO vigilanteDAO = new VigilanteDAO();
 
-    
-
     @PostMapping("/salvar")
     public String salvar(@RequestParam(required = false) String loginAntigo,
-                         @RequestParam String login,
-                         @RequestParam String senha,
-                         @RequestParam String turno,
-                         @RequestParam String cargaHoraria,
-                         @RequestParam double remuneracao,
-                         @RequestParam String dataContratacao,
-                         @RequestParam String fone,
-                         @RequestParam String email,
-                         @RequestParam String foneContato) {
+            @RequestParam String login,
+            @RequestParam String senha,
+            @RequestParam String turno,
+            @RequestParam String cargaHoraria,
+            @RequestParam double remuneracao,
+            @RequestParam String dataContratacao,
+            @RequestParam String fone,
+            @RequestParam String email,
+            @RequestParam String foneContato) {
 
-        Vigilante vigilante = new Vigilante(login, senha, turno, cargaHoraria, remuneracao, dataContratacao, new ContatoInfo(fone, email, foneContato));
+        Vigilante vigilante = new Vigilante(login, senha, turno, cargaHoraria, remuneracao, dataContratacao,
+                new ContatoInfo(fone, email, foneContato));
 
         if (loginAntigo == null || loginAntigo.isEmpty()) {
             vigilanteDAO.cadastrar(vigilante);
@@ -42,12 +41,12 @@ public class VigilanteAdminController {
             Vigilante oldVigilante = vigilanteDAO.buscarPeloLogin(loginAntigo);
             vigilanteDAO.atualizar(oldVigilante, vigilante);
         }
-        return "redirect:/dashboard"; 
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/excluir/{login}")
     public String excluir(@PathVariable String login) {
         vigilanteDAO.deletar(login);
         return "redirect:/dashboard";
-    }  
+    }
 }

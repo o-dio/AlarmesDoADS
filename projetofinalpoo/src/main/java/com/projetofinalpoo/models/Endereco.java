@@ -1,7 +1,8 @@
 package com.projetofinalpoo.models;
 
 /**
- * Representa um endereço com informações como rua, número, bairro, cidade, estado e CEP.
+ * Representa um endereço com informações como rua, número, bairro, cidade,
+ * estado e CEP.
  */
 public class Endereco {
     private int id;
@@ -15,15 +16,17 @@ public class Endereco {
     /**
      * Cria uma instância de Endereco com todos os atributos.
      *
-     * @param id o identificador do endereço
-     * @param rua o nome da rua
+     * @param id     o identificador do endereço
+     * @param rua    o nome da rua
      * @param numero o número do imóvel
      * @param bairro o bairro
      * @param cidade a cidade
      * @param estado o estado
-     * @param cep o código postal (CEP)
+     * @param cep    o código postal (CEP)
      */
-    public Endereco(){};
+    public Endereco() {
+    };
+
     public Endereco(int id, String rua, String numero, String bairro, String cidade, String estado, String cep) {
         this.id = id;
         this.rua = rua;
@@ -183,7 +186,8 @@ public class Endereco {
      * Compara este objeto com outro para verificar igualdade.
      *
      * @param obj o objeto a ser comparado
-     * @return {@code true} se os objetos forem iguais; caso contrário, {@code false}
+     * @return {@code true} se os objetos forem iguais; caso contrário,
+     *         {@code false}
      */
     @Override
     public boolean equals(Object obj) {

@@ -25,21 +25,21 @@ body {
 
 .login-wrapper {
   width: 100%;
-  max-width: 500px; 
+  max-width: 500px;
   padding: 2rem;
 }
 
 .login-box {
   background-color: #1a1a1a;
-  padding: 1.5rem; 
+  padding: 1.5rem;
   border-radius: 1rem;
-  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   color: var(--light-color);
   text-align: center;
 }
 
 .login-box h2 {
-  margin-bottom: 1rem; 
+  margin-bottom: 1rem;
   color: var(--main-color);
   font-size: 2rem;
 }

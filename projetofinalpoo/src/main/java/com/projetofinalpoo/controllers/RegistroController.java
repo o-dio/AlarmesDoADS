@@ -23,13 +23,14 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 @Controller
 public class RegistroController {
-    
+
     /**
-     * Exibe a página de registro para o usuário escolher seu tipo (cliente ou vigilante).
+     * Exibe a página de registro para o usuário escolher seu tipo (cliente ou
+     * vigilante).
      * 
      * @return Nome da view de registro.
      */
-    @RequestMapping(value="/registro", method=RequestMethod.GET)
+    @RequestMapping(value = "/registro", method = RequestMethod.GET)
     public String registro() {
         return "registro";
     }
@@ -38,10 +39,11 @@ public class RegistroController {
      * Processa o formulário de registro submetido via POST.
      * Cria um novo cliente ou vigilante conforme o parâmetro 'role' recebido.
      * 
-     * @param request Objeto HttpServletRequest para acessar parâmetros do formulário.
+     * @param request Objeto HttpServletRequest para acessar parâmetros do
+     *                formulário.
      * @return Redirecionamento para a página de login após o registro.
      */
-    @RequestMapping(value="/registrar", method=RequestMethod.POST)
+    @RequestMapping(value = "/registrar", method = RequestMethod.POST)
     public String registrar(HttpServletRequest request) {
         String role = request.getParameter("role");
 
@@ -52,11 +54,9 @@ public class RegistroController {
                     request.getParameter("cpf"),
                     formatarData(request.getParameter("dataNasc")),
                     new ContatoInfo(
-                        request.getParameter("fone"),
-                        request.getParameter("email"),
-                        request.getParameter("foneContato")
-                    )
-            );
+                            request.getParameter("fone"),
+                            request.getParameter("email"),
+                            request.getParameter("foneContato")));
             System.out.println("Cliente registrado: " + cliente);
             CacheClienteService clienteCache = new CacheClienteService();
             clienteCache.cadastrar(cliente);
@@ -83,11 +83,9 @@ public class RegistroController {
                     0.0,
                     formatarData(request.getParameter("dataContratacao")),
                     new ContatoInfo(
-                        request.getParameter("fone"),
-                        request.getParameter("email"),
-                        request.getParameter("foneContato")
-                    )
-            );
+                            request.getParameter("fone"),
+                            request.getParameter("email"),
+                            request.getParameter("foneContato")));
             System.out.println("Vigilante registrado: " + vigilante);
             CacheVigilanteService vigilanteCache = new CacheVigilanteService();
             vigilanteCache.cadastrar(vigilante);

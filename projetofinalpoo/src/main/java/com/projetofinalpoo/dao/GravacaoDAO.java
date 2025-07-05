@@ -12,7 +12,8 @@ import java.util.List;
 import com.projetofinalpoo.models.Gravacao;
 
 /**
- * Classe responsável por realizar operações de acesso a dados (DAO) da entidade Gravacao.
+ * Classe responsável por realizar operações de acesso a dados (DAO) da entidade
+ * Gravacao.
  */
 public class GravacaoDAO {
     private Connection conn = new ConexaoDAO().conectar();
@@ -24,7 +25,7 @@ public class GravacaoDAO {
      */
     public void cadastrar(Gravacao gravacao) {
         String sql = "INSERT INTO \"Gravacao\" (\"Data\", \"Duracao\", \"Arquivo\", \"Descricao\", \"IdProduto\") " +
-                     "VALUES (?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(gravacao.getData()));
@@ -45,23 +46,22 @@ public class GravacaoDAO {
      *
      * @return Lista de objetos Gravacao ou null em caso de erro.
      */
-   
+
     public List<Gravacao> buscarTodos() {
         String sql = "SELECT * FROM \"Gravacao\"";
         List<Gravacao> lista = new ArrayList<>();
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+                ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Gravacao g = new Gravacao(
-                    rs.getInt("id"),
-                    rs.getDate("Data").toLocalDate(),
-                    rs.getTime("Duracao").toLocalTime(),
-                    rs.getString("Arquivo"),
-                    rs.getString("Descricao"),
-                    rs.getInt("IdProduto")
-                );
+                        rs.getInt("id"),
+                        rs.getDate("Data").toLocalDate(),
+                        rs.getTime("Duracao").toLocalTime(),
+                        rs.getString("Arquivo"),
+                        rs.getString("Descricao"),
+                        rs.getInt("IdProduto"));
                 lista.add(g);
             }
 
@@ -71,6 +71,7 @@ public class GravacaoDAO {
 
         return lista;
     }
+
     /**
      * Busca uma gravação pelo ID.
      *
@@ -88,13 +89,12 @@ public class GravacaoDAO {
 
             if (rs.next()) {
                 return new Gravacao(
-                      rs.getInt("id"),
-                    rs.getDate("Data").toLocalDate(),
-                    rs.getTime("Duracao").toLocalTime(),
-                    rs.getString("Arquivo"),
-                    rs.getString("Descricao"),
-                    rs.getInt("IdProduto")
-                );
+                        rs.getInt("id"),
+                        rs.getDate("Data").toLocalDate(),
+                        rs.getTime("Duracao").toLocalTime(),
+                        rs.getString("Arquivo"),
+                        rs.getString("Descricao"),
+                        rs.getInt("IdProduto"));
             } else {
                 return null;
             }
@@ -107,13 +107,13 @@ public class GravacaoDAO {
     /**
      * Atualiza os dados de uma gravação existente.
      *
-     * @param id ID da gravação a ser atualizada.
+     * @param id       ID da gravação a ser atualizada.
      * @param gravacao Objeto Gravacao com os novos dados.
      */
     public void atualizar(int id, Gravacao gravacao) {
         String sql = "UPDATE \"Gravacao\" SET " +
-                     "\"Data\" = ?, \"Duracao\" = ?, \"Arquivo\" = ?, \"Descricao\" = ?, \"IdProduto\" = ? " +
-                     "WHERE id = ?";
+                "\"Data\" = ?, \"Duracao\" = ?, \"Arquivo\" = ?, \"Descricao\" = ?, \"IdProduto\" = ? " +
+                "WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setDate(1, Date.valueOf(gravacao.getData()));
@@ -157,39 +157,39 @@ public class GravacaoDAO {
             System.out.println("Erro ao deletar gravacao: " + e.getMessage());
         }
     }
- public List<Gravacao> buscarPorEndereco(int idEndereco) {
-    List<Gravacao> lista = new ArrayList<>();
 
-    String sql = """
-        SELECT g.* FROM "Gravacao" g
-        JOIN "Produto" p ON g."IdProduto" = p.id
-        WHERE p."IdEndereco" = ?
-    """;
+    public List<Gravacao> buscarPorEndereco(int idEndereco) {
+        List<Gravacao> lista = new ArrayList<>();
 
-    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setInt(1, idEndereco);
-        ResultSet rs = stmt.executeQuery();
+        String sql = """
+                    SELECT g.* FROM "Gravacao" g
+                    JOIN "Produto" p ON g."IdProduto" = p.id
+                    WHERE p."IdEndereco" = ?
+                """;
 
-        DateTimeFormatter formatterData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm:ss");
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idEndereco);
+            ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-            Gravacao g = new Gravacao(
-                rs.getInt("id"),
-                rs.getDate("Data").toLocalDate(),
-                rs.getTime("Duracao").toLocalTime(),
-                rs.getString("Arquivo"),
-                rs.getString("Descricao"),
-                rs.getInt("IdProduto")
-            );
+            DateTimeFormatter formatterData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter formatterHora = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-            lista.add(g);
+            while (rs.next()) {
+                Gravacao g = new Gravacao(
+                        rs.getInt("id"),
+                        rs.getDate("Data").toLocalDate(),
+                        rs.getTime("Duracao").toLocalTime(),
+                        rs.getString("Arquivo"),
+                        rs.getString("Descricao"),
+                        rs.getInt("IdProduto"));
+
+                lista.add(g);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar gravações: " + e.getMessage());
         }
-    } catch (Exception e) {
-        System.out.println("Erro ao buscar gravações: " + e.getMessage());
-    }
 
-    return lista;
-}
+        return lista;
+    }
 
 }

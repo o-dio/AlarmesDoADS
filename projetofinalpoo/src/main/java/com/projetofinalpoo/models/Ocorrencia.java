@@ -5,7 +5,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Representa uma ocorrência registrada por um vigilante sobre um determinado produto.
+ * Representa uma ocorrência registrada por um vigilante sobre um determinado
+ * produto.
  */
 public class Ocorrencia {
     private int id;
@@ -14,8 +15,10 @@ public class Ocorrencia {
     private int idVigilante;
     private int idProduto;
 
-    //Construtor
-    public Ocorrencia(){}
+    // Construtor
+    public Ocorrencia() {
+    }
+
     public Ocorrencia(int id, String data, String duracao, int idVigilante, int idProduto) {
         this.id = id;
         this.data = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -23,14 +26,16 @@ public class Ocorrencia {
         this.idVigilante = idVigilante;
         this.idProduto = idProduto;
     }
-public Ocorrencia(String data, String duracao, int idVigilante, int idProduto) {
-      
+
+    public Ocorrencia(String data, String duracao, int idVigilante, int idProduto) {
+
         this.data = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         this.duracao = LocalTime.parse(duracao, DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.idVigilante = idVigilante;
         this.idProduto = idProduto;
     }
-    //Metodos
+
+    // Metodos
     public int getId() {
         return id;
     }
@@ -137,7 +142,8 @@ public Ocorrencia(String data, String duracao, int idVigilante, int idProduto) {
      * Compara esta ocorrência com outra para verificar igualdade.
      *
      * @param obj o objeto a ser comparado
-     * @return {@code true} se os objetos forem iguais; caso contrário, {@code false}
+     * @return {@code true} se os objetos forem iguais; caso contrário,
+     *         {@code false}
      */
     @Override
     public boolean equals(Object obj) {

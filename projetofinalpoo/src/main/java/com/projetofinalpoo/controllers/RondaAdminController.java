@@ -15,16 +15,15 @@ public class RondaAdminController {
 
     private RotaDAO rotaDAO = new RotaDAO();
 
-@PostMapping("/salvar")
-public String salvar(Rota rota) {
-   if (rota.getId() == null){
-        rotaDAO.cadastrar(rota);
-    } else {
-        rotaDAO.atualizar(rota);
+    @PostMapping("/salvar")
+    public String salvar(Rota rota) {
+        if (rota.getId() == null) {
+            rotaDAO.cadastrar(rota);
+        } else {
+            rotaDAO.atualizar(rota);
+        }
+        return "redirect:/dashboard";
     }
-    return "redirect:/dashboard";
-}
-
 
     @GetMapping("/excluir/{nome}")
     public String excluir(@PathVariable String nome) {
@@ -32,4 +31,3 @@ public String salvar(Rota rota) {
         return "redirect:/dashboard";
     }
 }
-

@@ -14,8 +14,6 @@ public class ClienteController {
 
     ClienteDAO dao = new ClienteDAO();
 
- 
-
     @PostMapping("/cadastrarCliente")
     public String cadastrarCliente(
             @RequestParam String login,
@@ -24,8 +22,7 @@ public class ClienteController {
             @RequestParam String dataNasc,
             @RequestParam String fone,
             @RequestParam String email,
-            @RequestParam String foneContato
-    ) {
+            @RequestParam String foneContato) {
         Cliente cliente = new Cliente(login, senha, cpf, dataNasc, new ContatoInfo(fone, email, foneContato));
         dao.cadastrar(cliente);
         return "redirect:/clientes";
@@ -39,8 +36,7 @@ public class ClienteController {
             @RequestParam String dataNasc,
             @RequestParam String fone,
             @RequestParam String email,
-            @RequestParam String foneContato
-    ) {
+            @RequestParam String foneContato) {
         Cliente cliente = new Cliente(login, senha, cpf, dataNasc, new ContatoInfo(fone, email, foneContato));
         dao.atualizar(cliente);
         return "redirect:/clientes";

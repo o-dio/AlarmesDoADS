@@ -18,13 +18,15 @@ public class Trajeto {
     /**
      * Construtor padrão da classe Trajeto.
      */
-    public Trajeto() {}
+    public Trajeto() {
+    }
 
     /**
      * Construtor para criação de um trajeto sem ID.
      *
      * @param dataIni     data de início do trajeto no formato "dd/MM/yyyy"
-     * @param dataFim     data de término do trajeto no formato "dd/MM/yyyy" (pode ser null)
+     * @param dataFim     data de término do trajeto no formato "dd/MM/yyyy" (pode
+     *                    ser null)
      * @param idVigilante identificador do vigilante responsável
      * @param idRota      identificador da rota associada
      */
@@ -44,7 +46,8 @@ public class Trajeto {
      *
      * @param id          identificador do trajeto
      * @param dataIni     data de início do trajeto no formato "dd/MM/yyyy"
-     * @param dataFim     data de término do trajeto no formato "dd/MM/yyyy" (pode ser null)
+     * @param dataFim     data de término do trajeto no formato "dd/MM/yyyy" (pode
+     *                    ser null)
      * @param idVigilante identificador do vigilante responsável
      * @param idRota      identificador da rota associada
      */
@@ -205,6 +208,7 @@ public class Trajeto {
      */
     @Override
     public String toString() {
-        return "Trajeto [dataIni=" + dataIni + ", dataFim=" + dataFim + ", idVigilante=" + idVigilante + ", idRota=" + idRota + "]";
+        return "Trajeto [dataIni=" + dataIni + ", dataFim=" + dataFim + ", idVigilante=" + idVigilante + ", idRota="
+                + idRota + "]";
     }
 }

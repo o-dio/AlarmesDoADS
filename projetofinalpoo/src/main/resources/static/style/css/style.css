@@ -2,7 +2,7 @@
   --main-color: #d6a85c;
   --color-dark: #121212;
   --color-light: #f0f0f0;
-  --border: 0.1rem solid rgba(255,255,255,0.1);
+  --border: 0.1rem solid rgba(255, 255, 255, 0.1);
 }
 
 /* Reset */
@@ -104,7 +104,7 @@ body {
   line-height: 1.6;
 }
 
-/* HERO como capa */
+/* HERO com capa */
 .hero {
   position: relative;
   height: 100vh;
@@ -178,7 +178,7 @@ body {
   background-color: #1a1a1a;
 }
 
-.section-wrapper + .section-wrapper {
+.section-wrapper+.section-wrapper {
   margin-top: 3rem;
 }
 
@@ -326,7 +326,7 @@ footer {
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 0.5rem;
   min-width: 160px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   flex-direction: column;
   z-index: 1000;
 }
@@ -357,6 +357,7 @@ footer {
 
 /* RESPONSIVO */
 @media (max-width: 768px) {
+
   /* Ajuste hero */
   .hero-content {
     flex-direction: column;

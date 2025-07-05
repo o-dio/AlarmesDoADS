@@ -3,12 +3,13 @@ package com.projetofinalpoo.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 
 import com.projetofinalpoo.models.Admin;
 
 /**
- * Classe responsável pelo acesso e manipulação dos dados da entidade Admin no banco de dados.
+ * Classe responsável pelo acesso e manipulação dos dados da entidade Admin no
+ * banco de dados.
  */
 public class AdminDAO {
     private Connection conn = new ConexaoDAO().conectar();
@@ -20,8 +21,8 @@ public class AdminDAO {
      */
     public void cadastrar(Admin admin) {
         String sql = "INSERT INTO \"Admin\" " +
-        "(\"Login\", \"Senha\")" +
-        "VALUES (?, ?)";
+                "(\"Login\", \"Senha\")" +
+                "VALUES (?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, admin.getLogin());
@@ -48,12 +49,11 @@ public class AdminDAO {
 
             while (rs.next()) {
                 admins.add(new Admin(
-                    rs.getString("Login"),
-                    rs.getString("Senha")
-                ));
+                        rs.getString("Login"),
+                        rs.getString("Senha")));
             }
 
-            if(admins.size() > 0) {
+            if (admins.size() > 0) {
                 return admins;
             }
 
@@ -80,9 +80,8 @@ public class AdminDAO {
 
             if (rs.next()) {
                 return new Admin(
-                    rs.getString("Login"),
-                    rs.getString("Senha")
-                );
+                        rs.getString("Login"),
+                        rs.getString("Senha"));
             } else {
                 return null;
             }
@@ -109,9 +108,8 @@ public class AdminDAO {
 
             if (rs.next()) {
                 return new Admin(
-                    rs.getString("Login"),
-                    rs.getString("Senha")
-                );
+                        rs.getString("Login"),
+                        rs.getString("Senha"));
             } else {
                 return null;
             }
@@ -129,9 +127,9 @@ public class AdminDAO {
      */
     public void atualizar(Admin oldAdmin, Admin newAdmin) {
         String sql = "UPDATE \"Admin\" SET " +
-        "\"Login\" = ?, " +
-        "\"Senha\" = ? " +
-        "WHERE \"Login\" = ?";
+                "\"Login\" = ?, " +
+                "\"Senha\" = ? " +
+                "WHERE \"Login\" = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, newAdmin.getLogin());
@@ -158,19 +156,19 @@ public class AdminDAO {
      */
     public void deletar(Admin admin) throws Exception {
         String sql = "DELETE FROM \"Admin\" WHERE \"Login\" = ?";
-    
+
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
 
             stmt.setString(1, admin.getLogin());
 
             int linhasAfetadas = stmt.executeUpdate();
-    
+
             if (linhasAfetadas > 0) {
                 System.out.println("Admin deletado com sucesso!");
             } else {
                 System.out.println("Admin nao encontrado para excluir.");
             }
-    
+
         } catch (Exception e) {
             System.out.println("Erro ao deletar admin: " + e.getMessage());
         }

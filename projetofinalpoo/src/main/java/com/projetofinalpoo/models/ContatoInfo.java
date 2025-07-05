@@ -13,8 +13,8 @@ public class ContatoInfo {
     /**
      * Construtor que inicializa as informações de contato.
      * 
-     * @param fone       telefone principal.
-     * @param email      endereço de email.
+     * @param fone        telefone principal.
+     * @param email       endereço de email.
      * @param foneContato telefone para contato emergencial.
      */
     public ContatoInfo(String fone, String email, String foneContato) {
@@ -94,7 +94,8 @@ public class ContatoInfo {
 
     /**
      * Compara se este objeto é igual a outro.
-     * Dois objetos ContatoInfo são iguais se os seus atributos fone, email e foneContato forem iguais.
+     * Dois objetos ContatoInfo são iguais se os seus atributos fone, email e
+     * foneContato forem iguais.
      * 
      * @param obj o objeto a ser comparado.
      * @return true se forem iguais, false caso contrário.
@@ -127,7 +128,8 @@ public class ContatoInfo {
     }
 
     /**
-     * Retorna uma representação em String do objeto contendo os valores dos atributos.
+     * Retorna uma representação em String do objeto contendo os valores dos
+     * atributos.
      * 
      * @return String com informações do ContatoInfo.
      */
@@ -135,5 +137,5 @@ public class ContatoInfo {
     public String toString() {
         return "ContatoInfo [fone=" + fone + ", email=" + email + ", foneContato=" + foneContato + "]";
     }
-    
+
 }

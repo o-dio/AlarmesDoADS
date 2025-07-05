@@ -42,11 +42,11 @@ public class RotaDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                int id        = rs.getInt("id");
-                String nome   = rs.getString("Nome");
+                int id = rs.getInt("id");
+                String nome = rs.getString("Nome");
                 String bairro = rs.getString("Bairro");
-                String desc   = rs.getString("Descricao");
-                String obs    = rs.getString("Observacao");
+                String desc = rs.getString("Descricao");
+                String obs = rs.getString("Observacao");
                 rotas.add(new Rota(id, nome, bairro, desc, obs));
             }
         } catch (Exception e) {
@@ -68,12 +68,11 @@ public class RotaDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Rota(
-                    rs.getInt("id"),
-                    rs.getString("Nome"),
-                    rs.getString("Bairro"),
-                    rs.getString("Descricao"),
-                    rs.getString("Observacao")
-                );
+                        rs.getInt("id"),
+                        rs.getString("Nome"),
+                        rs.getString("Bairro"),
+                        rs.getString("Descricao"),
+                        rs.getString("Observacao"));
             }
         } catch (Exception e) {
             System.out.println("Erro ao buscar rota por id: " + e.getMessage());
@@ -87,12 +86,13 @@ public class RotaDAO {
      * @param rota Objeto Rota com os dados atualizados.
      */
     public void atualizar(Rota rota) {
-        String sql = "UPDATE \"Rota\" SET \"Bairro\" = ?, \"Descricao\" = ?, \"Observacao\" = ? WHERE \"Nome\" = ?";
+        String sql = "UPDATE \"Rota\" SET \"Nome\" = ?, \"Bairro\" = ?, \"Descricao\" = ?, \"Observacao\" = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
-            stmt.setString(1, rota.getBairro());
-            stmt.setString(2, rota.getDescricao());
-            stmt.setString(3, rota.getObservacao());
-            stmt.setString(4, rota.getNome());
+            stmt.setString(1, rota.getNome());
+            stmt.setString(2, rota.getBairro());
+            stmt.setString(3, rota.getDescricao());
+            stmt.setString(4, rota.getObservacao());
+            stmt.setInt(5, rota.getId());
             stmt.executeUpdate();
         } catch (Exception e) {
             System.out.println("Erro ao atualizar rota: " + e.getMessage());
