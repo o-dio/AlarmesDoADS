@@ -12,6 +12,7 @@ public class Endereco {
     private String estado;
     private String cep;
 
+    public Endereco(){};
     /**
      * Cria uma instância de Endereco com todos os atributos.
      *
@@ -23,7 +24,6 @@ public class Endereco {
      * @param estado o estado
      * @param cep o código postal (CEP)
      */
-    public Endereco(){};
     public Endereco(int id, String rua, String numero, String bairro, String cidade, String estado, String cep) {
         this.id = id;
         this.rua = rua;

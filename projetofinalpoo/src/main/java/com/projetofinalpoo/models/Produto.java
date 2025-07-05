@@ -15,6 +15,11 @@ public class Produto {
     private int idEndereco;
 
     /**
+     * Construtor vazio
+     */
+    public Produto() {}
+    
+    /**
      * Construtor completo da classe Produto.
      *
      * @param id         o identificador do produto
@@ -25,9 +30,6 @@ public class Produto {
      * @param defeito    indica se o produto está com defeito
      * @param idEndereco o ID do endereço onde o produto está/estava instalado
      */
-    public Produto() {
-    }
-
     public Produto(int id, String dataInst, String dataRet, boolean defeito, int idEndereco) {
         this.id = id;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
