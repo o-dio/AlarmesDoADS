@@ -17,7 +17,7 @@ public class RondaAdminController {
 
 @PostMapping("/salvar")
 public String salvar(Rota rota) {
-   if (rota.getId() == 0){
+   if (rota.getId() == null){
         rotaDAO.cadastrar(rota);
     } else {
         rotaDAO.atualizar(rota);

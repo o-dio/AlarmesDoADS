@@ -6,7 +6,7 @@
      */
     public class Rota {
   
-        private int id;
+        private Integer id;
           private String nome;
         private String bairro;
         private String descricao;
@@ -21,7 +21,7 @@
          * @param descricao  breve descrição da rota
          * @param observacao observações adicionais sobre a rota
          */
-        public Rota(int id, String nome, String bairro, String descricao, String observacao) {
+        public Rota(Integer id, String nome, String bairro, String descricao, String observacao) {
             this.id = id;
             this.nome = nome;
             this.bairro = bairro;
@@ -34,7 +34,7 @@
          *
          * @return o id da rota
          */
-        public int getId() {
+        public Integer getId() {
             return id;
         }
 
