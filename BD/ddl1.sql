@@ -55,7 +55,7 @@
 		"Fone" CHAR(11),
 		"Email" VARCHAR(256),
 		"FoneContato" CHAR(11),
-		"IdEndereco" IN	T,
+		"IdEndereco" INT,
 		CONSTRAINT vigilante_pk PRIMARY KEY (id),
 		CONSTRAINT turno_check CHECK ("Turno" = 'D' OR "Turno" = 'N'),
 		CONSTRAINT vigilante_fk FOREIGN KEY ("IdEndereco")
