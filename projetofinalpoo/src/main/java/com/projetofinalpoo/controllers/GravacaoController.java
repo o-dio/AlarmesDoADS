@@ -15,11 +15,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.projetofinalpoo.dao.GravacaoDAO;
 import com.projetofinalpoo.models.Gravacao;
 
+/**
+ * Controlador da gravação
+ */
 @Controller
 public class GravacaoController {
 
     private GravacaoDAO gravacaoDAO = new GravacaoDAO();
 
+    /**
+     * Busca todas as gravações presentes no banco de dado.
+     * 
+     * @param model Objeto a ser usado para criar atributos necessários da sessão.
+     * @return acesso ao dashboard
+     */
     @GetMapping("/dashboardAdmin")
     public String dashboardAdmin(Model model) {
         model.addAttribute("gravacoes", gravacaoDAO.buscarTodos());

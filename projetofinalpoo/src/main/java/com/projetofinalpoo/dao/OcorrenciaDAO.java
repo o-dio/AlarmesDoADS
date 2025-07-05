@@ -48,7 +48,6 @@ public class OcorrenciaDAO {
     public ArrayList<Ocorrencia> buscarTodos() {
         String sql = "SELECT * FROM \"Ocorrencia\"";
         ArrayList<Ocorrencia> ocorrencias = new ArrayList<>();
-        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
@@ -80,7 +79,6 @@ public class OcorrenciaDAO {
      */
     public Ocorrencia buscarPorId(int id) {
         String sql = "SELECT * FROM \"Ocorrencia\" WHERE id = ?";
-        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {

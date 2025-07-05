@@ -18,7 +18,10 @@ public class ConexaoDAO {
     private static final String USUARIO = "postgres";
     private static final String SENHA = "gustavo";
 
-
+    /**
+     * Conecta!
+     * @return retorna objeto da conexão.
+     */
     public Connection conectar() {
         try {
             Connection conexao = DriverManager.getConnection(URL, USUARIO, SENHA);

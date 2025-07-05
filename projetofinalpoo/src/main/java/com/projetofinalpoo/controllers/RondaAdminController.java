@@ -1,15 +1,14 @@
 package com.projetofinalpoo.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.projetofinalpoo.dao.RotaDAO;
 import com.projetofinalpoo.models.Rota;
 
-import jakarta.servlet.http.HttpSession;
-import com.projetofinalpoo.models.Admin;
-
+/**
+ * Controlador da ronda
+ */
 @Controller
 public class RondaAdminController {
 
@@ -25,6 +24,12 @@ public class RondaAdminController {
         return "redirect:/dashboard";
     }
 
+    /**
+     * Exclui uma ronda
+     * 
+     * @param nome nome da ronda a ser excluida
+     * @return redirecionamento para dashboard
+     */
     @GetMapping("/excluir/{nome}")
     public String excluir(@PathVariable String nome) {
         rotaDAO.deletar(nome);

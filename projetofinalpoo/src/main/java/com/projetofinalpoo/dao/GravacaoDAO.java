@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Time;
-import java.sql.Date;
 import java.time.format.DateTimeFormatter;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,8 +80,6 @@ public class GravacaoDAO {
      */
     public Gravacao buscarPorId(int id) {
         String sql = "SELECT * FROM \"Gravacao\" WHERE id = ?";
-        DateTimeFormatter dataFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, id);

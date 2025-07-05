@@ -4,15 +4,16 @@ import com.projetofinalpoo.dao.ProdutoDAO;
 import com.projetofinalpoo.models.Produto;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.List;
 
+/**
+ * Controlador para produtos
+ */
 @Controller
 public class ProdutoController {
 
@@ -46,6 +47,12 @@ public class ProdutoController {
         return "redirect:/dashboard";
     }
 
+    /**
+     * Excluir produto
+     * 
+     * @param id Identificador do produto a ser excluido.
+     * @return redirecionamento para o dashboard.
+     */
     @GetMapping("/produto/excluir/{id}")
     public String excluir(@PathVariable int id) {
         produtoDAO.deletar(id);

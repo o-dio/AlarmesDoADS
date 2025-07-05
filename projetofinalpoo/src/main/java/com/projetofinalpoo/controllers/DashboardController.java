@@ -6,9 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projetofinalpoo.dao.ClienteDAO;
 import com.projetofinalpoo.dao.GravacaoDAO;
@@ -26,6 +23,9 @@ import com.projetofinalpoo.models.Vigilante;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * Controlador do dashboard do admin
+ */
 @Controller
 public class DashboardController {
 

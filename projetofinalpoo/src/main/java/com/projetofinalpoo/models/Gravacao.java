@@ -2,7 +2,6 @@ package com.projetofinalpoo.models;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Representa uma gravação relacionada a um produto, contendo informações como
@@ -17,6 +16,12 @@ public class Gravacao {
     private int idProduto;
 
     /**
+     * Construtor vazio
+     */
+    public Gravacao() {
+    }
+
+    /**
      * Cria uma instância de Gravacao com os dados informados.
      *
      * @param id        o identificador da gravação
@@ -26,8 +31,7 @@ public class Gravacao {
      * @param descricao a descrição da gravação
      * @param idProduto o identificador do produto associado
      */
-    public Gravacao() {
-    }
+  
 
     public Gravacao(int id, LocalDate data, LocalTime duracao, String arquivo, String descricao, int idProduto) {
         this.id = id;

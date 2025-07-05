@@ -17,9 +17,20 @@ import com.projetofinalpoo.models.Vigilante;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * Controlador do monitoramento
+ */
 @Controller
 public class MonitoramentoController {
 
+    /**
+     * Mostra o painel de monitoramente
+     * 
+     * @param session Verifica se o usuario tem permissão para acessar a tela.
+     * @param model Objeto a ser usado para criar atributos necessários da sessão.
+     * @param idEnderecoSelecionado Endereço a ser visto no painel de monitoramento
+     * @return redireciona para página de login caso não haja autorização ou para o painel caso haja.
+     */
     @GetMapping("/monitoramento")
     public String mostrarPainelMonitoramento(
             HttpSession session,

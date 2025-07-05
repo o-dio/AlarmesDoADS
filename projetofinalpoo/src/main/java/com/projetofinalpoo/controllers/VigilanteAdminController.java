@@ -1,9 +1,7 @@
 package com.projetofinalpoo.controllers;
 
-import java.util.List;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,12 +12,14 @@ import com.projetofinalpoo.dao.VigilanteDAO;
 import com.projetofinalpoo.models.ContatoInfo;
 import com.projetofinalpoo.models.Vigilante;
 
+/**
+ * Controlador para Admins alterarem dados de vigilantes
+ */
 @Controller
 @RequestMapping("/dashboard/vigilantes")
 public class VigilanteAdminController {
 
     private final VigilanteDAO vigilanteDAO = new VigilanteDAO();
-
     @PostMapping("/salvar")
     public String salvar(@RequestParam(required = false) String loginAntigo,
             @RequestParam String login,
@@ -44,6 +44,12 @@ public class VigilanteAdminController {
         return "redirect:/dashboard";
     }
 
+    /**
+     * Método para exclusão de vigilantes
+     * 
+     * @param login login do vigilante a ser excluido
+     * @return redirecionamento para dashboard.
+     */
     @GetMapping("/excluir/{login}")
     public String excluir(@PathVariable String login) {
         vigilanteDAO.deletar(login);
