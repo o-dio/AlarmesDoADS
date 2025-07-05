@@ -11,7 +11,8 @@ import com.projetofinalpoo.models.Cliente;
 import com.projetofinalpoo.models.ContatoInfo;
 
 /**
- * Classe responsável por realizar operações de acesso a dados (DAO) da entidade Cliente.
+ * Classe responsável por realizar operações de acesso a dados (DAO) da entidade
+ * Cliente.
  */
 public class ClienteDAO {
     private Connection conn = new ConexaoDAO().conectar();
@@ -23,8 +24,8 @@ public class ClienteDAO {
      */
     public void cadastrar(Cliente cliente) {
         String sql = "INSERT INTO \"Cliente\" " +
-        "(\"Login\", \"Senha\", \"CPF\", \"DataNasc\", \"Fone\", \"Email\", \"FoneContato\")" +
-        "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "(\"Login\", \"Senha\", \"CPF\", \"DataNasc\", \"Fone\", \"Email\", \"FoneContato\")" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, cliente.getLogin());
@@ -54,24 +55,19 @@ public class ClienteDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                   Date dataNasc = rs.getDate("DataNasc");
-                    String dataFormatada = dataNasc != null ? new SimpleDateFormat("dd/MM/yyyy").format(dataNasc) : null;
-System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")));
                 clientes.add(new Cliente(
-                    rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("CPF"),
+                        rs.getString("Login"),
+                        rs.getString("Senha"),
+                        rs.getString("CPF"),
 
-                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    new ContatoInfo(
-                        rs.getString("Fone"),
-                        rs.getString("Email"),
-                        rs.getString("FoneContato")
-                    )
-                ));
+                        new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
+                        new ContatoInfo(
+                                rs.getString("Fone"),
+                                rs.getString("Email"),
+                                rs.getString("FoneContato"))));
             }
 
-            if(clientes.size() > 0) {
+            if (clientes.size() > 0) {
                 return clientes;
             }
 
@@ -98,16 +94,14 @@ System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNas
 
             if (rs.next()) {
                 Cliente findClient = new Cliente(
-                    rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("CPF"),
-                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    new ContatoInfo(
-                        rs.getString("Fone"),
-                        rs.getString("Email"),
-                        rs.getString("FoneContato")
-                    )
-                );
+                        rs.getString("Login"),
+                        rs.getString("Senha"),
+                        rs.getString("CPF"),
+                        new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
+                        new ContatoInfo(
+                                rs.getString("Fone"),
+                                rs.getString("Email"),
+                                rs.getString("FoneContato")));
                 return findClient;
             } else {
                 return null;
@@ -135,16 +129,14 @@ System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNas
 
             if (rs.next()) {
                 Cliente findClient = new Cliente(
-                    rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("CPF"),
-                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    new ContatoInfo(
-                        rs.getString("Fone"),
-                        rs.getString("Email"),
-                        rs.getString("FoneContato")
-                    )
-                );
+                        rs.getString("Login"),
+                        rs.getString("Senha"),
+                        rs.getString("CPF"),
+                        new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
+                        new ContatoInfo(
+                                rs.getString("Fone"),
+                                rs.getString("Email"),
+                                rs.getString("FoneContato")));
                 return findClient;
             } else {
                 System.out.println("Cliente nao encontrado");
@@ -171,16 +163,14 @@ System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNas
 
             if (rs.next()) {
                 Cliente findClient = new Cliente(
-                    rs.getString("Login"),
-                    rs.getString("Senha"),
-                    rs.getString("CPF"),
-                    new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
-                    new ContatoInfo(
-                        rs.getString("Fone"),
-                        rs.getString("Email"),
-                        rs.getString("FoneContato")
-                    )
-                );
+                        rs.getString("Login"),
+                        rs.getString("Senha"),
+                        rs.getString("CPF"),
+                        new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
+                        new ContatoInfo(
+                                rs.getString("Fone"),
+                                rs.getString("Email"),
+                                rs.getString("FoneContato")));
                 return findClient;
             } else {
                 System.out.println("Cliente nao encontrado com CPF: " + cpf);
@@ -192,7 +182,6 @@ System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNas
         }
     }
 
-
     /**
      * Atualiza os dados de um cliente existente.
      *
@@ -200,14 +189,14 @@ System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNas
      */
     public void atualizar(Cliente cliente) {
         String sql = "UPDATE \"Cliente\" SET " +
-        "\"Login\" = ?, " +
-        "\"Senha\" = ?, " +
-        "\"CPF\" = ?, " +
-        "\"DataNasc\" = ?, " +
-        "\"Fone\" = ?, " +
-        "\"Email\" = ?, " +
-        "\"FoneContato\" = ? "+
-        "WHERE \"CPF\" = ?";
+                "\"Login\" = ?, " +
+                "\"Senha\" = ?, " +
+                "\"CPF\" = ?, " +
+                "\"DataNasc\" = ?, " +
+                "\"Fone\" = ?, " +
+                "\"Email\" = ?, " +
+                "\"FoneContato\" = ? " +
+                "WHERE \"CPF\" = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setString(1, cliente.getLogin());

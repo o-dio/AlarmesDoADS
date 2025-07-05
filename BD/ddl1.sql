@@ -150,14 +150,14 @@
 	);
 
 	INSERT INTO "Admin" ("Login", "Senha") VALUES
-		('teste', 'teste');
+		('teste', '698dc19d489c4e4db73e28a713eab07b'); --teste
 
 	INSERT INTO "Cliente" ("Login", "Senha", "CPF", "DataNasc", "Fone", "Email", "FoneContato") VALUES
-		('cliente1', 'senha1', '86705321984', '1988-10-14', '11945678234', 'cliente1@email.com', '11932147890'),
-		('cliente2', 'senha2', '25387143921', '1995-07-22', '11998765432', 'cliente2@email.com', '11987654321'),
-		('cliente3', 'senha3', '53417896421', '2001-03-12', '11976543210', 'cliente3@email.com', '11965432109'),
-		('cliente4', 'senha4', '64820913579', '1982-12-03', '11912345678', 'cliente4@email.com', '11943215678'),
-		('cliente5', 'senha5', '15932784610', '1999-05-19', '11956473829', 'cliente5@email.com', '11993827164');
+		('cliente1', '92f20dafc5e5ac1c66820903c492cc04', '86705321984', '1988-10-14', '11945678234', 'cliente1@email.com', '11932147890'), --senha1
+		('cliente2', '34ae07655b9a94e90556aff79bfd60b0', '25387143921', '1995-07-22', '11998765432', 'cliente2@email.com', '11987654321'), --senha2
+		('cliente3', 'f940608acd624f8092bc86353052e734', '53417896421', '2001-03-12', '11976543210', 'cliente3@email.com', '11965432109'), --senha3
+		('cliente4', 'f98494438eca6d421a8f9b5b3f02ed83', '64820913579', '1982-12-03', '11912345678', 'cliente4@email.com', '11943215678'), --senha4
+		('cliente5', '4003ad34bf5fe5b88e5f393ff15ad623', '15932784610', '1999-05-19', '11956473829', 'cliente5@email.com', '11993827164'); --senha5
 
 	INSERT INTO "Endereco" ("Rua", "Numero", "Complemento", "Bairro", "Cidade", "Estado", "IdCliente") VALUES
 		('Rua 1', 101, 'Apto 10', 'Bairro 1', 'Cidade 1', 'SP', 1),
@@ -167,9 +167,9 @@
 		('Rua 5', 505, 'Apto 50', 'Bairro 5', 'Cidade 5', 'SP', 5);
 
 	INSERT INTO "Vigilante" ("Login", "Senha", "Turno", "CargaHoraria", "Remuneracao", "DataContratacao", "Fone", "Email", "FoneContato", "IdEndereco") VALUES
-		('vigilante1', 'senhavig1', 'D', '08:00:00', 2750.50, '2018-04-15', '11956473829', 'vig1@empresa.com', '11993827164', 1),
-		('vigilante2', 'senhavig2', 'N', '10:00:00', 3200.75, '2020-11-22', '11912348765', 'vig2@empresa.com', '11976543210', NULL),
-		('vigilante3', 'senhavig3', 'D', '12:00:00', 4100.00, '2017-07-30', '11987654321', 'vig3@empresa.com', '11965432109', 3);
+		('vigilante1', 'e6fe77c120104d0124d8b7f308e8bb0f', 'D', '08:00:00', 2750.50, '2018-04-15', '11956473829', 'vig1@empresa.com', '11993827164', 1), --senhavig1
+		('vigilante2', '86ebbc51ed4d5b81e3f653fd9b364e55', 'N', '10:00:00', 3200.75, '2020-11-22', '11912348765', 'vig2@empresa.com', '11976543210', NULL), --senhavig2
+		('vigilante3', 'c92dcb975ecb2395dbf69d6fa30a5504', 'D', '12:00:00', 4100.00, '2017-07-30', '11987654321', 'vig3@empresa.com', '11965432109', 3);--senhavig3
 
 	INSERT INTO "Rota" ("Nome", "Bairro", "Descricao", "Observacao") VALUES
 		('Rota 1', 'Bairro 1', 'Descrição da Rota 1', 'Observação da Rota 1'),

@@ -1,35 +1,44 @@
 package com.projetofinalpoo.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.projetofinalpoo.dao.RotaDAO;
 import com.projetofinalpoo.models.Rota;
 
-import jakarta.servlet.http.HttpSession;
-import com.projetofinalpoo.models.Admin;
-
+/**
+ * Controlador da ronda
+ */
 @Controller
 public class RondaAdminController {
 
     private RotaDAO rotaDAO = new RotaDAO();
 
-@PostMapping("/salvar")
-public String salvar(Rota rota) {
-   if (rota.getId() == null){
-        rotaDAO.cadastrar(rota);
-    } else {
-        rotaDAO.atualizar(rota);
+    /**
+     * Salva a ronda
+     * 
+     * @param rota Rota da ronda a ser salva
+     * @return redirecionamento para dashboard
+     */
+    @PostMapping("/salvar")
+    public String salvar(Rota rota) {
+        if (rota.getId() == null) {
+            rotaDAO.cadastrar(rota);
+        } else {
+            rotaDAO.atualizar(rota);
+        }
+        return "redirect:/dashboard";
     }
-    return "redirect:/dashboard";
-}
 
-
+    /**
+     * Exclui uma ronda
+     * 
+     * @param nome nome da ronda a ser excluida
+     * @return redirecionamento para dashboard
+     */
     @GetMapping("/excluir/{nome}")
     public String excluir(@PathVariable String nome) {
         rotaDAO.deletar(nome);
         return "redirect:/dashboard";
     }
 }
-

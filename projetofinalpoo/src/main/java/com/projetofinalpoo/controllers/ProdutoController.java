@@ -4,25 +4,37 @@ import com.projetofinalpoo.dao.ProdutoDAO;
 import com.projetofinalpoo.models.Produto;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.util.List;
 
+/**
+ * Controlador para produtos
+ */
 @Controller
 public class ProdutoController {
 
     private ProdutoDAO produtoDAO = new ProdutoDAO();
+
+    /**
+     * Salva produto no banco
+     * 
+     * @param id identificador do novo produto
+     * @param dataInst data da instalação do novo produto
+     * @param dataRet data da retirada do novo produto
+     * @param defeito o novo produto tem defeito?
+     * @param idEndereco endereco do novo produto
+     * @return redirecionamento para dashboard
+     */
     @PostMapping("/produto/salvar")
     public String salvar(@RequestParam(required = false) Integer id,
-                         @RequestParam String dataInst,
-                         @RequestParam String dataRet,
-                         @RequestParam boolean defeito,
-                         @RequestParam int idEndereco) {
+            @RequestParam String dataInst,
+            @RequestParam String dataRet,
+            @RequestParam boolean defeito,
+            @RequestParam int idEndereco) {
 
         Produto produto = new Produto();
         if (id != null) {
@@ -43,9 +55,15 @@ public class ProdutoController {
         return "redirect:/dashboard";
     }
 
+    /**
+     * Excluir produto
+     * 
+     * @param id Identificador do produto a ser excluido.
+     * @return redirecionamento para o dashboard.
+     */
     @GetMapping("/produto/excluir/{id}")
     public String excluir(@PathVariable int id) {
         produtoDAO.deletar(id);
         return "redirect:/dashboard";
-        }
+    }
 }

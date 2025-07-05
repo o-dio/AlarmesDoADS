@@ -79,7 +79,6 @@ public class ProdutoDAO {
      */
     public Produto buscarPorId(int id) {
         String sql = "SELECT * FROM \"Produto\" WHERE \"id\" = ?";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, id);

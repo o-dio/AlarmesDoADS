@@ -2,7 +2,6 @@ package com.projetofinalpoo.models;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Representa uma gravação relacionada a um produto, contendo informações como data, duração e arquivo.

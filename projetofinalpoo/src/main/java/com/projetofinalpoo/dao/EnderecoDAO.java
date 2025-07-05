@@ -5,13 +5,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import com.projetofinalpoo.models.Endereco;
+/**
+ * Estabelece os parametros para comunicação entre
+ * classe Endereço e tabela Endereço do banco de dados
+ */
 public class EnderecoDAO {
     private Connection conn;
-
+    
+    /**
+     * Estabelece a conexão com o banco de dados
+     */
     public EnderecoDAO() {
         this.conn = new ConexaoDAO().conectar();
     }
 
+    /**
+     * Busca por parametro identificador
+     * @param id parametro identificador a ser buscado
+     * @return Endereço encontrado.
+     */
     public Endereco buscarPorId(int id) {
         Endereco e = null;
         String sql = "SELECT * FROM \"Endereco\" WHERE \"id\" = ?";
