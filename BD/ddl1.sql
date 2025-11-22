@@ -6,8 +6,11 @@
 	DROP TABLE IF EXISTS "Endereco_Rota";
 	DROP TABLE IF EXISTS "Rota";
 	DROP TABLE IF EXISTS "Vigilante";
+	DROP TABLE IF EXISTS "Contrato_Endereco";
 	DROP TABLE IF EXISTS "Endereco";
+	DROP TABLE IF EXISTS "Contrato";
 	DROP TABLE IF EXISTS "Cliente";
+	
 
 	CREATE TABLE "Admin" (
 		id SERIAL,
@@ -27,6 +30,18 @@
 		"FoneContato" CHAR(11),
 		CONSTRAINT cliente_pk PRIMARY KEY (id)
 	);
+	
+	CREATE TABLE "Contrato" (
+		id SERIAL,
+		"IdCliente" INT NOT NULL,
+		"Data" DATE NOT NULL,
+		"Valor" DOUBLE PRECISION NOT NULL,
+		CONSTRAINT contrato_pk PRIMARY KEY (id),
+		CONSTRAINT contrato_fk FOREIGN KEY ("IdCliente")
+			REFERENCES "Cliente"(id)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+	);
 
 	CREATE TABLE "Endereco" (
 		id SERIAL,
@@ -36,10 +51,20 @@
 		"Bairro" VARCHAR(256) NOT NULL,
 		"Cidade" VARCHAR(256) NOT NULL,
 		"Estado" CHAR(2) NOT NULL,
-		"IdCliente" INT NOT NULL,
-		CONSTRAINT endereco_pk PRIMARY KEY (id),
-		CONSTRAINT endereco_fk FOREIGN KEY ("IdCliente")
-			REFERENCES "Cliente"(id)
+		CONSTRAINT endereco_pk PRIMARY KEY (id)
+	);
+	
+	CREATE TABLE "Contrato_Endereco" (
+		id serial,
+		"IdContrato" INT NOT NULL,
+		"IdEndereco" INT NOT NULL,
+		CONSTRAINT contrato_endereco_pk PRIMARY KEY (id),
+		CONSTRAINT contrato_endereco_fk_e FOREIGN KEY("IdEndereco")
+			REFERENCES "Endereco"(id)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE,
+		CONSTRAINT contrato_endereco_fk_c FOREIGN KEY("IdContrato")
+			REFERENCES "Contrato"(id)
 			ON UPDATE CASCADE
 			ON DELETE CASCADE
 	);
@@ -159,12 +184,26 @@
 		('cliente4', 'f98494438eca6d421a8f9b5b3f02ed83', '64820913579', '1982-12-03', '11912345678', 'cliente4@email.com', '11943215678'), --senha4
 		('cliente5', '4003ad34bf5fe5b88e5f393ff15ad623', '15932784610', '1999-05-19', '11956473829', 'cliente5@email.com', '11993827164'); --senha5
 
-	INSERT INTO "Endereco" ("Rua", "Numero", "Complemento", "Bairro", "Cidade", "Estado", "IdCliente") VALUES
-		('Rua 1', 101, 'Apto 10', 'Bairro 1', 'Cidade 1', 'SP', 1),
-		('Rua 2', 202, 'Apto 20', 'Bairro 2', 'Cidade 2', 'SP', 2),
-		('Rua 3', 303, 'Apto 30', 'Bairro 3', 'Cidade 3', 'SP', 3),
-		('Rua 4', 404, 'Apto 40', 'Bairro 4', 'Cidade 4', 'SP', 4),
-		('Rua 5', 505, 'Apto 50', 'Bairro 5', 'Cidade 5', 'SP', 5);
+	INSERT INTO "Endereco" ("Rua", "Numero", "Complemento", "Bairro", "Cidade", "Estado") VALUES
+		('Rua 1', 101, 'Apto 10', 'Bairro 1', 'Cidade 1', 'SP'),
+		('Rua 2', 202, 'Apto 20', 'Bairro 2', 'Cidade 2', 'SP'),
+		('Rua 3', 303, 'Apto 30', 'Bairro 3', 'Cidade 3', 'SP'),
+		('Rua 4', 404, 'Apto 40', 'Bairro 4', 'Cidade 4', 'SP'),
+		('Rua 5', 505, 'Apto 50', 'Bairro 5', 'Cidade 5', 'SP');
+		
+	INSERT INTO "Contrato" ("IdCliente", "Data", "Valor") VALUES
+		(1, '2024-01-15', 1500.00),
+		(2, '2024-02-10', 2999.90),
+		(3, '2024-03-05', 450.75),
+		(1, '2024-04-20', 780.00),
+		(4, '2024-05-12', 12500.50);
+		
+	INSERT INTO "Contrato_Endereco" ("IdContrato", "IdEndereco") VALUES
+		(1, 4),
+		(2, 1),
+		(3, 5),
+		(4, 2),
+		(5, 3);
 
 	INSERT INTO "Vigilante" ("Login", "Senha", "Turno", "CargaHoraria", "Remuneracao", "DataContratacao", "Fone", "Email", "FoneContato", "IdEndereco") VALUES
 		('vigilante1', 'e6fe77c120104d0124d8b7f308e8bb0f', 'D', '08:00:00', 2750.50, '2018-04-15', '11956473829', 'vig1@empresa.com', '11993827164', 1), --senhavig1
@@ -208,3 +247,4 @@
 		('2024-04-15', '00:45:00', 3, 3),
 		('2024-05-05', '01:20:00', 1, 4),
 		('2024-06-01', '00:50:00', 2, 5);
+		
