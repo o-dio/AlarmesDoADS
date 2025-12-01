@@ -129,12 +129,10 @@
 
     <!--TABELA OCORRENCIAS-->
     <div id="ocorrenciasContainer" style="display:none;">
-
-
-      <table>
+      <table id="tabelaOcorrencias" >
         <thead>
           <tr>
-            <th>ID</th>
+            <th style="display: none;">ID</th>
             <th>Data</th>
             <th>Duração</th>
             <th>Vigilante</th>
@@ -145,9 +143,9 @@
         <tbody>
           <tr th:each="ocorrencia : ${ocorrencias}" th:attr="data-id=${ocorrencia.id}">
 
-            <td th:text="${ocorrencia.id}">1</td>
-            <td th:text="${ocorrencia.data}">01/01/2024</td>
-            <td th:text="${ocorrencia.duracao}">00:30:00</td>
+            <td th:text="${ocorrencia.id}" style="display: none;">1</td>
+            <td th:text="${#temporals.format(ocorrencia.data, 'dd/MM/yyyy')}"></td>
+            <td th:text="${#temporals.format(ocorrencia.duracao, 'HH:mm:ss')}"></td>
             <td th:text="${ocorrencia.idVigilante}">10</td>
             <td th:text="${ocorrencia.idProduto}">5</td>
             <td>
@@ -162,81 +160,11 @@
       </table>
       <button type="button" onclick="abrirModalAdicionarOcorrencia()">Nova Ocorrência</button>
     </div>
-    <!-- TABELA ALARME -->
-    <div id="alarmesContainer" style="display:none;">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Data Instalação</th>
-            <th>Data Retirada</th>
-            <th>Defeito</th>
-            <th>ID Endereço</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="alarme : ${alarmes}" th:attr="data-id=${alarme.id}">
-            <td th:text="${alarme.id}">1</td>
-            <td th:text="${#temporals.format(alarme.dataInst, 'dd/MM/yyyy')}">01/01/2024</td>
-            <td th:text="${#temporals.format(alarme.dataRet, 'dd/MM/yyyy')}">01/02/2024</td>
-            <td th:text="${alarme.defeito}">false</td>
-            <td th:text="${alarme.idEndereco}">10</td>
-            <td>
-              <button type="button" th:onclick="|abrirModalEditarAlarme(${alarme.id})|">Editar</button>
-              <a th:href="@{/produto/excluir/{id}(id=${alarme.id})}"
-                onclick="return confirm('Deseja excluir este alarme?')">
-                <button>Excluir</button>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button type="button" onclick="abrirModalAdicionarAlarme()">Novo Alarme</button>
-    </div>
 
 
-    <!--TABELA CLIENTES-->
-    <div id="clientesContainer" style="display: none;">
-
-      <table>
-        <thead>
-          <tr>
-            <th>Login</th>
-            <th>CPF</th>
-            <th>Data Nasc</th>
-            <th>Fone</th>
-            <th>Email</th>
-            <th>Fone Contato</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="cliente : ${clientes}" th:id="'cliente-' + ${cliente.login}">
-            <td th:text="${cliente.login}"></td>
-            <td th:text="${cliente.cpf}"></td>
-            <td th:text="${#temporals.format(cliente.dataNasc, 'dd/MM/yyyy')}"></td>
-            <td th:text="${cliente.contatoInfo != null ? cliente.contatoInfo.fone : ''}"></td>
-            <td th:text="${cliente.contatoInfo != null ? cliente.contatoInfo.email : ''}"></td>
-            <td th:text="${cliente.contatoInfo != null ? cliente.contatoInfo.foneContato : ''}"></td>
-
-            <td>
-              <!-- <button type="button" th:onclick="|abrirModalEditar('${cliente.login}')|">Editar</button> -->
-              <a th:href="@{/excluirCliente/{cpf}(cpf=${cliente.cpf})}"
-                onclick="return confirm('Deseja excluir este cliente?')">
-                <button>Excluir</button>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table><button onclick="abrirModalNovo()">Novo Cliente</button>
-    </div>
-
-  </div>
   <!-- TABELA GRAVACOES -->
-
-  <div id="gravacoesContainer" style="display:none;">
-    <table border="1">
+  <div id="gravacoesContainer" style="display: none;">
+    <table id="tabelaGravacoes" border="1">
       <thead>
         <tr>
           <th>ID</th>
@@ -245,8 +173,10 @@
           <th>Data</th>
           <th>Arquivo</th>
           <th>ID Produto</th>
+          <th>Ações</th>
         </tr>
       </thead>
+      
       <tbody>
         <tr th:each="gravacao : ${gravacoes}" th:attr="data-id=${gravacao.id}">
           <td th:text="${gravacao.id}"></td>
@@ -267,38 +197,58 @@
       </tbody>
     </table>
     <button onclick="abrirModalAdicionarGravacao()">Nova Gravação</button>
-  </div>
-  <!-- Modal Cliente -->
-  <div id="modalCliente" style="display: none;">
-    <form id="formCliente" method="post">
-      <input type="hidden" id="modoCliente" name="modo">
+    </div>
 
-      <input type="text" id="clienteLogin" name="login" placeholder="Login" required>
-      <input type="password" id="clienteSenha" name="senha" placeholder="Senha">
-      <input type="text" id="clienteCpf" name="cpf" placeholder="CPF" required>
-      <input type="date" id="clienteDataNasc" name="dataNasc" required>
-      <input type="text" id="clienteFone" name="fone" placeholder="Fone" required>
-      <input type="email" id="clienteEmail" name="email" placeholder="Email" required>
-      <input type="text" id="clienteFoneContato" name="foneContato" placeholder="Fone Contato" required>
 
-      <button type="submit" id="botaoEnviarCliente">Salvar</button>
-      <button type="button" onclick="fecharModalCliente()">Cancelar</button>
-    </form>
-  </div>
-  </div>
+    <!-- TABELA ALARME -->
+    <div id="alarmesContainer" style="display:none;">
+      <table id="tabelaAlarmes">
+        <thead>
+          <tr>
+            <th>ID</th>1
+            <th>Data Instalação</th>
+            <th>Data Retirada</th>
+            <th>Defeito</th>
+            <th>ID Endereço</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="alarme : ${alarmes}" th:attr="data-id=${alarme.id}">
+            <td th:text="${alarme.id}">1</td>
+            <td th:text="${#temporals.format(alarme.dataInst, 'dd/MM/yyyy')}">01/01/2024</td>
+            <td th:text="${#temporals.format(alarme.dataRet, 'dd/MM/yyyy')}">01/02/2024</td>
+            <td th:text="${alarme.defeito ? 'Sim' : 'Não'}"></td>
+            <td th:text="${alarme.idEndereco}">10</td>
+            <td>
+              <button type="button" th:onclick="|abrirModalEditarAlarme(${alarme.id})|">Editar</button>
+              <a th:href="@{/produto/excluir/{id}(id=${alarme.id})}"
+                onclick="return confirm('Deseja excluir este alarme?')">
+                <button>Excluir</button>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" onclick="abrirModalAdicionarAlarme()">Novo Alarme</button>
+    </div>
+
+
+</div>
+
   <!-- MODAL GRAVACOES -->
   <div id="modalGravacao" class="modal" style="display:none;">
     <div class="modal-content">
       <span onclick="fecharModal('modalGravacao')" class="close">&times;</span>
       <h2>Gerenciar Gravação</h2>
       <form action="/gravacao/salvar" method="post">
-        <input type="hidden" id="idGravacao" name="id">
+        <input type="hidden" id="idGravacao" name="id" >
 
         <label>Descrição:</label>
         <input type="text" id="descricaoGravacao" name="descricao" required>
 
         <label>Duração:</label>
-        <input type="time" id="duracaoGravacao" name="duracao" required>
+        <input type="time" id="duracaoGravacao" name="duracao" step="1" required>
 
         <label>Data:</label>
         <input type="date" id="dataGravacao" name="data" required>
@@ -381,7 +331,7 @@
         <input type="date" id="dataOcorrencia" name="data" required>
 
         <label>Duração:</label>
-        <input type="time" id="duracaoOcorrencia" name="duracao" required>
+        <input type="time" id="duracaoOcorrencia" name="duracao" step="1" required>
 
         <label>ID Vigilante:</label>
         <input type="number" id="idVigilanteOcorrencia" name="idVigilante" required>
@@ -394,8 +344,6 @@
       </form>
     </div>
   </div>
-
-
 </body>
 
 <script>
@@ -459,24 +407,23 @@
 
 
   function abrirModalEditarRonda(id) {
-    const linha = document.querySelector(`tr[data-id='${id}']`);
+  const tr = document.querySelector(`tr[data-id='${id}']`);
 
-
-    if (!tr) {
-      alert('Ronda não encontrada!');
-      return;
-    }
-
-    const tds = tr.querySelectorAll('td');
-
-    document.getElementById('id').value = id;
-    document.getElementById('nome').value = tds[1].innerText.trim();
-    document.getElementById('bairro').value = tds[2].innerText.trim();
-    document.getElementById('descricao').value = tds[3].innerText.trim();
-    document.getElementById('observacao').value = tds[4].innerText.trim();
-
-    document.getElementById('modalRonda').style.display = 'flex';
+  if (!tr) {
+    alert('Ronda não encontrada!');
+    return;
   }
+
+  const tds = tr.querySelectorAll('td');
+
+  document.getElementById('id').value = id;
+  document.getElementById('nome').value = tds[1].innerText.trim();
+  document.getElementById('bairro').value = tds[2].innerText.trim();
+  document.getElementById('descricao').value = tds[3].innerText.trim();
+  document.getElementById('observacao').value = tds[4].innerText.trim();
+
+  document.getElementById('modalRonda').style.display = 'flex';
+}
 
   function abrirModalAdicionar() {
     document.getElementById('id').value = '';
@@ -502,80 +449,42 @@
     document.getElementById('idProdutoOcorrencia').value = '';
     document.getElementById('modalOcorrencia').style.display = 'flex';
   }
+function abrirModalEditarOcorrencia(id) {
 
-  function abrirModalEditarOcorrencia(id) {
-    const tr = document.querySelector(`tr[data-id="${id}"]`);
-    const tds = tr.querySelectorAll('td');
+  const tabela = document.querySelector("#tabelaOcorrencias");
+  const tr = tabela.querySelector(`tr[data-id='${id}']`);
 
-    document.getElementById('idOcorrencia').value = id;
-    document.getElementById('dataOcorrencia').value = formatarData(tds[1].innerText);
-    document.getElementById('duracaoOcorrencia').value = tds[2].innerText;
-    document.getElementById('idVigilanteOcorrencia').value = tds[3].innerText;
-    document.getElementById('idProdutoOcorrencia').value = tds[4].innerText;
+  console.log("Linha encontrada:", tr);
 
-    document.getElementById('modalOcorrencia').style.display = 'flex';
+  if (!tr) {
+    alert("Ocorrência não encontrada!");
+    return;
   }
 
+  const tds = tr.querySelectorAll("td");
+
+  document.getElementById('idOcorrencia').value = id;
+  document.getElementById('dataOcorrencia').value = formatarData(tds[1].innerText.trim());
+  document.getElementById('duracaoOcorrencia').value = tds[2].innerText.trim();
+  document.getElementById('idVigilanteOcorrencia').value = tds[3].innerText.trim();
+  document.getElementById('idProdutoOcorrencia').value = tds[4].innerText.trim();
+
+  document.getElementById('modalOcorrencia').style.display = 'flex';
+}
 
 
   //VIGILANTES ------------------------------------------------------
 
 
 
-  // function abrirModalAdicionarVigilante() {
-  //   document.getElementById('loginAntigo').value = '';
-  //   document.getElementById('login').value = '';
-  //   document.getElementById('senha').value = '';
-  //   document.getElementById('turno').value = '';
-  //   document.getElementById('cargaHoraria').value = '';
-  //   document.getElementById('remuneracao').value = '';
-  //   document.getElementById('dataContratacao').value = '';
-  //   document.getElementById('fone').value = '';
-  //   document.getElementById('email').value = '';
-  //   document.getElementById('foneContato').value = '';
-
-  //   document.getElementById('modalVigilante').style.display = 'flex';
-  // }
-  // function abrirModalEditarVigilante(login) {
-  //   console.log("Abrindo modal para:", login);
-
-  //   const tr = document.querySelector(`tr[data-login="${login}"]`);
-  //   if (!tr) {
-  //     alert('Vigilante não encontrado!');
-  //     return;
-  //   }
-  //   const tds = tr.querySelectorAll('td');
-
-  //   document.getElementById('loginAntigo').value = login;
-  //   document.getElementById('login').value = tds[0].innerText.trim();
-
-  //   document.getElementById('senha').value = '';
-
-  //   document.getElementById('turno').value = tds[1].innerText.trim();
-  //   document.getElementById('cargaHoraria').value = tds[2].innerText.trim();
-  //   document.getElementById('remuneracao').value = tds[3].innerText.trim();
-  //   document.getElementById('dataContratacao').value = formatarData(tds[4].innerText.trim());
-  //   document.getElementById('fone').value = tds[5].innerText.trim();
-  //   document.getElementById('email').value = tds[6].innerText.trim();
-  //   document.getElementById('foneContato').value = tds[7].innerText.trim();
-
-  //   document.getElementById('modalVigilante').style.display = 'flex';
-  // }
+  //ALARMES
 
 
-
-
-
-  //alarmes
-
-  function mostrarAlarmes() {
-    document.getElementById('alarmesContainer').style.display = 'block';
-    document.getElementById('rondasContainer').style.display = 'none';
-    document.getElementById('ocorrenciasContainer').style.display = 'none';
-
-  }
   function abrirModalEditarAlarme(id) {
-    const tr = document.querySelector(`tr[data-id="${id}"]`);
+   
+    const tabela = document.querySelector("#tabelaAlarmes");
+  const tr = tabela.querySelector(`tr[data-id='${id}']`);
+
     if (!tr) {
       alert('Alarme não encontrado!');
       return;
@@ -585,7 +494,7 @@
     document.getElementById('idAlarme').value = id;
     document.getElementById('dataInstAlarme').value = formatarData(tds[1].innerText);
     document.getElementById('dataRetAlarme').value = formatarData(tds[2].innerText);
-    document.getElementById('defeitoAlarme').value = tds[3].innerText.trim();
+    document.getElementById('defeitoAlarme').value = tr.dataset.defeito;
     document.getElementById('idEnderecoAlarme').value = tds[4].innerText.trim();
 
     document.getElementById('modalAlarme').style.display = 'flex';
@@ -601,98 +510,39 @@
     document.getElementById('modalAlarme').style.display = 'flex';
   }
 
-  function formatarData(dataStr) {
-    const partes = dataStr.split('/');
-    return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
-  }
 
 
-
-
-  //CLIENTE
-  function abrirModalNovo() {
-    document.getElementById('formCliente').action = '/cadastrarCliente';
-    document.getElementById('modoCliente').value = 'novo';
-
-    document.getElementById('clienteLogin').readOnly = false;
-    document.getElementById('clienteLogin').value = '';
-    document.getElementById('clienteSenha').required = true;
-    document.getElementById('clienteSenha').value = '';
-    document.getElementById('clienteCpf').value = '';
-    document.getElementById('clienteDataNasc').value = '';
-    document.getElementById('clienteFone').value = '';
-    document.getElementById('clienteEmail').value = '';
-    document.getElementById('clienteFoneContato').value = '';
-
-    document.getElementById('modalCliente').style.display = 'block';
-  }
-
-  function abrirModalEditar(login) {
-    const linha = document.querySelector(`#cliente-${login}`);
-    const tds = linha.getElementsByTagName('td');
-
-    document.getElementById('formCliente').action = '/editarCliente';
-    document.getElementById('modoCliente').value = 'editar';
-
-    document.getElementById('clienteLogin').readOnly = true;
-    document.getElementById('clienteLogin').value = tds[0].innerText;
-    document.getElementById('clienteSenha').required = false;
-    document.getElementById('clienteSenha').value = '';
-    document.getElementById('clienteCpf').value = tds[1].innerText;
-    document.getElementById('clienteDataNasc').value = tds[2].innerText.split('/').reverse().join('-');
-    document.getElementById('clienteFone').value = tds[3].innerText;
-    document.getElementById('clienteEmail').value = tds[4].innerText;
-    document.getElementById('clienteFoneContato').value = tds[5].innerText;
-
-    document.getElementById('modalCliente').style.display = 'block';
-  }
-
-  function fecharModalCliente() {
-    document.getElementById('modalCliente').style.display = 'none';
-  }
 
   // GRAVAÇÕES ---------------------------------------------------------
 
-
-  function abrirModalAdicionarGravacao() {
-    document.getElementById('idGravacao').value = '';
-    document.getElementById('descricaoGravacao').value = '';
-    document.getElementById('duracaoGravacao').value = '';
-    document.getElementById('dataGravacao').value = '';
-    document.getElementById('arquivoGravacao').value = '';
-    document.getElementById('idProdutoGravacao').value = '';
-    document.getElementById('modalGravacao').style.display = 'flex';
+function abrirModalEditarGravacao(id) {
+      const tabela = document.querySelector("#tabelaGravacoes");
+  const tr = tabela.querySelector(`tr[data-id='${id}']`);
+  if (!tr) {
+    alert('Gravação não encontrada!');
+    return;
   }
 
-  function abrirModalEditarGravacao(id) {
-    const tr = document.querySelector(`tr[data-id="${id}"]`);
-    if (!tr) {
-      alert('Gravação não encontrada!');
-      return;
-    }
+  const tds = tr.querySelectorAll('td');
 
-    const tds = tr.querySelectorAll('td');
-    document.getElementById('idGravacao').value = id;
-    document.getElementById('descricaoGravacao').value = tds[1].innerText.trim();
-    document.getElementById('duracaoGravacao').value = tds[2].innerText.trim();
-    document.getElementById('dataGravacao').value = formatarData(tds[3].innerText.trim());
-    document.getElementById('arquivoGravacao').value = tds[4].innerText.trim();
-    document.getElementById('idProdutoGravacao').value = tds[5].innerText.trim();
+  document.getElementById('idGravacao').value = id;
+  document.getElementById('descricaoGravacao').value = tds[1].innerText;
+  document.getElementById("duracaoGravacao").value = tds[2].innerText.trim();;
+  document.getElementById('dataGravacao').value = formatarData(tds[3].innerText);
+  document.getElementById('arquivoGravacao').value = tds[4].innerText;
+  document.getElementById('idProdutoGravacao').value = tds[5].innerText;
 
-    document.getElementById('modalGravacao').style.display = 'flex';
-  }
-  function formatarData(dataStr) {
-    if (!dataStr) return '';
-    if (dataStr.includes('/')) {
-      const partes = dataStr.split('/');
-      return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
-    } else if (dataStr.includes('-')) {
-      return dataStr;
-    }
-    return dataStr;
-  }
+  document.getElementById('modalGravacao').style.display = 'flex';
+}
 
-  lucide.createIcons();
+function formatarData(dataStr) {
+  const [d, m, a] = dataStr.split("/");
+  return `${a}-${m}-${d}`;
+}
+
+
+lucide.createIcons();
+
 </script>
 
 </html>
