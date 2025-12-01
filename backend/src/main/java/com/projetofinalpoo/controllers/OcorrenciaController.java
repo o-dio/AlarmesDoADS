@@ -5,111 +5,98 @@ import com.projetofinalpoo.dao.ProdutoDAO;
 import com.projetofinalpoo.dao.VigilanteDAO;
 import com.projetofinalpoo.models.Ocorrencia;
 import com.projetofinalpoo.models.Vigilante;
+import com.projetofinalpoo.viewmodels.ProdutoMonitoradoViewModel;
+import com.projetofinalpoo.viewmodels.OcorrenciaCompletaViewModel;
+import com.projetofinalpoo.dtos.OcorrenciaCadastroDTO;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * Controlador responsável por gerenciar as operações relacionadas às ocorrências,
- * incluindo visualização da tela de ocorrências e cadastro de novas ocorrências.
+ * Controlador responsável por fornecer endpoints REST para operações relacionadas às ocorrências,
+ * permitindo que o frontend em React possa listar ocorrências, consultar produtos monitorados
+ * e cadastrar novas ocorrências relacionadas a vigilantes e produtos.
  */
-@Controller
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@RestController
+@RequestMapping("/api/ocorrencias")
 public class OcorrenciaController {
 
     /**
-     * Exibe a página de ocorrências apenas para usuários do tipo "vigilante".
-     * Carrega produtos monitorados, com informações do cliente e endereço, para exibição.
-     * 
-     * @param session Sessão HTTP para verificar tipo do usuário logado.
-     * @param model   Modelo para adicionar atributos que serão acessíveis na view.
-     * @return Nome da view de ocorrências ou redirecionamento para página inicial se não for vigilante.
+     * Retorna a lista de produtos monitorados, incluindo informações do cliente e endereço completo,
+     * permitindo que o vigilante selecione o produto antes de registrar uma ocorrência.
+     *
+     * @param session Sessão HTTP para verificar o tipo do usuário logado.
+     * @return Lista de ProdutoMonitoradoViewModel contendo produto + cliente + endereço.
      */
-    @RequestMapping("/ocorrencia")
-    public String telaOcorrencia(HttpSession session, Model model) {
+    @GetMapping("/produtos-monitorados")
+    public List<ProdutoMonitoradoViewModel> listarProdutosMonitorados(HttpSession session) {
+
         Object tipo = session.getAttribute("tipo");
 
-        if (tipo != null && tipo.equals("vigilante")) {
-            ProdutoDAO produtoDAO = new ProdutoDAO();
-            List<ProdutoMonitoradoViewModel> produtosMonitorados = produtoDAO.buscarProdutosComClienteEndereco();
-            model.addAttribute("produtosMonitorados", produtosMonitorados);
-            return "ocorrencia";
+        if (tipo == null || !tipo.equals("vigilante")) {
+            return List.of();
         }
 
-        return "redirect:/";
+        ProdutoDAO produtoDAO = new ProdutoDAO();
+        return produtoDAO.buscarProdutosComClienteEndereco();
     }
 
     /**
-     * Cadastra uma nova ocorrência para um produto monitorado, associando ao vigilante logado.
-     * 
-     * @param idProduto  Identificador do produto monitorado relacionado à ocorrência.
-     * @param duracaoStr Duração da ocorrência em formato de tempo (HH:mm:ss).
-     * @param session    Sessão HTTP para obter o vigilante logado.
-     * @return Redirecionamento para a tela de ocorrências ou para login se não estiver autenticado.
+     * Lista todas as ocorrências registradas, retornando informações completas,
+     * incluindo produto, cliente, endereço, duração, data e vigilante responsável.
+     *
+     * @param session Sessão HTTP para verificar autenticação.
+     * @return Lista de OcorrenciaCompletaViewModel contendo todos os dados necessários para exibição.
      */
-    @RequestMapping("/ocorrencia/cadastrar")
-    public String cadastrarOcorrencia(@RequestParam("idProduto") int idProduto,
-                                     @RequestParam("duracao") String duracaoStr,
-                                     HttpSession session) {
+    @GetMapping
+    public List<OcorrenciaCompletaViewModel> listarOcorrencias(HttpSession session) {
+
+        Object tipo = session.getAttribute("tipo");
+
+        if (tipo == null || !tipo.equals("vigilante")) {
+            return List.of();
+        }
+
+        return new OcorrenciaDAO().buscarOcorrenciasCompletas();
+    }
+
+    /**
+     * Cadastra uma nova ocorrência associada a um produto e ao vigilante logado no sistema.
+     *
+     * @param dto     DTO contendo o identificador do produto e a duração da ocorrência.
+     * @param session Sessão HTTP contendo dados do vigilante autenticado.
+     * @return String com status da operação.
+     */
+    @PostMapping("/cadastrar")
+    public String cadastrarOcorrencia(@RequestBody OcorrenciaCadastroDTO dto,
+                                      HttpSession session) {
 
         Vigilante vigilante = (Vigilante) session.getAttribute("usuarioLogado");
 
         if (vigilante == null) {
-            return "redirect:/login";
+            return "erro: usuário não logado";
         }
 
         int idVigilante = new VigilanteDAO().buscarIdPorLogin(vigilante.getLogin());
 
-        LocalDate dataAtual = LocalDate.now();
-        LocalTime duracao = LocalTime.parse(duracaoStr);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dataFormatada = LocalDate.now().format(formatter);
 
         Ocorrencia ocorrencia = new Ocorrencia(
-            dataAtual.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-            duracao.toString(),
-            idVigilante,
-            idProduto
+                dataFormatada,
+                dto.getDuracao(),
+                idVigilante,
+                dto.getIdProduto()
         );
 
         new OcorrenciaDAO().cadastrar(ocorrencia);
 
-        return "redirect:/ocorrencia";
-    }
-
-    /**
-     * Classe ViewModel usada para transportar dados de produtos monitorados,
-     * incluindo informações do cliente e endereço completo para a camada de visualização.
-     */
-    public static class ProdutoMonitoradoViewModel {
-        private int idProduto;
-        private String nomeCliente;
-        private String telefoneCliente;
-        private String enderecoCompleto;
-
-        /**
-         * Construtor para inicializar o ViewModel com os dados do produto monitorado.
-         * 
-         * @param idProduto       ID do produto monitorado.
-         * @param nomeCliente     Nome do cliente associado.
-         * @param telefoneCliente Telefone do cliente.
-         * @param enderecoCompleto Endereço completo do cliente.
-         */
-        public ProdutoMonitoradoViewModel(int idProduto, String nomeCliente, String telefoneCliente, String enderecoCompleto) {
-            this.idProduto = idProduto;
-            this.nomeCliente = nomeCliente;
-            this.telefoneCliente = telefoneCliente;
-            this.enderecoCompleto = enderecoCompleto;
-        }
-
-        public int getIdProduto() { return idProduto; }
-        public String getNomeCliente() { return nomeCliente; }
-        public String getTelefoneCliente() { return telefoneCliente; }
-        public String getEnderecoCompleto() { return enderecoCompleto; }
+        return "ok";
     }
 }

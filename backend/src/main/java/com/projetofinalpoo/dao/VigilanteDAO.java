@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import com.projetofinalpoo.models.ContatoInfo;
 import com.projetofinalpoo.models.Vigilante;
+import org.springframework.stereotype.Repository;
 
 /**
  * Classe responsável por realizar operações de banco de dados relacionadas à
@@ -17,6 +18,7 @@ import com.projetofinalpoo.models.Vigilante;
  * Fornece métodos para criar, ler, atualizar e deletar vigilantes, além de
  * buscas específicas.
  */
+@Repository
 public class VigilanteDAO {
     private Connection conn = new ConexaoDAO().conectar();
 

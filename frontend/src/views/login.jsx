@@ -31,7 +31,7 @@ export default function Login() {
                 "http://localhost:8080/api/login",
                 formData,
                 { 
-                    withCredentials: true, //necessario para cookies/sessao
+                    withCredentials: true, 
                     headers: { "Content-Type": "application/x-www-form-urlencoded" } 
                 }
             );

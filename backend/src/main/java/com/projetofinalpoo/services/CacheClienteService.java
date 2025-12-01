@@ -3,6 +3,9 @@ package com.projetofinalpoo.services;
 import com.projetofinalpoo.dao.ClienteDAO;
 import com.projetofinalpoo.models.Cliente;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,13 +15,24 @@ import java.util.HashMap;
  * 
  * Permite operações de CRUD em memória, além de sincronização com o banco.
  */
+@Service
 public class CacheClienteService {
 
     /** Armazena os clientes em memória, indexados pelo CPF. */
     private HashMap<String, Cliente> cacheClientes = new HashMap<>();
 
     /** DAO responsável pelas operações no banco de dados. */
-    private ClienteDAO clienteDAO = new ClienteDAO();
+    private final ClienteDAO clienteDAO;
+
+    /**
+     * Construtor do serviço, onde o Spring injeta automaticamente o ClienteDAO.
+     *
+     * @param clienteDAO DAO responsável pelas operações no banco.
+     */
+    @Autowired
+    public CacheClienteService(ClienteDAO clienteDAO) {
+        this.clienteDAO = clienteDAO;
+    }
 
     /**
      * Carrega todos os clientes do banco de dados e os armazena no cache.

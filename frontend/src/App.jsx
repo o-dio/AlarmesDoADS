@@ -7,6 +7,7 @@ import Index from "./views/index";
 import Registro from "./views/registro";
 import Rondas from "./views/rondas";
 import Monitoramento from "./views/monitoramento";
+import Ocorrencia from "./views/ocorrencia";
 
 function App() {
   const [userType, setUserType] = useState(null);
@@ -49,6 +50,10 @@ function App() {
       <Route 
         path="/monitoramento"
         element={userType ? <Monitoramento /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/ocorrencia"
+        element={userType ? <Ocorrencia /> : <Navigate to="/" />}
       />
     </Routes>
   );

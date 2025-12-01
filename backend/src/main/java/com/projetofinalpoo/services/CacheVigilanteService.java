@@ -6,19 +6,30 @@ import com.projetofinalpoo.models.Vigilante;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
  * Serviço de cache em memória para objetos {@link Vigilante}.
- * 
- * Permite operações de CRUD local e sincronização com o banco de dados,
- * otimizando o desempenho e reduzindo consultas ao banco.
  */
+@Service
 public class CacheVigilanteService {
 
     /** Armazena os vigilantes em cache, indexados pelo login. */
     private HashMap<String, Vigilante> cacheVigilantes = new HashMap<>();
 
     /** DAO responsável pelas interações com o banco de dados. */
-    private VigilanteDAO vigilanteDAO = new VigilanteDAO();
+    private final VigilanteDAO vigilanteDAO;
+
+    /**
+     * Construtor do serviço com injeção de dependência do DAO.
+     *
+     * @param vigilanteDAO DAO responsável pelo acesso ao banco de dados.
+     */
+    @Autowired
+    public CacheVigilanteService(VigilanteDAO vigilanteDAO) {
+        this.vigilanteDAO = vigilanteDAO;
+    }
 
     /**
      * Carrega todos os vigilantes do banco para o cache.

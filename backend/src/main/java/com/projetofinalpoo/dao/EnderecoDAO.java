@@ -47,8 +47,6 @@ public class EnderecoDAO {
                 e.setCidade(rs.getString("Cidade"));
                 e.setEstado(rs.getString("Estado"));
 
-                // O banco NÃO possui CEP → não setamos CEP
-
                 // Carrega as rotas associadas ao endereço
                 e.getRotas().addAll(buscarRotasDoEndereco(id));
             }

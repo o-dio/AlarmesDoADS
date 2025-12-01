@@ -6,19 +6,33 @@ import com.projetofinalpoo.models.Admin;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 /**
  * Serviço de cache para objetos {@link Admin}, armazenando-os em memória 
  * para melhorar a performance e reduzir acessos ao banco de dados.
  * 
  * Permite operações de CRUD em memória, bem como sincronização com o banco.
  */
+@Service
 public class CacheAdminService {
 
     /** Armazena os admins em memória, indexados pelo login. */
     private final HashMap<String, Admin> cacheAdmins = new HashMap<>();
 
     /** DAO responsável pelas operações com o banco de dados. */
-    private final AdminDAO adminDAO = new AdminDAO();
+    private final AdminDAO adminDAO;
+
+    /**
+     * Construtor do serviço com injeção de dependência do DAO.
+     *
+     * @param adminDAO DAO responsável pelo acesso ao banco de dados.
+     */
+    @Autowired
+    public CacheAdminService(AdminDAO adminDAO) {
+        this.adminDAO = adminDAO;
+    }
 
     /**
      * Carrega todos os administradores do banco de dados para o cache em memória.

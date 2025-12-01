@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.projetofinalpoo.viewmodels.RondaViewModel;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -147,36 +149,5 @@ public class RondaController {
         resposta.put("rotasDisponiveis", rotasDisponiveis);
 
         return ResponseEntity.ok(resposta);
-    }
-
-    /**
-     * ViewModel usada para encapsular dados da ronda que serão exibidos na
-     * interface.
-     */
-    public static class RondaViewModel {
-        private String dataIni, dataFim, local, bairro, descricao, status, enderecoCompleto;
-        private int idRota;
-
-        public RondaViewModel(String dataIni, String dataFim,
-                              String local, String bairro, String descricao,
-                              String status, String enderecoCompleto, int idRota) {
-            this.dataIni = dataIni;
-            this.dataFim = dataFim;
-            this.local = local;
-            this.bairro = bairro;
-            this.descricao = descricao;
-            this.status = status;
-            this.enderecoCompleto = enderecoCompleto;
-            this.idRota = idRota;
-        }
-
-        public String getDataIni() { return dataIni; }
-        public String getDataFim() { return dataFim; }
-        public String getLocal() { return local; }
-        public String getBairro() { return bairro; }
-        public String getDescricao() { return descricao; }
-        public String getStatus() { return status; }
-        public String getEnderecoCompleto() { return enderecoCompleto; }
-        public int getIdRota() { return idRota; }
     }
 }

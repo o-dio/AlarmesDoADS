@@ -3,13 +3,16 @@ package com.projetofinalpoo.services;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.springframework.stereotype.Service;
+
 /**
- * Serviço utilitário responsável por gerar hashes MD5 a partir de strings de entrada.
+ * Serviço utilitário {@link Service} responsável por gerar hashes MD5 a partir de strings de entrada.
  * 
  * <p>Este serviço é geralmente utilizado para criptografar senhas ou outros dados sensíveis
  * antes de armazená-los, embora o MD5 não seja recomendado para segurança criptográfica moderna
  * devido à sua vulnerabilidade a colisões.</p>
  */
+@Service
 public class HashMD5Service {
 
     /**

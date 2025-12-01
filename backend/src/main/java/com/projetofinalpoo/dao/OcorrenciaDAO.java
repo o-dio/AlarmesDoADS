@@ -8,8 +8,11 @@ import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.projetofinalpoo.models.Ocorrencia;
+
+import com.projetofinalpoo.viewmodels.OcorrenciaCompletaViewModel;
 
 /**
  * Classe responsável por realizar operações de acesso a dados (DAO) da entidade
@@ -101,6 +104,64 @@ public class OcorrenciaDAO {
             System.out.println("Erro ao buscar ocorrencia por ID: " + e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * Busca ocorrências completas contendo produto, cliente, endereço e vigilante.
+     *
+     * @return Lista de OcorrenciaCompletaViewModel com dados agregados.
+     */
+    public List<OcorrenciaCompletaViewModel> buscarOcorrenciasCompletas() {
+        List<OcorrenciaCompletaViewModel> lista = new ArrayList<>();
+
+        String sql =
+            "SELECT o.id AS ocorrencia_id, o.\"Duracao\", o.\"Data\", " +
+            "p.id AS produto_id, " +
+            "c.\"Login\" AS cliente_nome, c.\"Fone\" AS cliente_telefone, " +
+            "e.\"Rua\", e.\"Numero\", e.\"Bairro\", e.\"Cidade\", e.\"Estado\", " +
+            "v.\"Login\" AS vigilante_nome " +
+            "FROM \"Ocorrencia\" o " +
+            "JOIN \"Produto\" p ON p.id = o.\"IdProduto\" " +
+            "JOIN \"Endereco\" e ON e.id = p.\"IdEndereco\" " +
+            "JOIN \"Contrato_Endereco\" ce ON ce.\"IdEndereco\" = e.id " +
+            "JOIN \"Contrato\" ct ON ct.id = ce.\"IdContrato\" " +
+            "JOIN \"Cliente\" c ON c.id = ct.\"IdCliente\" " +
+            "LEFT JOIN \"Vigilante\" v ON v.id = o.\"IdVigilante\"";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                String endereco = String.format(
+                    "%s, %s - %s, %s - %s",
+                    rs.getString("Rua"),
+                    rs.getString("Numero"),
+                    rs.getString("Bairro"),
+                    rs.getString("Cidade"),
+                    rs.getString("Estado")
+                );
+
+                OcorrenciaCompletaViewModel oc = new OcorrenciaCompletaViewModel(
+                        rs.getInt("ocorrencia_id"),
+                        rs.getInt("produto_id"),
+                        rs.getString("cliente_nome"),
+                        rs.getString("cliente_telefone"),
+                        endereco,
+                        rs.getString("Duracao"),
+                        rs.getDate("Data").toString(),
+                        rs.getString("vigilante_nome")
+                );
+
+                lista.add(oc);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar ocorrências completas: " + e.getMessage());
+        }
+
+        return lista;
     }
 
     /**

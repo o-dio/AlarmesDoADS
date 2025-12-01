@@ -154,7 +154,7 @@ section {
   cursor: pointer;
 }
 
-/* ========== HERO SECTION ========== */
+/* HERO SECTION */
 .hero {
   position: relative;
   width: 100%;
@@ -219,7 +219,7 @@ section {
 }
 
 
-/* ========== OUTRAS SECOES ========== */
+/* OUTRAS SECOES */
 .about-content {
   display: flex;
   align-items: center;
@@ -340,10 +340,8 @@ footer {
 
   .navbar.active { display: flex; }
 
-
-  /* Ajuste hero */
   .hero {
-    height: calc(100vh - 80px); /* Mantém altura ajustada */
+    height: calc(100vh - 80px);
   }
 
   .hero-content {
@@ -369,8 +367,7 @@ footer {
   .hero-img img {
     opacity: 0.3;
   }
-
-  /* Ajuste about */
+  
   .about-content {
     flex-direction: column;
     justify-content: center;

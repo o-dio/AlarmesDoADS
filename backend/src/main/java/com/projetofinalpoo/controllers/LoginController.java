@@ -1,11 +1,9 @@
 package com.projetofinalpoo.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.projetofinalpoo.models.Admin;
-import com.projetofinalpoo.models.Cliente;
-import com.projetofinalpoo.models.Vigilante;
 import com.projetofinalpoo.services.CacheAdminService;
 import com.projetofinalpoo.services.CacheClienteService;
 import com.projetofinalpoo.services.CacheVigilanteService;
@@ -22,6 +20,26 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/api")
 public class LoginController {
 
+    private final CacheClienteService clienteCache;
+    private final CacheVigilanteService vigilanteCache;
+    private final CacheAdminService adminCache;
+
+    /**
+     * Construtor do controller, onde o Spring injeta automaticamente os serviços de cache.
+     *
+     * @param clienteCache Serviço de cache de clientes.
+     * @param vigilanteCache Serviço de cache de vigilantes.
+     * @param adminCache Serviço de cache de admins.
+     */
+    @Autowired
+    public LoginController(CacheClienteService clienteCache,
+                           CacheVigilanteService vigilanteCache,
+                           CacheAdminService adminCache) {
+        this.clienteCache = clienteCache;
+        this.vigilanteCache = vigilanteCache;
+        this.adminCache = adminCache;
+    }
+
     /**
      * Método que processa o formulário de login.
      * Verifica as credenciais e tipo de usuário (role), e realiza a autenticação
@@ -34,27 +52,26 @@ public class LoginController {
      * @return 200 OK caso sucesso, 401 se falhar.
      */
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String nome, @RequestParam String senha, 
-                                   @RequestParam String role, HttpSession session) {
+    public ResponseEntity<?> login(@RequestParam String nome, 
+                                   @RequestParam String senha, 
+                                   @RequestParam String role, 
+                                   HttpSession session) {
         
         Object usuario = null;
 
         if(role.equals("cliente")) {
-            CacheClienteService clienteCache = new CacheClienteService();
             clienteCache.carregarDoBanco();
             usuario = clienteCache.buscarPeloLoginSenha(nome, HashMD5Service.gerarMD5(senha));
             if (usuario != null) {
                 session.setAttribute("tipo", "cliente");
             } 
         } else if(role.equals("vigilante")) {
-            CacheVigilanteService vigilanteCache = new CacheVigilanteService();
             vigilanteCache.carregarDoBanco();
             usuario = vigilanteCache.buscarPeloLoginSenha(nome, HashMD5Service.gerarMD5(senha));
             if(usuario != null) {
                 session.setAttribute("tipo", "vigilante");
             }
         } else if(role.equals("admin")) {
-            CacheAdminService adminCache = new CacheAdminService();
             adminCache.carregarDoBanco();
             usuario = adminCache.buscarPeloLoginSenha(nome, HashMD5Service.gerarMD5(senha));
             if(usuario != null) {
@@ -63,11 +80,10 @@ public class LoginController {
         }
 
         if (usuario == null) {
-            return ResponseEntity.status(401).body("Credenciais invalidas");
+            return ResponseEntity.status(401).body("Credenciais inválidas");
         }
 
         session.setAttribute("usuarioLogado", usuario);
-
         return ResponseEntity.ok("Login efetuado com sucesso");
     }
 

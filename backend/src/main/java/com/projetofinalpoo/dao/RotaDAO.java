@@ -62,8 +62,7 @@ public class RotaDAO {
                     rs.getString("Numero"),
                     rs.getString("Bairro"),
                     rs.getString("Cidade"),
-                    rs.getString("Estado"),
-                    rs.getString("Cep")
+                    rs.getString("Estado")
                 );
 
                 enderecos.add(e);

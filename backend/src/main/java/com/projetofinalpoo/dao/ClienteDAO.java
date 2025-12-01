@@ -9,11 +9,14 @@ import java.sql.Date;
 
 import com.projetofinalpoo.models.Cliente;
 import com.projetofinalpoo.models.ContatoInfo;
+import org.springframework.stereotype.Repository;
 
 /**
  * Classe responsável por realizar operações de acesso a dados (DAO) da entidade
  * Cliente.
  */
+
+@Repository
 public class ClienteDAO {
     private Connection conn = new ConexaoDAO().conectar();
 

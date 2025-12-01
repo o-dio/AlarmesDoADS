@@ -14,7 +14,6 @@ public class Endereco {
     private String bairro;
     private String cidade;
     private String estado;
-    private String cep;
 
     private List<Rota> rotas;
     private List<Contrato> contratos;
@@ -28,7 +27,7 @@ public class Endereco {
     }
 
     /**
-     * Construtor que inicializa um endereço com todos os atributos.
+     * Construtor que inicializa um endereço com todos os atributos (exceto CEP).
      *
      * @param id     Identificador do endereço.
      * @param rua    Nome da rua.
@@ -36,9 +35,8 @@ public class Endereco {
      * @param bairro Bairro do endereço.
      * @param cidade Cidade do endereço.
      * @param estado Estado do endereço.
-     * @param cep    CEP do endereço.
      */
-    public Endereco(int id, String rua, String numero, String bairro, String cidade, String estado, String cep) {
+    public Endereco(int id, String rua, String numero, String bairro, String cidade, String estado) {
         this();
         this.id = id;
         this.rua = rua;
@@ -46,7 +44,6 @@ public class Endereco {
         this.bairro = bairro;
         this.cidade = cidade;
         this.estado = estado;
-        this.cep = cep;
     }
 
     /**
@@ -167,16 +164,6 @@ public class Endereco {
         this.estado = estado; 
     }
 
-    /** @return CEP do endereço. */
-    public String getCep() { 
-        return cep; 
-    }
-
-    /** @param cep Define o CEP do endereço. */
-    public void setCep(String cep) { 
-        this.cep = cep; 
-    }
-
     /** @return Lista de rotas associadas ao endereço. */
     public List<Rota> getRotas() { 
         return rotas; 
@@ -188,18 +175,18 @@ public class Endereco {
     }
 
     /**
-     * Retorna o código hash do endereço, baseado em id, rua, número, bairro, cidade, estado e CEP.
+     * Retorna o código hash do endereço, baseado em id, rua, número, bairro, cidade e estado.
      *
      * @return Código hash do endereço.
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, rua, numero, bairro, cidade, estado, cep);
+        return Objects.hash(id, rua, numero, bairro, cidade, estado);
     }
 
     /**
      * Compara este endereço com outro objeto para verificar igualdade.
-     * Dois endereços são considerados iguais se tiverem o mesmo id, rua, número, bairro, cidade, estado e CEP.
+     * Dois endereços são considerados iguais se tiverem o mesmo id, rua, número, bairro, cidade e estado.
      *
      * @param obj Objeto a ser comparado.
      * @return true se os endereços forem iguais; false caso contrário.
@@ -214,12 +201,11 @@ public class Endereco {
                Objects.equals(numero, other.numero) &&
                Objects.equals(bairro, other.bairro) &&
                Objects.equals(cidade, other.cidade) &&
-               Objects.equals(estado, other.estado) &&
-               Objects.equals(cep, other.cep);
+               Objects.equals(estado, other.estado);
     }
 
     /**
-     * Retorna uma representação em String do endereço, incluindo rua, número, bairro, cidade, estado, CEP,
+     * Retorna uma representação em String do endereço, incluindo rua, número, bairro, cidade e estado,
      * rotas associadas e contratos associados.
      *
      * @return Representação em String do endereço.
@@ -229,6 +215,6 @@ public class Endereco {
         String rotasStr = rotas.isEmpty() ? "Nenhuma" : rotas.toString();
         String contratosStr = contratos.isEmpty() ? "Nenhum" : contratos.toString();
         return rua + ", " + numero + " - " + bairro + ", " + cidade + " - " + estado +
-               ", CEP: " + cep + ", rotas=[" + rotasStr + "], contratos=[" + contratosStr + "]";
+               ", rotas=[" + rotasStr + "], contratos=[" + contratosStr + "]";
     }
 }

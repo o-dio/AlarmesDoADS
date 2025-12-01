@@ -1,5 +1,4 @@
-import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import axios from "axios";
 
 import "../style/css/style.css";
@@ -9,13 +8,8 @@ import { Helmet } from "react-helmet";
 import Menu from "../components/Menu";
 
 export default function Index() {
-    const [tipo, setTipo] = useState(null);
-    const [usuario, setUsuario] = useState("Usuário");
-    const [menuAtivo, setMenuAtivo] = useState(false);
-    const [dropdownAtivo, setDropdownAtivo] = useState(false);
 
     const perfilRef = useRef(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get("http://localhost:8080/api/session", { withCredentials: true })
@@ -26,22 +20,6 @@ export default function Index() {
             })
             .catch(() => setTipo("NAO_LOGADO"));
     }, []);
-
-    function toggleMenu() { setMenuAtivo(!menuAtivo); }
-    function toggleDropdown() { setDropdownAtivo(!dropdownAtivo); }
-
-    //FAZER LOGOUT
-    async function handleLogout() {
-        try {
-            await axios.get("http://localhost:8080/api/logout", {
-                withCredentials: true
-            });
-
-            navigate("/");
-        } catch (err) {
-            console.error("Erro ao deslogar:", err);
-        }
-    }
 
     //FECHA O DROPDOWN AO CLICAR FORA
     useEffect(() => {

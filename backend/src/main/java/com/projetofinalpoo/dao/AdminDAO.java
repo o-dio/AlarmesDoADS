@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import com.projetofinalpoo.models.Admin;
+import org.springframework.stereotype.Repository;
 
 /**
  * Classe responsável pelo acesso e manipulação dos dados da entidade Admin no
  * banco de dados.
  */
+@Repository
 public class AdminDAO {
     private Connection conn = new ConexaoDAO().conectar();
 
