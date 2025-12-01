@@ -1,8 +1,13 @@
 package com.projetofinalpoo.models;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
  * Representa uma rota de patrulhamento, com informações de nome, bairro,
  * descrição e observações adicionais.
+ * Cada rota pode conter múltiplos {@link Endereco}.
  */
 public class Rota {
 
@@ -12,14 +17,17 @@ public class Rota {
     private String descricao;
     private String observacao;
 
+    // Lista de endereços que pertencem a esta rota
+    private List<Endereco> enderecos;
+
     /**
      * Construtor da classe Rota.
      *
-     * @param id         identificador único da rota
-     * @param nome       nome da rota
-     * @param bairro     bairro onde a rota está localizada
-     * @param descricao  breve descrição da rota
-     * @param observacao observações adicionais sobre a rota
+     * @param id         Identificador único da rota.
+     * @param nome       Nome da rota.
+     * @param bairro     Bairro onde a rota está localizada.
+     * @param descricao  Breve descrição da rota.
+     * @param observacao Observações adicionais sobre a rota.
      */
     public Rota(Integer id, String nome, String bairro, String descricao, String observacao) {
         this.id = id;
@@ -27,151 +35,127 @@ public class Rota {
         this.bairro = bairro;
         this.descricao = descricao;
         this.observacao = observacao;
+        this.enderecos = new ArrayList<>();
     }
 
     /**
-     * Retorna o identificador da rota.
+     * Adiciona um endereço à rota e garante a atualização bidirecional.
      *
-     * @return o id da rota
+     * @param endereco Endereço a ser adicionado à rota.
      */
+    public void adicionarEndereco(Endereco endereco) {
+        if (!enderecos.contains(endereco)) {
+            enderecos.add(endereco);
+            endereco.adicionarRota(this);
+        }
+    }
+
+    /**
+     * Remove um endereço da rota e garante a atualização bidirecional.
+     *
+     * @param endereco Endereço a ser removido da rota.
+     */
+    public void removerEndereco(Endereco endereco) {
+        if (enderecos.contains(endereco)) {
+            enderecos.remove(endereco);
+            endereco.removerRota(this);
+        }
+    }
+
+    // Getters e Setters
+
+    /** @return ID da rota. */
     public Integer getId() {
         return id;
     }
 
-    /**
-     * Retorna o nome da rota.
-     *
-     * @return o nome
-     */
+    /** @return Nome da rota. */
     public String getNome() {
         return nome;
     }
 
-    /**
-     * Define o nome da rota.
-     *
-     * @param nome o novo nome
-     */
+    /** @param nome Define o nome da rota. */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**
-     * Retorna o bairro da rota.
-     *
-     * @return o bairro
-     */
+    /** @return Bairro onde a rota está localizada. */
     public String getBairro() {
         return bairro;
     }
 
-    /**
-     * Define o bairro da rota.
-     *
-     * @param bairro o novo bairro
-     */
+    /** @param bairro Define o bairro da rota. */
     public void setBairro(String bairro) {
         this.bairro = bairro;
     }
 
-    /**
-     * Retorna a descrição da rota.
-     *
-     * @return a descrição
-     */
+    /** @return Descrição da rota. */
     public String getDescricao() {
         return descricao;
     }
 
-    /**
-     * Define a descrição da rota.
-     *
-     * @param descricao a nova descrição
-     */
+    /** @param descricao Define a descrição da rota. */
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
 
-    /**
-     * Retorna observações adicionais sobre a rota.
-     *
-     * @return a observação
-     */
+    /** @return Observações adicionais sobre a rota. */
     public String getObservacao() {
         return observacao;
     }
 
-    /**
-     * Define observações adicionais sobre a rota.
-     *
-     * @param observacao a nova observação
-     */
+    /** @param observacao Define observações adicionais da rota. */
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
 
-    /**
-     * Gera o código hash da rota com base em seus atributos.
-     *
-     * @return o valor do hash
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-        result = prime * result + ((bairro == null) ? 0 : bairro.hashCode());
-        result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
-        result = prime * result + ((observacao == null) ? 0 : observacao.hashCode());
-        return result;
+    /** @return Lista de endereços associados à rota. */
+    public List<Endereco> getEnderecos() {
+        return enderecos;
     }
 
     /**
-     * Verifica se duas rotas são iguais com base nos seus atributos (exceto o ID).
+     * Gera o código hash da rota com base em seus atributos (excluindo lista de endereços e ID).
      *
-     * @param obj o objeto a ser comparado
-     * @return {@code true} se forem iguais; caso contrário, {@code false}
+     * @return Valor do hash da rota.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, bairro, descricao, observacao);
+    }
+
+    /**
+     * Verifica se duas rotas são iguais com base nos seus atributos (exceto o ID e a lista de endereços).
+     *
+     * @param obj Objeto a ser comparado.
+     * @return {@code true} se forem iguais; caso contrário, {@code false}.
      */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
+        if (obj == null || getClass() != obj.getClass())
             return false;
         Rota other = (Rota) obj;
-        if (nome == null) {
-            if (other.nome != null)
-                return false;
-        } else if (!nome.equals(other.nome))
-            return false;
-        if (bairro == null) {
-            if (other.bairro != null)
-                return false;
-        } else if (!bairro.equals(other.bairro))
-            return false;
-        if (descricao == null) {
-            if (other.descricao != null)
-                return false;
-        } else if (!descricao.equals(other.descricao))
-            return false;
-        if (observacao == null) {
-            if (other.observacao != null)
-                return false;
-        } else if (!observacao.equals(other.observacao))
-            return false;
-        return true;
+        return Objects.equals(nome, other.nome) &&
+               Objects.equals(bairro, other.bairro) &&
+               Objects.equals(descricao, other.descricao) &&
+               Objects.equals(observacao, other.observacao);
     }
 
     /**
      * Retorna uma representação em string da rota.
+     * Inclui os endereços de forma resumida para evitar recursão infinita.
      *
-     * @return uma string com os dados da rota
+     * @return String contendo os dados da rota e os endereços resumidos.
      */
     @Override
     public String toString() {
-        return "Rota [nome=" + nome + ", bairro=" + bairro + ", descricao=" + descricao + ", observacao=" + observacao
-                + "]";
+        String enderecosStr = "";
+        for (Endereco e : enderecos) {
+            enderecosStr += e.getRua() + ", " + e.getNumero() + "; ";
+        }
+        return "Rota [nome=" + nome + ", bairro=" + bairro + ", descricao=" + descricao +
+               ", observacao=" + observacao + ", enderecos=[" + enderecosStr + "]]";
     }
 }

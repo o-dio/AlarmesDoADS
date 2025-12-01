@@ -80,7 +80,7 @@ export default function Login() {
                             value={senha}
                             onChange={(e) => setSenha(e.target.value)}
                             autoComplete="off"
-                            style={{ textTransform: "none" }} // impede capitalizacao automatica
+                            style={{ textTransform: "none" }}
                         />
 
                         <div className="role-selector">

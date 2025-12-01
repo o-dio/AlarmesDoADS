@@ -1,8 +1,11 @@
 package com.projetofinalpoo.models;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
- * Representa um endereço com informações como rua, número, bairro, cidade,
- * estado e CEP.
+ * Representa um endereço físico que pode estar associado a múltiplos {@link Contrato} e {@link Rota}.
  */
 public class Endereco {
     private int id;
@@ -13,21 +16,30 @@ public class Endereco {
     private String estado;
     private String cep;
 
+    private List<Rota> rotas;
+    private List<Contrato> contratos;
+
     /**
-     * Cria uma instância de Endereco com todos os atributos.
-     *
-     * @param id     o identificador do endereço
-     * @param rua    o nome da rua
-     * @param numero o número do imóvel
-     * @param bairro o bairro
-     * @param cidade a cidade
-     * @param estado o estado
-     * @param cep    o código postal (CEP)
+     * Construtor padrão que inicializa as listas de rotas e contratos.
      */
     public Endereco() {
-    };
+        this.rotas = new ArrayList<>();
+        this.contratos = new ArrayList<>();
+    }
 
+    /**
+     * Construtor que inicializa um endereço com todos os atributos.
+     *
+     * @param id     Identificador do endereço.
+     * @param rua    Nome da rua.
+     * @param numero Número do endereço.
+     * @param bairro Bairro do endereço.
+     * @param cidade Cidade do endereço.
+     * @param estado Estado do endereço.
+     * @param cep    CEP do endereço.
+     */
     public Endereco(int id, String rua, String numero, String bairro, String cidade, String estado, String cep) {
+        this();
         this.id = id;
         this.rua = rua;
         this.numero = numero;
@@ -38,208 +50,185 @@ public class Endereco {
     }
 
     /**
-     * Retorna o identificador do endereço.
+     * Adiciona um contrato ao endereço, garantindo que a relação seja bidirecional.
      *
-     * @return o id
+     * @param contrato Contrato a ser adicionado.
      */
-    public int getId() {
-        return id;
+    public void adicionarContrato(Contrato contrato) {
+        if (!contratos.contains(contrato)) {
+            contratos.add(contrato);
+            if (!contrato.getEnderecos().contains(this)) {
+                contrato.adicionarEndereco(this);
+            }
+        }
     }
 
     /**
-     * Define o identificador do endereço.
+     * Remove um contrato do endereço, garantindo que a relação bidirecional seja atualizada.
      *
-     * @param id o novo id
+     * @param contrato Contrato a ser removido.
      */
-    public void setId(int id) {
-        this.id = id;
+    public void removerContrato(Contrato contrato) {
+        if (contratos.contains(contrato)) {
+            contratos.remove(contrato);
+            if (contrato.getEnderecos().contains(this)) {
+                contrato.removerEndereco(this);
+            }
+        }
     }
 
     /**
-     * Retorna o nome da rua.
+     * Adiciona uma rota ao endereço, garantindo que a relação seja bidirecional.
      *
-     * @return a rua
+     * @param rota Rota a ser adicionada.
      */
-    public String getRua() {
-        return rua;
+    public void adicionarRota(Rota rota) {
+        if (!rotas.contains(rota)) {
+            rotas.add(rota);
+            if (!rota.getEnderecos().contains(this)) {
+                rota.adicionarEndereco(this);
+            }
+        }
     }
 
     /**
-     * Define o nome da rua.
+     * Remove uma rota do endereço, garantindo que a relação bidirecional seja atualizada.
      *
-     * @param rua a nova rua
+     * @param rota Rota a ser removida.
      */
-    public void setRua(String rua) {
-        this.rua = rua;
+    public void removerRota(Rota rota) {
+        if (rotas.contains(rota)) {
+            rotas.remove(rota);
+            if (rota.getEnderecos().contains(this)) {
+                rota.removerEndereco(this);
+            }
+        }
+    }
+
+    // Getters e Setters com JavaDoc
+
+    /** @return Identificador do endereço. */
+    public int getId() { 
+        return id; 
+    }
+
+    /** @param id Define o identificador do endereço. */
+    public void setId(int id) { 
+        this.id = id; 
+    }
+
+    /** @return Nome da rua do endereço. */
+    public String getRua() { 
+        return rua; 
+    }
+
+    /** @param rua Define o nome da rua do endereço. */
+    public void setRua(String rua) { 
+        this.rua = rua; 
+    }
+
+    /** @return Número do endereço. */
+    public String getNumero() { 
+        return numero; 
+    }
+
+    /** @param numero Define o número do endereço. */
+    public void setNumero(String numero) { 
+        this.numero = numero; 
+    }
+
+    /** @return Bairro do endereço. */
+    public String getBairro() { 
+        return bairro; 
+    }
+
+    /** @param bairro Define o bairro do endereço. */
+    public void setBairro(String bairro) { 
+        this.bairro = bairro; 
+    }
+
+    /** @return Cidade do endereço. */
+    public String getCidade() { 
+        return cidade; 
+    }
+
+    /** @param cidade Define a cidade do endereço. */
+    public void setCidade(String cidade) { 
+        this.cidade = cidade; 
+    }
+
+    /** @return Estado do endereço. */
+    public String getEstado() { 
+        return estado; 
+    }
+
+    /** @param estado Define o estado do endereço. */
+    public void setEstado(String estado) { 
+        this.estado = estado; 
+    }
+
+    /** @return CEP do endereço. */
+    public String getCep() { 
+        return cep; 
+    }
+
+    /** @param cep Define o CEP do endereço. */
+    public void setCep(String cep) { 
+        this.cep = cep; 
+    }
+
+    /** @return Lista de rotas associadas ao endereço. */
+    public List<Rota> getRotas() { 
+        return rotas; 
+    }
+
+    /** @return Lista de contratos associados ao endereço. */
+    public List<Contrato> getContratos() { 
+        return contratos; 
     }
 
     /**
-     * Retorna o número do imóvel.
+     * Retorna o código hash do endereço, baseado em id, rua, número, bairro, cidade, estado e CEP.
      *
-     * @return o número
-     */
-    public String getNumero() {
-        return numero;
-    }
-
-    /**
-     * Define o número do imóvel.
-     *
-     * @param numero o novo número
-     */
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    /**
-     * Retorna o bairro.
-     *
-     * @return o bairro
-     */
-    public String getBairro() {
-        return bairro;
-    }
-
-    /**
-     * Define o bairro.
-     *
-     * @param bairro o novo bairro
-     */
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    /**
-     * Retorna a cidade.
-     *
-     * @return a cidade
-     */
-    public String getCidade() {
-        return cidade;
-    }
-
-    /**
-     * Define a cidade.
-     *
-     * @param cidade a nova cidade
-     */
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    /**
-     * Retorna o estado.
-     *
-     * @return o estado
-     */
-    public String getEstado() {
-        return estado;
-    }
-
-    /**
-     * Define o estado.
-     *
-     * @param estado o novo estado
-     */
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    /**
-     * Retorna o código postal (CEP).
-     *
-     * @return o CEP
-     */
-    public String getCep() {
-        return cep;
-    }
-
-    /**
-     * Define o código postal (CEP).
-     *
-     * @param cep o novo CEP
-     */
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    /**
-     * Gera o código hash com base nos atributos do endereço.
-     *
-     * @return o valor do hash
+     * @return Código hash do endereço.
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        result = prime * result + ((rua == null) ? 0 : rua.hashCode());
-        result = prime * result + ((numero == null) ? 0 : numero.hashCode());
-        result = prime * result + ((bairro == null) ? 0 : bairro.hashCode());
-        result = prime * result + ((cidade == null) ? 0 : cidade.hashCode());
-        result = prime * result + ((estado == null) ? 0 : estado.hashCode());
-        result = prime * result + ((cep == null) ? 0 : cep.hashCode());
-        return result;
+        return Objects.hash(id, rua, numero, bairro, cidade, estado, cep);
     }
 
     /**
-     * Compara este objeto com outro para verificar igualdade.
+     * Compara este endereço com outro objeto para verificar igualdade.
+     * Dois endereços são considerados iguais se tiverem o mesmo id, rua, número, bairro, cidade, estado e CEP.
      *
-     * @param obj o objeto a ser comparado
-     * @return {@code true} se os objetos forem iguais; caso contrário,
-     *         {@code false}
+     * @param obj Objeto a ser comparado.
+     * @return true se os endereços forem iguais; false caso contrário.
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
         Endereco other = (Endereco) obj;
-        if (id != other.id)
-            return false;
-        if (rua == null) {
-            if (other.rua != null)
-                return false;
-        } else if (!rua.equals(other.rua))
-            return false;
-        if (numero == null) {
-            if (other.numero != null)
-                return false;
-        } else if (!numero.equals(other.numero))
-            return false;
-        if (bairro == null) {
-            if (other.bairro != null)
-                return false;
-        } else if (!bairro.equals(other.bairro))
-            return false;
-        if (cidade == null) {
-            if (other.cidade != null)
-                return false;
-        } else if (!cidade.equals(other.cidade))
-            return false;
-        if (estado == null) {
-            if (other.estado != null)
-                return false;
-        } else if (!estado.equals(other.estado))
-            return false;
-        if (cep == null) {
-            if (other.cep != null)
-                return false;
-        } else if (!cep.equals(other.cep))
-            return false;
-        return true;
+        return id == other.id &&
+               Objects.equals(rua, other.rua) &&
+               Objects.equals(numero, other.numero) &&
+               Objects.equals(bairro, other.bairro) &&
+               Objects.equals(cidade, other.cidade) &&
+               Objects.equals(estado, other.estado) &&
+               Objects.equals(cep, other.cep);
     }
 
     /**
-     * Retorna uma representação em string do endereço.
+     * Retorna uma representação em String do endereço, incluindo rua, número, bairro, cidade, estado, CEP,
+     * rotas associadas e contratos associados.
      *
-     * @return uma string formatada com os dados do endereço
+     * @return Representação em String do endereço.
      */
     @Override
     public String toString() {
-        return rua + ", " + numero + " - " + bairro + ", " + cidade + " - " + estado + ", CEP: " + cep;
+        String rotasStr = rotas.isEmpty() ? "Nenhuma" : rotas.toString();
+        String contratosStr = contratos.isEmpty() ? "Nenhum" : contratos.toString();
+        return rua + ", " + numero + " - " + bairro + ", " + cidade + " - " + estado +
+               ", CEP: " + cep + ", rotas=[" + rotasStr + "], contratos=[" + contratosStr + "]";
     }
 }

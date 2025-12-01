@@ -1,0 +1,288 @@
+.rondas-page {
+  --main-color: #c79d6a;
+  --hover-color: #b78e4a;
+  --bg-dark: #111111;
+  --text-light: #f1f1f1;
+  --card-bg: #1c1c1c;
+  --section-bg: #262626;
+  --btn-bg: #333333;
+  --transition: 0.3s ease;
+  --radius: 0.75rem;
+  --font: 'Inter', 'Roboto', sans-serif;
+}
+
+.rondas-page * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font);
+}
+
+.rondas-page body {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  padding: 2rem 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.rondas-page .rondas-container {
+  max-width: 960px;
+  width: 100%;
+}
+
+.rondas-page .rondas-container h1 {
+  font-size: 2.75rem;
+  font-weight: 900;
+  color: var(--main-color);
+  text-align: center;
+  margin-bottom: 2rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 6px rgba(199,157,106,0.6);
+}
+
+.rondas-page .ronda-card {
+  background-color: var(--card-bg);
+  padding: 2rem 2.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  transition: transform var(--transition), background-color var(--transition);
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.rondas-page .ronda-card:hover {
+  background-color: #222;
+  transform: translateY(-4px);
+}
+
+.rondas-page .ronda-card form {
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.rondas-page form label {
+  font-weight: 600;
+  color: var(--main-color);
+  font-size: 1.15rem;
+}
+
+.rondas-page form select {
+  background-color: var(--section-bg);
+  color: var(--text-light);
+  border: 1px solid #444;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--radius);
+  width: 100%;
+  font-size: 1.05rem;
+  transition: border-color var(--transition);
+}
+
+.rondas-page form select:focus {
+  outline: none;
+  border-color: var(--main-color);
+  box-shadow: 0 0 6px var(--main-color);
+}
+
+.rondas-page button,
+.rondas-page .registrar-btn {
+  background-color: var(--main-color);
+  color: var(--bg-dark);
+  border: none;
+  padding: 0.9rem 1.8rem;
+  border-radius: var(--radius);
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color var(--transition), transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(199,157,106,0.6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+.rondas-page button i,
+.rondas-page .registrar-btn i {
+  margin-right: 0.7rem;
+  stroke: var(--bg-dark);
+}
+
+.rondas-page button:hover:not(:disabled),
+.rondas-page .registrar-btn:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-2px);
+}
+
+.rondas-page button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #444 !important;
+  box-shadow: none;
+}
+
+.rondas-page table.historico {
+  width: 100%;
+  margin-top: 2rem;
+  border-collapse: collapse;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+
+.rondas-page table.historico thead {
+  background-color: var(--main-color);
+  color: var(--bg-dark);
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.rondas-page table.historico th,
+.rondas-page table.historico td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+}
+
+.rondas-page table.historico tbody tr:nth-child(even) {
+  background-color: #1a1a1a;
+}
+
+.rondas-page table.historico tbody tr:hover {
+  background-color: #2b2b2b;
+}
+
+.rondas-page .ronda-mapa,
+.rondas-page .ronda-extra {
+  background-color: var(--section-bg);
+  padding: 1.2rem 1.5rem;
+  border-radius: var(--radius);
+  margin-top: 2rem;
+  box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+}
+
+.rondas-page .ronda-mapa h2,
+.rondas-page .ronda-extra h2 {
+  color: var(--main-color);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.rondas-page .ronda-extra textarea {
+  width: 100%;
+  height: 120px;
+  padding: 1rem;
+  background-color: #1c1c1c;
+  border: 1px solid #555;
+  color: var(--text-light);
+  border-radius: 0.5rem;
+  resize: vertical;
+  font-size: 1rem;
+  font-family: var(--font);
+}
+
+.rondas-page .ronda-extra textarea:focus {
+  outline: none;
+  border-color: var(--main-color);
+  box-shadow: 0 0 6px var(--main-color);
+}
+
+.rondas-page .mapa-box {
+  width: 100%;
+  height: 300px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+.rondas-page .mapa-box iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.rondas-page .status {
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.4rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.rondas-page .status.em\ andamento {
+  background: orange;
+  color: var(--bg-dark);
+  box-shadow: 0 0 6px orange;
+}
+
+.rondas-page .status.finalizada {
+  background: #4CAF50;
+  color: var(--bg-dark);
+  box-shadow: 0 0 6px #4CAF50;
+}
+
+.rondas-page .modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.rondas-page .modal-conteudo {
+  background: #1c1c1c;
+  color: var(--text-light);
+  padding: 2rem;
+  max-width: 800px;
+  width: 100%;
+  border-radius: 0.8rem;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.rondas-page .modal-conteudo .fechar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  color: var(--main-color);
+  cursor: pointer;
+  transition: color var(--transition);
+}
+
+.rondas-page .modal-conteudo .fechar:hover {
+  color: var(--hover-color);
+}
+
+@media (max-width: 600px) {
+  .rondas-page .ronda-card {
+    padding: 1.5rem 1.5rem;
+  }
+  .rondas-page .rondas-container h1 {
+    font-size: 2rem;
+  }
+  .rondas-page table.historico th,
+  .rondas-page table.historico td {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+  .rondas-page button {
+    width: 100%;
+  }
+}

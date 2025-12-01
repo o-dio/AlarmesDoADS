@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import com.projetofinalpoo.models.Endereco;
 import com.projetofinalpoo.models.Rota;
 
 /**
@@ -32,6 +33,50 @@ public class RotaDAO {
     }
 
     /**
+     * Busca todos os endereços associados a uma rota (via tabela Endereco_Rota)
+     *
+     * @param idRota ID da rota
+     * @return lista de endereços pertencentes à rota
+     */
+    private ArrayList<Endereco> buscarEnderecosDaRota(int idRota) {
+
+        ArrayList<Endereco> enderecos = new ArrayList<>();
+
+        String sql = """
+            SELECT e.*
+            FROM "Endereco" e
+            JOIN "Endereco_Rota" er ON er."IdEndereco" = e.id
+            WHERE er."IdRota" = ?
+        """;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idRota);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+
+                Endereco e = new Endereco(
+                    rs.getInt("id"),
+                    rs.getString("Rua"),
+                    rs.getString("Numero"),
+                    rs.getString("Bairro"),
+                    rs.getString("Cidade"),
+                    rs.getString("Estado"),
+                    rs.getString("Cep")
+                );
+
+                enderecos.add(e);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar endereços da rota: " + e.getMessage());
+        }
+
+        return enderecos;
+    }
+
+    /**
      * Retorna uma lista com todas as rotas cadastradas.
      *
      * @return Lista de objetos Rota.
@@ -39,19 +84,30 @@ public class RotaDAO {
     public ArrayList<Rota> buscarTodos() {
         String sql = "SELECT * FROM \"Rota\"";
         ArrayList<Rota> rotas = new ArrayList<>();
+
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+
             ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nome = rs.getString("Nome");
                 String bairro = rs.getString("Bairro");
                 String desc = rs.getString("Descricao");
                 String obs = rs.getString("Observacao");
-                rotas.add(new Rota(id, nome, bairro, desc, obs));
+
+                Rota r = new Rota(id, nome, bairro, desc, obs);
+
+                // carrega os endereços da rota (N:N)
+                r.getEnderecos().addAll(buscarEnderecosDaRota(id));
+
+                rotas.add(r);
             }
+
         } catch (Exception e) {
             System.out.println("Erro ao buscar rotas: " + e.getMessage());
         }
+
         return rotas;
     }
 
@@ -62,26 +118,38 @@ public class RotaDAO {
      * @return Objeto Rota correspondente, ou null se não encontrado.
      */
     public Rota buscarPorId(int id) {
+
         String sql = "SELECT * FROM \"Rota\" WHERE id = ?";
+
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
-                return new Rota(
+                Rota r = new Rota(
                         rs.getInt("id"),
                         rs.getString("Nome"),
                         rs.getString("Bairro"),
                         rs.getString("Descricao"),
-                        rs.getString("Observacao"));
+                        rs.getString("Observacao")
+                );
+
+                // carrega os endereços da rota
+                r.getEnderecos().addAll(buscarEnderecosDaRota(id));
+
+                return r;
             }
+
         } catch (Exception e) {
             System.out.println("Erro ao buscar rota por id: " + e.getMessage());
         }
+
         return null;
     }
 
     /**
-     * Atualiza os dados de uma rota existente, com base no nome.
+     * Atualiza os dados de uma rota existente.
      *
      * @param rota Objeto Rota com os dados atualizados.
      */

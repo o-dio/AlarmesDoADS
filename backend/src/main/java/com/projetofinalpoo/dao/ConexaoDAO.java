@@ -16,7 +16,7 @@ public class ConexaoDAO {
      */
     private static final String URL = "jdbc:postgresql://localhost:5432/alarmeadsbd";
     private static final String USUARIO = "postgres";
-    private static final String SENHA = "";
+    private static final String SENHA = "#156!Postgres098OLs";
 
     /**
      * Conecta!

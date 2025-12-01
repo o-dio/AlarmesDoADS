@@ -5,6 +5,8 @@ import axios from "axios";
 import Login from "./views/login";
 import Index from "./views/index";
 import Registro from "./views/registro";
+import Rondas from "./views/rondas";
+import Monitoramento from "./views/monitoramento";
 
 function App() {
   const [userType, setUserType] = useState(null);
@@ -39,6 +41,14 @@ function App() {
       <Route
         path="/registro"
         element={userType ? <Navigate to="/index"/> : <Registro />}
+      />
+      <Route
+        path="/rondas"
+        element={userType ? <Rondas /> : <Navigate to="/" />}
+      />
+      <Route 
+        path="/monitoramento"
+        element={userType ? <Monitoramento /> : <Navigate to="/" />}
       />
     </Routes>
   );

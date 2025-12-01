@@ -5,8 +5,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Representa uma ocorrência registrada por um vigilante sobre um determinado
- * produto.
+ * Representa uma ocorrência registrada por um vigilante sobre um determinado produto.
+ * Contém informações sobre data, duração, vigilante responsável e produto associado.
  */
 public class Ocorrencia {
     private int id;
@@ -15,10 +15,21 @@ public class Ocorrencia {
     private int idVigilante;
     private int idProduto;
 
-    // Construtor
+    /**
+     * Construtor padrão.
+     */
     public Ocorrencia() {
     }
 
+    /**
+     * Construtor completo com todos os atributos.
+     *
+     * @param id          Identificador da ocorrência.
+     * @param data        Data da ocorrência no formato "dd/MM/yyyy".
+     * @param duracao     Duração da ocorrência no formato "HH:mm:ss".
+     * @param idVigilante ID do vigilante responsável.
+     * @param idProduto   ID do produto associado.
+     */
     public Ocorrencia(int id, String data, String duracao, int idVigilante, int idProduto) {
         this.id = id;
         this.data = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -27,96 +38,69 @@ public class Ocorrencia {
         this.idProduto = idProduto;
     }
 
+    /**
+     * Construtor sem o ID, útil para criar ocorrências antes de persistir em banco.
+     *
+     * @param data        Data da ocorrência no formato "dd/MM/yyyy".
+     * @param duracao     Duração da ocorrência no formato "HH:mm:ss".
+     * @param idVigilante ID do vigilante responsável.
+     * @param idProduto   ID do produto associado.
+     */
     public Ocorrencia(String data, String duracao, int idVigilante, int idProduto) {
-
         this.data = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         this.duracao = LocalTime.parse(duracao, DateTimeFormatter.ofPattern("HH:mm:ss"));
         this.idVigilante = idVigilante;
         this.idProduto = idProduto;
     }
 
-    // Metodos
+    // Getters e Setters
+
+    /** @return ID da ocorrência. */
     public int getId() {
         return id;
     }
 
-    /**
-     * Define o identificador da ocorrência.
-     *
-     * @param id o novo id
-     */
+    /** @param id Define o ID da ocorrência. */
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     * Retorna a data da ocorrência.
-     *
-     * @return a data
-     */
+    /** @return Data da ocorrência. */
     public LocalDate getData() {
         return data;
     }
 
-    /**
-     * Define a data da ocorrência.
-     *
-     * @param data a nova data
-     */
+    /** @param data Define a data da ocorrência. */
     public void setData(LocalDate data) {
         this.data = data;
     }
 
-    /**
-     * Retorna a duração da ocorrência.
-     *
-     * @return a duração
-     */
+    /** @return Duração da ocorrência. */
     public LocalTime getDuracao() {
         return duracao;
     }
 
-    /**
-     * Define a duração da ocorrência.
-     *
-     * @param duracao a nova duração
-     */
+    /** @param duracao Define a duração da ocorrência. */
     public void setDuracao(LocalTime duracao) {
         this.duracao = duracao;
     }
 
-    /**
-     * Retorna o ID do vigilante responsável pela ocorrência.
-     *
-     * @return o ID do vigilante
-     */
+    /** @return ID do vigilante responsável pela ocorrência. */
     public int getIdVigilante() {
         return idVigilante;
     }
 
-    /**
-     * Define o ID do vigilante responsável pela ocorrência.
-     *
-     * @param idVigilante o novo ID do vigilante
-     */
+    /** @param idVigilante Define o ID do vigilante responsável. */
     public void setIdVigilante(int idVigilante) {
         this.idVigilante = idVigilante;
     }
 
-    /**
-     * Retorna o ID do produto associado à ocorrência.
-     *
-     * @return o ID do produto
-     */
+    /** @return ID do produto associado à ocorrência. */
     public int getIdProduto() {
         return idProduto;
     }
 
-    /**
-     * Define o ID do produto associado à ocorrência.
-     *
-     * @param idProduto o novo ID do produto
-     */
+    /** @param idProduto Define o ID do produto associado à ocorrência. */
     public void setIdProduto(int idProduto) {
         this.idProduto = idProduto;
     }
@@ -124,7 +108,7 @@ public class Ocorrencia {
     /**
      * Gera o código hash baseado nos atributos da ocorrência.
      *
-     * @return o valor do hash
+     * @return Código hash da ocorrência.
      */
     @Override
     public int hashCode() {
@@ -139,11 +123,11 @@ public class Ocorrencia {
     }
 
     /**
-     * Compara esta ocorrência com outra para verificar igualdade.
+     * Compara esta ocorrência com outro objeto para verificar igualdade.
+     * Duas ocorrências são iguais se todos os seus atributos forem iguais.
      *
-     * @param obj o objeto a ser comparado
-     * @return {@code true} se os objetos forem iguais; caso contrário,
-     *         {@code false}
+     * @param obj Objeto a ser comparado.
+     * @return {@code true} se os objetos forem iguais; {@code false} caso contrário.
      */
     @Override
     public boolean equals(Object obj) {
@@ -176,7 +160,7 @@ public class Ocorrencia {
     /**
      * Retorna uma representação em string da ocorrência.
      *
-     * @return uma string com os dados da ocorrência
+     * @return String contendo todos os dados da ocorrência.
      */
     @Override
     public String toString() {

@@ -8,22 +8,23 @@ import com.projetofinalpoo.models.Vigilante;
 import com.projetofinalpoo.models.Rota;
 
 import jakarta.servlet.http.HttpSession;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Controlador responsável por gerenciar as operações relacionadas às rondas,
  * incluindo check-in, check-out e listagem das rondas do vigilante logado.
  */
-@Controller
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@RestController
+@RequestMapping("/api/rondas")
 public class RondaController {
+
     private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     /**
@@ -32,13 +33,14 @@ public class RondaController {
      *
      * @param idRota  Identificador da rota.
      * @param session Sessão HTTP para obter o vigilante logado.
-     * @return Redireciona para a página de rondas ou login se não autenticado.
+     * @return JSON indicando sucesso ou erro.
      */
-    @RequestMapping("/rondas/checkin")
-    public String realizarCheckin(@RequestParam("idRota") int idRota, HttpSession session) {
+    @PostMapping("/checkin")
+    public ResponseEntity<?> realizarCheckin(@RequestParam("idRota") int idRota, HttpSession session) {
+
         Vigilante vigilante = (Vigilante) session.getAttribute("usuarioLogado");
         if (vigilante == null) {
-            return "redirect:/login";
+            return ResponseEntity.status(401).body(Map.of("error", "Não autenticado"));
         }
 
         int idVigilante = new VigilanteDAO().buscarIdPorLogin(vigilante.getLogin());
@@ -47,8 +49,10 @@ public class RondaController {
         novo.setIdRota(idRota);
         novo.setIdVigilante(idVigilante);
         novo.setDataIni(LocalDate.now());
+
         new TrajetoDAO().cadastrar(novo);
-        return "redirect:/rondas";
+
+        return ResponseEntity.ok(Map.of("success", true));
     }
 
     /**
@@ -57,19 +61,19 @@ public class RondaController {
      *
      * @param idRota  Identificador da rota.
      * @param session Sessão HTTP para obter o vigilante logado.
-     * @return Redireciona para a página de rondas ou login se não autenticado.
+     * @return JSON indicando sucesso ou erro.
      */
-    @RequestMapping("/rondas/checkout")
-    public String realizarCheckout(@RequestParam("idRota") int idRota, HttpSession session) {
+    @PostMapping("/checkout")
+    public ResponseEntity<?> realizarCheckout(@RequestParam("idRota") int idRota, HttpSession session) {
+
         Vigilante vigilante = (Vigilante) session.getAttribute("usuarioLogado");
         if (vigilante == null) {
-            return "redirect:/login";
+            return ResponseEntity.status(401).body(Map.of("error", "Não autenticado"));
         }
 
         int idVigilante = new VigilanteDAO().buscarIdPorLogin(vigilante.getLogin());
 
         TrajetoDAO trajDao = new TrajetoDAO();
-
         Trajeto trajetoEmAndamento = trajDao.buscarTrajetoPorVigilanteERota(idVigilante, idRota);
 
         if (trajetoEmAndamento != null) {
@@ -79,27 +83,25 @@ public class RondaController {
             System.out.println("Nenhum trajeto aberto encontrado para checkout.");
         }
 
-        return "redirect:/rondas";
+        return ResponseEntity.ok(Map.of("success", true));
     }
 
     /**
      * Exibe a lista de rondas do vigilante logado, indicando quais estão em
-     * andamento
-     * e as rotas disponíveis para iniciar novas rondas.
+     * andamento e as rotas disponíveis para iniciar novas rondas.
      *
      * @param session Sessão HTTP para obter o vigilante logado.
-     * @param model   Objeto Model para passagem de dados para a view.
-     * @return Nome da view de rondas ou redireciona para login se não autenticado.
+     * @return JSON com todas as informações necessárias para o front React.
      */
-    @RequestMapping("/rondas")
-    public String exibirRondas(HttpSession session, Model model) {
+    @GetMapping
+    public ResponseEntity<?> exibirRondas(HttpSession session) {
+
         Vigilante vigilante = (Vigilante) session.getAttribute("usuarioLogado");
         if (vigilante == null) {
-            return "redirect:/login";
+            return ResponseEntity.status(401).body(Map.of("error", "Não autenticado"));
         }
 
-        int idVigilante = new VigilanteDAO()
-                .buscarIdPorLogin(vigilante.getLogin());
+        int idVigilante = new VigilanteDAO().buscarIdPorLogin(vigilante.getLogin());
 
         TrajetoDAO trajDao = new TrajetoDAO();
         ArrayList<Trajeto> trajetos = trajDao.buscarPorIdVigilante(idVigilante);
@@ -107,6 +109,7 @@ public class RondaController {
         List<RondaViewModel> rondas = new ArrayList<>();
         boolean emRonda = false;
         String enderecoRondaAtual = null;
+
         RotaDAO rotaDAO = new RotaDAO();
 
         for (Trajeto t : trajetos) {
@@ -114,6 +117,7 @@ public class RondaController {
             Rota r = rotaDAO.buscarPorId(t.getIdRota());
             if (r == null)
                 continue;
+
             String endereco = r.getNome() + " – " + r.getBairro();
 
             if (t.getDataFim() == null && !emRonda) {
@@ -129,16 +133,20 @@ public class RondaController {
                     r.getDescricao(),
                     t.getDataFim() == null ? "Em andamento" : "Finalizada",
                     endereco,
-                    t.getIdRota()));
+                    t.getIdRota()
+            ));
         }
+
         List<Rota> rotasDisponiveis = rotaDAO.buscarTodos();
-        model.addAttribute("rotasDisponiveis", rotasDisponiveis);
 
-        model.addAttribute("rondas", rondas);
-        model.addAttribute("emRonda", emRonda);
-        model.addAttribute("enderecoRondaAtual", enderecoRondaAtual);
+        // Agora retornamos tudo em JSON para o React
+        Map<String, Object> resposta = new HashMap<>();
+        resposta.put("rondas", rondas);
+        resposta.put("emRonda", emRonda);
+        resposta.put("enderecoRondaAtual", enderecoRondaAtual);
+        resposta.put("rotasDisponiveis", rotasDisponiveis);
 
-        return "rondas";
+        return ResponseEntity.ok(resposta);
     }
 
     /**
@@ -150,8 +158,8 @@ public class RondaController {
         private int idRota;
 
         public RondaViewModel(String dataIni, String dataFim,
-                String local, String bairro, String descricao,
-                String status, String enderecoCompleto, int idRota) {
+                              String local, String bairro, String descricao,
+                              String status, String enderecoCompleto, int idRota) {
             this.dataIni = dataIni;
             this.dataFim = dataFim;
             this.local = local;
@@ -162,36 +170,13 @@ public class RondaController {
             this.idRota = idRota;
         }
 
-        public String getDataIni() {
-            return dataIni;
-        }
-
-        public String getDataFim() {
-            return dataFim;
-        }
-
-        public String getLocal() {
-            return local;
-        }
-
-        public String getBairro() {
-            return bairro;
-        }
-
-        public String getDescricao() {
-            return descricao;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public String getEnderecoCompleto() {
-            return enderecoCompleto;
-        }
-
-        public int getIdRota() {
-            return idRota;
-        }
+        public String getDataIni() { return dataIni; }
+        public String getDataFim() { return dataFim; }
+        public String getLocal() { return local; }
+        public String getBairro() { return bairro; }
+        public String getDescricao() { return descricao; }
+        public String getStatus() { return status; }
+        public String getEnderecoCompleto() { return enderecoCompleto; }
+        public int getIdRota() { return idRota; }
     }
 }

@@ -6,6 +6,7 @@ import "../style/css/style.css";
 import securityHeroImg from "../assets/images/security-hero.jpg";
 import aboutImg from "../assets/images/about-img.png";
 import { Helmet } from "react-helmet";
+import Menu from "../components/Menu";
 
 export default function Index() {
     const [tipo, setTipo] = useState(null);
@@ -62,41 +63,9 @@ export default function Index() {
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
             </Helmet>
 
-            <header className="header">
-                <section>
-                    <a href="#" className="logo">
-                        {<span style={{ color: '#d6a85c', fontWeight: 'bold', fontSize: '1.5rem' }}>SEGURANÇA</span>}
-                    </a>
+            <Menu></Menu>
 
-                    <nav className={`navbar ${menuAtivo ? "active" : ""}`}>
-                        <a href="#">Inicio</a>
-                        <a href="#about">Sobre</a>
-                        <a href="#contato">Contato</a>
-
-                        {tipo === "vigilante" && <a href="/ocorrencia">Ocorrência</a>}
-                        {tipo === "vigilante" && <a href="/rondas">Rondas</a>}
-                        {tipo === "vigilante" && <a href="/monitoramento">Monitoramento</a>}
-                        {tipo === "admin" && <a href="/dashboard">Admin</a>}
-                    </nav>
-
-                    <div className="menu-toggle" onClick={toggleMenu}>
-                        <i className="fas fa-bars"></i>
-                    </div>
-
-                    <div className="perfil" onClick={toggleDropdown} ref={perfilRef}>
-                        <i className="fas fa-user-circle"></i>
-                        <span id="user-name">{usuario}</span>
-
-                        <div className={`dropdown-menu ${dropdownAtivo ? "show" : ""}`}>
-                            <a href="#">Meu Perfil</a>
-                            <a href="#">Configurações</a>
-                            <button onClick={handleLogout} className="logout-btn">Sair</button>
-                        </div>
-                    </div>
-                </section>
-            </header>
-
-            <section className="hero">
+            <section id="hero" className="hero">
                 <div className="hero-img">
                     <img src={securityHeroImg} alt="Segurança" />
                 </div>

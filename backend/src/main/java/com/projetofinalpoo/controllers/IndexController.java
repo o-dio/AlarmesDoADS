@@ -69,7 +69,7 @@ public class IndexController {
     public ResponseEntity<?> getSession(HttpSession session) {
         Object tipo = session.getAttribute("tipo");
         Object usuario = session.getAttribute("usuarioLogado");
-        System.out.println(usuario);
+        
         if (tipo == null || usuario == null) {
             return ResponseEntity.ok(null);
         }
