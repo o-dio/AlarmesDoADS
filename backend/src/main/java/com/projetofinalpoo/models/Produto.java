@@ -2,6 +2,7 @@ package com.projetofinalpoo.models;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * Representa um produto (ex: câmera, alarme, cerca elétrica) instalado em um
@@ -9,8 +10,15 @@ import java.time.format.DateTimeFormatter;
  */
 public class Produto {
     private int id;
+
+    /** Data da instacação do produto no formato dd/MM/yyyy para JSON. */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataInst;
+
+    /** Duração da retirada do produto no formato HH:mm:ss para JSON. */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataRet;
+
     private boolean defeito;
     private int idEndereco;
 

@@ -2,6 +2,7 @@ package com.projetofinalpoo.models;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * Representa uma gravação relacionada a um produto, contendo informações como
@@ -9,7 +10,13 @@ import java.time.LocalTime;
  */
 public class Gravacao {
     private int id;
+
+    /** Data da gravacao no formato dd/MM/yyyy para JSON. */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate data;
+
+    /** Duração da gravacao no formato HH:mm:ss para JSON. */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private LocalTime duracao;
     private String arquivo;
     private String descricao;

@@ -3,69 +3,73 @@ package com.projetofinalpoo.controllers;
 import com.projetofinalpoo.dao.ClienteDAO;
 import com.projetofinalpoo.models.Cliente;
 import com.projetofinalpoo.models.ContatoInfo;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 /**
- * Controlador para cliente
+ * Controlador REST para clientes.
  */
-@Controller
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@RestController
+@RequestMapping("/api/clientes")
 public class ClienteController {
 
-    ClienteDAO dao = new ClienteDAO();
+    private final ClienteDAO dao = new ClienteDAO();
 
-    @PostMapping("/cadastrarCliente")
-    public String cadastrarCliente(
-            @RequestParam String login,
-            @RequestParam String senha,
-            @RequestParam String cpf,
-            @RequestParam String dataNasc,
-            @RequestParam String fone,
-            @RequestParam String email,
-            @RequestParam String foneContato) {
-        Cliente cliente = new Cliente(login, senha, cpf, dataNasc, new ContatoInfo(fone, email, foneContato));
-        dao.cadastrar(cliente);
-        return "redirect:/clientes";
+    /**
+     * Lista todos os clientes cadastrados.
+     *
+     * @return lista de clientes
+     */
+    @GetMapping
+    public List<Cliente> listarClientes() {
+        return dao.buscarTodos();
     }
 
     /**
-     * Edita o cliente
-     * 
-     * @param login login do novo cliente
-     * @param senha senha do novo cliente
-     * @param cpf cpf base
-     * @param dataNasc data de nascimento do novo cliente
-     * @param fone telefone do novo cliente
-     * @param email email do novo cliente
-     * @param foneContato contato do novo cliente
-     * @return redirecionamento para página do cliente
+     * Retorna um cliente baseado no login.
+     *
+     * @param cpf cpf do cliente
+     * @return Cliente correspondente
      */
-    @PostMapping("/editarCliente")
-    public String editarCliente(
-            @RequestParam String login,
-            @RequestParam(required = false) String senha,
-            @RequestParam String cpf,
-            @RequestParam String dataNasc,
-            @RequestParam String fone,
-            @RequestParam String email,
-            @RequestParam String foneContato) {
-        Cliente cliente = new Cliente(login, senha, cpf, dataNasc, new ContatoInfo(fone, email, foneContato));
-        dao.atualizar(cliente);
-        return "redirect:/clientes";
+    @GetMapping("/{login}")
+    public Cliente buscarCliente(@PathVariable String cpf) {
+        return dao.buscarPeloCpf(cpf);
     }
 
     /**
-     * Excluir cliente baseado no CPF
-     * 
-     * @param cpf cpf do cliente a ser excluido
-     * @return redirecionamento para clientes
+     * Salva ou atualiza um cliente.
+     * Se o cliente já existir (pelo login ou CPF), atualiza os dados;
+     * caso contrário, cadastra um novo cliente.
+     *
+     * @param cliente objeto Cliente enviado pelo front
+     * @return Cliente cadastrado ou atualizado
      */
-    @GetMapping("/excluirCliente/{cpf}")
+    @PostMapping("/salvar")
+    public Cliente salvar(@RequestBody Cliente cliente) {
+        Cliente existente = dao.buscarPeloCpf(cliente.getCpf());
+
+        if (existente == null) {
+            dao.cadastrar(cliente);
+        } else {
+            dao.atualizar(cliente);
+        }
+
+        return cliente;
+    }
+
+    /**
+     * Exclui um cliente baseado no CPF.
+     *
+     * @param cpf CPF do cliente a ser excluído
+     * @return mensagem de confirmação
+     */
+    @DeleteMapping("/excluir/{cpf}")
     public String excluirCliente(@PathVariable String cpf) {
         Cliente cliente = new Cliente();
         cliente.setCpf(cpf);
         dao.deletar(cliente);
-        return "redirect:/clientes";
+        return "Cliente com CPF " + cpf + " excluído com sucesso!";
     }
 }

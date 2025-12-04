@@ -1,11 +1,14 @@
 package com.projetofinalpoo.controllers;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projetofinalpoo.dao.ClienteDAO;
 import com.projetofinalpoo.dao.GravacaoDAO;
@@ -13,6 +16,7 @@ import com.projetofinalpoo.dao.OcorrenciaDAO;
 import com.projetofinalpoo.dao.ProdutoDAO;
 import com.projetofinalpoo.dao.RotaDAO;
 import com.projetofinalpoo.dao.VigilanteDAO;
+
 import com.projetofinalpoo.models.Admin;
 import com.projetofinalpoo.models.Cliente;
 import com.projetofinalpoo.models.Gravacao;
@@ -24,54 +28,72 @@ import com.projetofinalpoo.models.Vigilante;
 import jakarta.servlet.http.HttpSession;
 
 /**
- * Controlador do dashboard do admin
+ * Controlador REST responsável por fornecer os dados necessários
+ * para o dashboard do administrador.
+ * 
+ * Este controlador substitui a versão antiga baseada em Thymeleaf.
+ * Agora, todos os dados são devolvidos como JSON, para serem
+ * consumidos pelo frontend em React.
+ *
+ * Endpoint principal:
+ *   GET /api/dashboard
+ *
+ * Requisitos:
+ *   - Usuário precisa estar autenticado na sessão como "admin".
+ *
+ * Retorno:
+ *   - Objeto JSON contendo todas as listas e totais necessários
+ *     para exibição no dashboard.
  */
-@Controller
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@RestController
+@RequestMapping("/api/dashboard")
 public class DashboardController {
 
-    @GetMapping("/dashboard")
-    public String exibirDashboard(HttpSession session, Model model) {
+    /**
+     * Retorna todos os dados necessários para exibição no dashboard do administrador.
+     *
+     * Verifica a sessão para garantir que o usuário logado é um administrador.
+     * Caso não seja, retorna HTTP 401 (Unauthorized).
+     *
+     * @param session sessão HTTP contendo dados do usuário logado
+     * @return ResponseEntity contendo JSON com listas e totais
+     */
+    @GetMapping
+    public ResponseEntity<?> getDashboardData(HttpSession session) {
+        // Verifica se usuário é Admin
         Admin admin = (Admin) session.getAttribute("usuarioLogado");
         String tipo = (String) session.getAttribute("tipo");
+
         if (admin == null || !"admin".equals(tipo)) {
-            return "redirect:/login";
+            return ResponseEntity.status(401).body("Usuário não autorizado.");
         }
 
+        // DAOs
         RotaDAO rotaDAO = new RotaDAO();
-        List<Rota> rondasList = rotaDAO.buscarTodos();
-        model.addAttribute("totalRondas", rondasList.size());
-        model.addAttribute("rondas", rondasList);
-
         OcorrenciaDAO ocorrenciaDAO = new OcorrenciaDAO();
-        List<Ocorrencia> ocorrenciasList = ocorrenciaDAO.buscarTodos();
-        model.addAttribute("totalOcorrencias", ocorrenciasList.size());
-        model.addAttribute("ocorrencias", ocorrenciasList);
-
         ProdutoDAO produtoDAO = new ProdutoDAO();
-        List<Produto> alarmesList = produtoDAO.buscarTodos();
-        model.addAttribute("totalAlarmes", alarmesList.size());
-        model.addAttribute("alarmes", alarmesList);
-
-        GravacaoDAO gravacaoDao = new GravacaoDAO();
-        List<Gravacao> gravacoes = gravacaoDao.buscarTodos();
-        if (gravacoes == null) {
-            gravacoes = new ArrayList<>();
-        }
-        model.addAttribute("totalRelatos", gravacoes.size());
-        model.addAttribute("gravacoes", gravacoes);
-
+        GravacaoDAO gravacaoDAO = new GravacaoDAO();
         ClienteDAO clienteDAO = new ClienteDAO();
-        List<Cliente> clienteList = clienteDAO.buscarTodos();
-        model.addAttribute("totalClientes", clienteList.size());
-
-        model.addAttribute("clientes", clienteList);
-
         VigilanteDAO vigilanteDAO = new VigilanteDAO();
-        List<Vigilante> vigilantesList = vigilanteDAO.buscarTodos();
-        model.addAttribute("totalVigilantes", vigilantesList.size());
-        model.addAttribute("vigilantes", vigilantesList);
 
-        return "dashboardAdmin";
+        // Carrega listas
+        List<Rota> rondas = rotaDAO.buscarTodos();
+        List<Ocorrencia> ocorrencias = ocorrenciaDAO.buscarTodos();
+        List<Produto> alarmes = produtoDAO.buscarTodos();
+        List<Gravacao> gravacoes = gravacaoDAO.buscarTodos();
+        List<Cliente> clientes = clienteDAO.buscarTodos();
+        List<Vigilante> vigilantes = vigilanteDAO.buscarTodos();
+
+        // Monta resposta JSON
+        Map<String, Object> resposta = new HashMap<>();
+        resposta.put("rondas", rondas);
+        resposta.put("ocorrencias", ocorrencias);
+        resposta.put("alarmes", alarmes);
+        resposta.put("gravacoes", gravacoes);
+        resposta.put("clientes", clientes);
+        resposta.put("vigilantes", vigilantes);
+
+        return ResponseEntity.ok(resposta);
     }
-
 }

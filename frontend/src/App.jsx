@@ -8,6 +8,7 @@ import Registro from "./views/registro";
 import Rondas from "./views/rondas";
 import Monitoramento from "./views/monitoramento";
 import Ocorrencia from "./views/ocorrencia";
+import DashboardAdmin from "./views/dashboardAdmin";
 
 function App() {
   const [userType, setUserType] = useState(null);
@@ -54,6 +55,10 @@ function App() {
       <Route
         path="/ocorrencia"
         element={userType ? <Ocorrencia /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/dashboard"
+        element={userType ? <DashboardAdmin /> : <Navigate to="/" />}
       />
     </Routes>
   );

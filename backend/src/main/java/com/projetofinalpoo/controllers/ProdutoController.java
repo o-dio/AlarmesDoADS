@@ -2,60 +2,51 @@ package com.projetofinalpoo.controllers;
 
 import com.projetofinalpoo.dao.ProdutoDAO;
 import com.projetofinalpoo.models.Produto;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
- * Controlador para produtos
+ * Controlador REST para Produtos.
+ * Agora adequado ao frontend em React.
  */
-@Controller
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@RestController
+@RequestMapping("/api/produtos")
 public class ProdutoController {
 
     private ProdutoDAO produtoDAO = new ProdutoDAO();
 
-    @PostMapping("/produto/salvar")
-    public String salvar(@RequestParam(required = false) Integer id,
-            @RequestParam String dataInst,
-            @RequestParam String dataRet,
-            @RequestParam String defeito,
-            @RequestParam int idEndereco) {
-
-        Produto produto = new Produto();
-        if (id != null) {
-            produto.setId(id);
-        }
-
-        produto.setDataInst(LocalDate.parse(dataInst));
-        produto.setDataRet(LocalDate.parse(dataRet));
-        produto.setDefeito(Boolean.parseBoolean(defeito));
-        produto.setIdEndereco(idEndereco);
-
-        System.out.println("Salvando produto: " + produto);
-
-        if (id == null || id == 0) {
-            produtoDAO.cadastrar(produto);
-        } else {
-            produtoDAO.atualizar(id, produto);
-        }
-
-        return "redirect:/dashboard";
+    /**
+     * Lista todos os produtos existentes.
+     * @return lista de produtos em JSON
+     */
+    @GetMapping
+    public List<Produto> listar() {
+        return produtoDAO.buscarTodos();
     }
 
     /**
-     * Excluir produto
-     * 
-     * @param id Identificador do produto a ser excluido.
-     * @return redirecionamento para o dashboard.
+     * Cadastra ou atualiza um produto.
      */
-    @GetMapping("/produto/excluir/{id}")
-    public String excluir(@PathVariable int id) {
+    @PostMapping("/salvar")
+    public Produto salvar(@RequestBody Produto produto) {
+
+        if (produto.getId() == 0) {
+            produtoDAO.cadastrar(produto);
+        } else {
+            produtoDAO.atualizar(produto.getId(), produto);
+        }
+
+        return produto;
+    }
+
+    /**
+     * Exclui um produto pelo ID.
+     */
+    @DeleteMapping("/excluir/{id}")
+    public void excluir(@PathVariable int id) {
         produtoDAO.deletar(id);
-        return "redirect:/dashboard";
     }
 }

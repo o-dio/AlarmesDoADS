@@ -3,7 +3,7 @@ import axios from "axios";
 import "../style/css/styleOcorrencia.css";
 import Menu from "../components/Menu";
 
-function Ocorrencia() {
+export default function Ocorrencia() {
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -92,5 +92,3 @@ function Ocorrencia() {
     </>
   );
 }
-
-export default Ocorrencia;

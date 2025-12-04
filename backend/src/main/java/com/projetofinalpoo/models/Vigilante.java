@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import com.projetofinalpoo.services.HashMD5Service;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * Representa um vigilante do sistema com suas informações de contrato e acesso.
@@ -14,9 +15,17 @@ public class Vigilante implements Usuario {
     private String login;
     private String senha;
     private String turno;
+
+     /** Carga horaria de vigilante no formato HH:mm:ss para JSON. */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private LocalTime cargaHoraria;
+
     private double remuneracao;
+
+    /** Data da contratacao de vigilante no formato HH:mm:ss para JSON. */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataContratacao;
+
     private ContatoInfo contatoInfo;
 
     /**

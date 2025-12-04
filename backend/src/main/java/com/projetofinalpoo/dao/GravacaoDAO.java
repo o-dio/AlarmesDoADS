@@ -50,10 +50,10 @@ public class GravacaoDAO {
     public List<Gravacao> buscarTodos() {
         String sql = "SELECT * FROM \"Gravacao\"";
         List<Gravacao> lista = new ArrayList<>();
-
+        
         try (PreparedStatement stmt = conn.prepareStatement(sql);
                 ResultSet rs = stmt.executeQuery()) {
-
+                
             while (rs.next()) {
                 Gravacao g = new Gravacao(
                         rs.getInt("id"),
@@ -84,7 +84,7 @@ public class GravacaoDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql);) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-
+            
             if (rs.next()) {
                 return new Gravacao(
                         rs.getInt("id"),

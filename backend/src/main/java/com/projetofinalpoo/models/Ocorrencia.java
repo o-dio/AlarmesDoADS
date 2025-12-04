@@ -3,6 +3,7 @@ package com.projetofinalpoo.models;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * Representa uma ocorrência registrada por um vigilante sobre um determinado produto.
@@ -10,8 +11,15 @@ import java.time.format.DateTimeFormatter;
  */
 public class Ocorrencia {
     private int id;
+
+    /** Data da ocorrência no formato dd/MM/yyyy para JSON. */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate data;
+
+    /** Duração da ocorrência no formato HH:mm:ss para JSON. */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private LocalTime duracao;
+
     private int idVigilante;
     private int idProduto;
 

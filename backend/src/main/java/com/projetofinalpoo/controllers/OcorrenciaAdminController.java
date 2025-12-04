@@ -2,8 +2,6 @@ package com.projetofinalpoo.controllers;
 
 import com.projetofinalpoo.dao.OcorrenciaDAO;
 import com.projetofinalpoo.models.Ocorrencia;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -11,66 +9,50 @@ import java.time.LocalTime;
 import java.util.List;
 
 /**
- * Controlador para ocorrencias.
+ * Controlador REST para gerenciar Ocorrências.
+ * Fornece endpoints para listar, criar, atualizar e deletar ocorrências.
+ * Adequado para consumo por frontend React via JSON.
  */
-@Controller
-@RequestMapping("/dashboard/ocorrencias")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@RestController
+@RequestMapping("/api/admin/ocorrencias")
 public class OcorrenciaAdminController {
 
     private final OcorrenciaDAO ocorrenciaDAO = new OcorrenciaDAO();
 
     /**
-     * Lista Ocorrências para o Admin.
-     * 
-     * @param model Objeto a ser usado para criar atributos necessários da sessão.
-     * @return Redirecionamento para dashboard.
+     * Retorna todas as ocorrências cadastradas.
+     *
+     * @return lista de ocorrências
      */
     @GetMapping
-    public String listarOcorrencias(Model model) {
-        List<Ocorrencia> ocorrencias = ocorrenciaDAO.buscarTodos();
-        model.addAttribute("ocorrencias", ocorrencias);
-        return "dashboardAdmin";
+    public List<Ocorrencia> listarOcorrencias() {
+        return ocorrenciaDAO.buscarTodos();
     }
 
     /**
-     * Salva a Ocorrência
-     * 
-     * @param id parametro identificador da nova ocorrência
-     * @param data data da nova ocorrência
-     * @param duracao duracao da nova ocorrência
-     * @param idVigilante identificador do vigilante atrelado a nova ocorrência
-     * @param idProduto identificador do produto atrelado a nova ocorrência
-     * @return redirecionamento para o dashboard
+     * Salva uma nova ocorrência ou atualiza uma existente.
+     *
+     * @param ocorrencia objeto Ocorrencia enviado pelo frontend
+     * @return ocorrência salva ou atualizada
      */
     @PostMapping("/salvar")
-    public String salvar(@RequestParam(required = false) Integer id,
-            @RequestParam String data,
-            @RequestParam String duracao,
-            @RequestParam int idVigilante,
-            @RequestParam int idProduto) {
-
-        Ocorrencia ocorrencia = new Ocorrencia();
-        if (id != null) {
-            ocorrencia.setId(id);
-        }
-        ocorrencia.setData(LocalDate.parse(data));
-        ocorrencia.setDuracao(LocalTime.parse(duracao));
-        ocorrencia.setIdVigilante(idVigilante);
-        ocorrencia.setIdProduto(idProduto);
-
-        if (id == null || id == 0) {
+    public Ocorrencia salvarOcorrencia(@RequestBody Ocorrencia ocorrencia) {
+        if (ocorrencia.getId() == 0) {
             ocorrenciaDAO.cadastrar(ocorrencia);
         } else {
-            ocorrencia.setId(id);
-            ocorrenciaDAO.atualizar(id, ocorrencia);
+            ocorrenciaDAO.atualizar(ocorrencia.getId(), ocorrencia);
         }
-
-        return "redirect:/dashboard";
+        return ocorrencia;
     }
 
-    @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable int id) {
+    /**
+     * Exclui uma ocorrência pelo seu ID.
+     *
+     * @param id ID da ocorrência a ser excluída
+     */
+    @DeleteMapping("/excluir/{id}")
+    public void excluirOcorrencia(@PathVariable int id) {
         ocorrenciaDAO.deletar(id);
-        return "redirect:/dashboard";
     }
 }
