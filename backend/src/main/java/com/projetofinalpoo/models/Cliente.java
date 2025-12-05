@@ -26,6 +26,7 @@ public class Cliente implements Usuario {
     private LocalDate dataNasc;
 
     private ContatoInfo contatoInfo;
+    private int id; 
 
     // Lista de contratos do cliente
     private List<Contrato> contratos = new ArrayList<>();
@@ -89,7 +90,15 @@ public class Cliente implements Usuario {
     }
 
     // Getters e Setters com JavaDoc
+    /** @return id do cliente. */
+    public int getId() {
+    return id;
+    }
 
+    /** @param id Define o id do cliente. */
+    public void setId(int id) {
+        this.id = id;
+    }
     /** @return Login do cliente. */
     public String getLogin() {
         return login;

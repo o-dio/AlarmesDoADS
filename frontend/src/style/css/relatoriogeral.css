@@ -1,0 +1,66 @@
+/* Estilo Relatório Geral */
+.relatorio-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 80vh;
+    background-color: #121212;
+    color: #f0f0f0;
+    padding: 2rem;
+    text-align: center;
+    gap: 20px;
+}
+
+.relatorio-container h1 {
+    font-size: 3rem;
+    color: #d6a85c;
+    margin-bottom: 1rem;
+}
+
+.relatorio-container p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.relatorio-container .buttons {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.relatorio-container button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #121212;
+    background-color: #d6a85c;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.relatorio-container button:hover {
+    background-color: #b78e4a;
+    transform: translateY(-2px);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .relatorio-container h1 {
+        font-size: 2.2rem;
+    }
+
+    .relatorio-container p {
+        font-size: 1rem;
+    }
+
+    .relatorio-container .buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .relatorio-container button {
+        width: 80%;
+    }
+}

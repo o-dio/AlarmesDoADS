@@ -9,6 +9,7 @@ import Rondas from "./views/rondas";
 import Monitoramento from "./views/monitoramento";
 import Ocorrencia from "./views/ocorrencia";
 import DashboardAdmin from "./views/dashboardAdmin";
+import RelatorioGeral from "./views/relatoriogeral";
 
 function App() {
   const [userType, setUserType] = useState(null);
@@ -59,6 +60,10 @@ function App() {
       <Route
         path="/dashboard"
         element={userType ? <DashboardAdmin /> : <Navigate to="/" />}
+      />
+      <Route 
+        path="/relatorio-geral"
+        element={userType ? <RelatorioGeral /> : <Navigate to="/" />}
       />
     </Routes>
   );

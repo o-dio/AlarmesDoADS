@@ -95,8 +95,9 @@ export default function Menu() {
                     <span id="user-name">{usuario}</span>
 
                     <div className={`dropdown-menu ${dropdownAtivo ? "show" : ""}`}>
-                        <a href="#">Meu Perfil</a>
-                        <a href="#">Configurações</a>
+                        <a href="/meu-perfil">Meu Perfil</a>
+                        {tipo === "admin" && <a href="/relatorio-geral">Relatório Geral</a>}
+                        {tipo === "cliente" && <a href="/contrato">Contrato</a>}
                         <button onClick={handleLogout} className="logout-btn">Sair</button>
                     </div>
                 </div>

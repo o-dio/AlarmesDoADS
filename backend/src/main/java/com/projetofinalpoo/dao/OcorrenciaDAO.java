@@ -11,13 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.projetofinalpoo.models.Ocorrencia;
-
+import org.springframework.stereotype.Repository;
 import com.projetofinalpoo.viewmodels.OcorrenciaCompletaViewModel;
 
 /**
  * Classe responsável por realizar operações de acesso a dados (DAO) da entidade
  * Ocorrencia.
  */
+@Repository
 public class OcorrenciaDAO {
     private Connection conn = new ConexaoDAO().conectar();
 

@@ -7,10 +7,11 @@ import java.util.ArrayList;
 
 import com.projetofinalpoo.models.Endereco;
 import com.projetofinalpoo.models.Rota;
-
+import org.springframework.stereotype.Repository;
 /**
  * Classe responsável pelas operações de acesso a dados (DAO) da entidade Rota.
  */
+@Repository
 public class RotaDAO {
     private Connection conn = new ConexaoDAO().conectar();
 

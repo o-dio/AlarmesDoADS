@@ -7,13 +7,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Connection;
 import java.util.ArrayList;
-
+import org.springframework.stereotype.Repository;
 import com.projetofinalpoo.models.Trajeto;
 
 /**
  * Classe responsável pelo acesso aos dados da entidade Trajeto.
  * Realiza operações de CRUD e consultas específicas sobre trajetos.
  */
+@Repository
 public class TrajetoDAO {
     private Connection conn = new ConexaoDAO().conectar();
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

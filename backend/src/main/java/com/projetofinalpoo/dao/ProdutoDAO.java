@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.springframework.stereotype.Repository;
 import com.projetofinalpoo.models.Produto;
 import com.projetofinalpoo.models.Endereco;
 import com.projetofinalpoo.viewmodels.ProdutoMonitoradoViewModel;
@@ -18,6 +18,7 @@ import com.projetofinalpoo.viewmodels.ProdutoMonitoradoViewModel;
  * Contém métodos para cadastrar, buscar, atualizar e deletar produtos, bem como consultas
  * específicas relacionadas a clientes, vigilantes e endereços.
  */
+@Repository
 public class ProdutoDAO {
 
     /** Conexão com o banco de dados. */

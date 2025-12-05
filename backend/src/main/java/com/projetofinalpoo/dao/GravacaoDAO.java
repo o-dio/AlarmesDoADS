@@ -8,13 +8,14 @@ import java.time.format.DateTimeFormatter;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.springframework.stereotype.Repository;
 import com.projetofinalpoo.models.Gravacao;
 
 /**
  * Classe responsável por realizar operações de acesso a dados (DAO) da entidade
  * Gravacao.
  */
+@Repository
 public class GravacaoDAO {
     private Connection conn = new ConexaoDAO().conectar();
 

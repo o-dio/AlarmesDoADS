@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.springframework.stereotype.Repository;
 import com.projetofinalpoo.models.Endereco;
 import com.projetofinalpoo.models.Rota;
 
@@ -14,6 +14,7 @@ import com.projetofinalpoo.models.Rota;
  * Estabelece os parametros para comunicação entre
  * classe Endereço e tabela Endereço do banco de dados
  */
+@Repository
 public class EnderecoDAO {
 
     private Connection conn;
@@ -87,5 +88,41 @@ public class EnderecoDAO {
         }
 
         return rotas;
+    }
+
+    /**
+     * Busca todos os endereços cadastrados no banco de dados.
+     * 
+     * @return lista contendo todos os endereços cadastrados
+     */
+    public List<Endereco> buscarTodos() {
+        List<Endereco> enderecos = new ArrayList<>();
+
+        String sql = "SELECT * FROM \"Endereco\"";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Endereco e = new Endereco();
+                e.setId(rs.getInt("id"));
+                e.setRua(rs.getString("Rua"));
+                e.setNumero(String.valueOf(rs.getInt("Numero")));
+                e.setBairro(rs.getString("Bairro"));
+                e.setCidade(rs.getString("Cidade"));
+                e.setEstado(rs.getString("Estado"));
+
+                // Adiciona também as rotas associadas
+                e.getRotas().addAll(buscarRotasDoEndereco(e.getId()));
+
+                enderecos.add(e);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar todos os endereços: " + e.getMessage());
+        }
+
+        return enderecos;
     }
 }
