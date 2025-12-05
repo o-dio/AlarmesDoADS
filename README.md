@@ -10,20 +10,21 @@
 
 ## Para rodar:
 
-**Back-End:** Pelo terminal, acesse a pasta AlarmesDoADS/backend e execute o maven:
+**Back-End:** Pelo terminal, acesse a pasta AlarmesDoADS/backend, isntale as dependencias do mvn e execute o maven:
 
 ```cmd
 
+    mvn clean install
     cd backend
     mvn spring-boot:run
 
 ```
 
-**Front-End:** Pelo terminal, acesse a pasta AlarmesDoADS/front e execute o react:
-(Você pode instalar as dependências com "npm i")
+**Front-End:** Pelo terminal, acesse a pasta AlarmesDoADS/front, instale as dependências e execute o react:
 
 ```cmd
 
+    npm i
     cd frontend
     npm run dev
 
