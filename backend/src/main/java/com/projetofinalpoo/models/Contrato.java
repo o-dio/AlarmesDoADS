@@ -10,8 +10,10 @@ import java.util.Objects;
  * Representa um contrato de serviço de um cliente.
  * Um contrato depende obrigatoriamente de um {@link Cliente} e pode estar associado a múltiplos {@link Endereco}.
  */
+
 public class Contrato {
 
+    private int id;
     private Cliente cliente;
     private LocalDate dataInicio;
     private LocalDate dataFim;
@@ -84,10 +86,19 @@ public class Contrato {
     }
 
     // Getters e Setters com JavaDoc
+    
 
     /** @return O cliente associado ao contrato. */
     public Cliente getCliente() { 
         return cliente; 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     /** @param cliente Define o cliente associado ao contrato. */
