@@ -14,8 +14,8 @@
 
 ```cmd
 
-    mvn clean install
     cd backend
+    mvn clean install
     mvn spring-boot:run
 
 ```
@@ -24,13 +24,13 @@
 
 ```cmd
 
-    npm i
     cd frontend
+    npm i
     npm run dev
 
 ```
 
- **Documentação completa:** Clique em Documentation no diretório raiz!
+ **Documentação completa:** Disponível em: ./backend/target/apidocs/index.html
 
 ---
 
