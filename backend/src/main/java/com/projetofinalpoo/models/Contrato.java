@@ -13,6 +13,7 @@ import com.projetofinalpoo.models.Endereco;
  * Representa um contrato de serviço de um cliente.
  * Um contrato depende obrigatoriamente de um {@link Cliente} e pode estar associado a múltiplos {@link Endereco}.
  */
+
 public class Contrato {
 
     private int id;
@@ -88,19 +89,18 @@ public class Contrato {
     }
 
     // Getters e Setters com JavaDoc
-    /** @return O id contrato. */
-    public int getId() {
-        return id;
-    }
-
-    /** @param id Define o id do contrato. */
-    public void setId(int id) {
-        this.id = id;
-    }
 
     /** @return O cliente associado ao contrato. */
     public Cliente getCliente() { 
         return cliente; 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     /** @param cliente Define o cliente associado ao contrato. */

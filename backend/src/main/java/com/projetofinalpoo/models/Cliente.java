@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.projetofinalpoo.services.HashMD5Service;
 import com.projetofinalpoo.models.Contrato;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * Representa um cliente do sistema.
@@ -20,11 +19,9 @@ public class Cliente implements Usuario {
     private String login;
     private String senha;
     private String cpf;
-
     /** Data de nascimento de cliente no formato HH:mm:ss para JSON. */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataNasc;
-
     private ContatoInfo contatoInfo;
     private int id; 
 

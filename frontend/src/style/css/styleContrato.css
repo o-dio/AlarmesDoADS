@@ -1,0 +1,240 @@
+
+:root {
+    --primary-bg: #0d1117;
+    --container-bg: #161b22;
+    --text-color: #c9d1d9; 
+    --accent-color: #d6a85c; 
+    --button-view-bg: #8C6239; 
+    --button-download-bg: #A67C00; 
+    --border-color: #30363d;
+}
+
+body {
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    font-family: 'Poppins', 'Roboto', 'Arial', sans-serif;
+    min-height: 100vh; 
+}
+
+.contrato-container {
+    max-width: 1300px;
+    margin: 60px auto;
+    padding: 40px;
+    background-color: var(--container-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color); 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); 
+}
+
+h1 {
+    color: var(--accent-color);
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5em;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-bottom: 3px solid var(--accent-color);
+    padding-bottom: 15px;
+}
+
+p {
+    text-align: center;
+    font-size: 1.1em;
+    padding: 25px;
+    background-color: #21262d; 
+    border-radius: 8px;
+    margin-top: 30px;
+    border-left: 5px solid var(--accent-color);
+}
+
+.contrato-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.contrato-table thead tr {
+    background-color: #21262d; 
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.contrato-table th, .contrato-table td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95em;
+}
+
+.contrato-table th {
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+}
+
+.contrato-table tbody tr {
+    background-color: #161b22;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.contrato-table tbody tr:hover {
+    background-color: #21262d; 
+    transform: scale(1.005); box-shadow: 0 4px 12px rgba(140, 98, 57, 0.4);
+
+}
+
+.contrato-actions-cell {
+    display: flex;
+    gap: 8px; 
+    align-items: center;
+}
+
+.action-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.action-button:focus {
+    outline: none;
+      box-shadow: 0 4px 12px rgba(140, 98, 57, 0.4);
+
+}
+
+.view-button {
+    background-color: var(--button-view-bg);
+    color: var(--primary-bg); 
+}
+
+.view-button:hover {
+    background-color: #B3865D;
+    box-shadow: 0 4px 12px rgba(140, 98, 57, 0.4);
+}
+
+.download-button {
+    background-color: var(--button-download-bg);
+    color: white;
+}
+
+.download-button:hover {
+    background-color: #FFD700;
+    box-shadow: 0 4px 12px rgba(166, 124, 0, 0.4);
+
+}
+
+h2 {
+    color: var(--text-color);
+    text-align: center;
+    padding: 80px;
+    font-size: 1.8em;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: var(--container-bg, #0d1117);
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    position: relative;
+    transform: translateY(-50px);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+}
+
+.modal-backdrop.show .modal-content {
+    transform: translateY(0);
+}
+
+.modal-content h2 {
+    color: var(--accent-color, #A67C00);
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color, #30363d);
+    padding-bottom: 10px;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--text-color, #c9d1d9);
+    font-size: 2em;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: var(--accent-color, #716235);
+}
+
+.contract-preview-box {
+    background-color: #0d1117;
+    border: 1px solid var(--border-color, #30363d);
+    padding: 25px;
+    border-radius: 8px;
+    min-height: 400px;
+    margin-top: 15px;
+}
+
+.preview-header {
+    color: var(--accent-color, #A67C00);
+    font-weight: bold;
+    font-size: 1.1em;
+    border-bottom: 2px solid var(--border-color, #30363d);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.lorem-content {
+    font-style: italic;
+    color: #8b949e;
+    line-height: 1.6;
+    margin-top: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 30px;
+}
+
+.modal-footer .download-button {
+    background-color: #A67C00;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
