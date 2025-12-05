@@ -10,13 +10,13 @@ export default function RelatorioGeral() {
     async function handleVerRelatorio() {
         try {
             const response = await axios.get("http://localhost:8080/api/relatorio/geral/ver", {
-                responseType: "blob", // importante para PDFs
+                responseType: "blob",
                 withCredentials: true
             });
 
             const file = new Blob([response.data], { type: "application/pdf" });
             const fileURL = URL.createObjectURL(file);
-            window.open(fileURL); // abre o PDF em nova aba
+            window.open(fileURL);
 
             setRelatorioGerado(true);
         } catch (err) {

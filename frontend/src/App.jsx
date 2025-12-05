@@ -10,6 +10,7 @@ import Monitoramento from "./views/monitoramento";
 import Ocorrencia from "./views/ocorrencia";
 import DashboardAdmin from "./views/dashboardAdmin";
 import Contrato from "./views/contrato";
+import RelatorioGeral from "./views/relatoriogeral";
 
 function App() {
   const [userType, setUserType] = useState(null);
@@ -60,6 +61,14 @@ function App() {
       <Route 
         path="/contrato"
         element={userType ? <Contrato /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/dashboard"
+        element={userType ? <DashboardAdmin /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/relatorio-geral"
+        element={userType ? <RelatorioGeral /> : <Navigate to="/" />}
       />
     </Routes>
   );

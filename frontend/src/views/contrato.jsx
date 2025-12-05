@@ -23,9 +23,10 @@ export default function Contrato() {
         axios.get("http://localhost:8080/api/session", { withCredentials: true })
             .then(res => {
                 const idCliente = res.data.usuario?.id;
+                console.log(`id do cliente  ${idCliente}`)
                 if (idCliente !== undefined && idCliente !== null) {
                     setLoading(true);
-                    axios.get(`http://localhost:8080/contrato/cliente/id/${idCliente}`, { withCredentials: true })
+                    axios.get(`http://localhost:8080/api/contrato/cliente/id/${idCliente}`, { withCredentials: true })
                         .then(res => setContratos(res.data))
                         .catch(() => setContratos([]))
                         .finally(() => setLoading(false));

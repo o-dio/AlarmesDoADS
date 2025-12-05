@@ -41,23 +41,45 @@ import com.projetofinalpoo.dao.OcorrenciaDAO;
 import com.projetofinalpoo.dao.GravacaoDAO;
 import com.projetofinalpoo.dao.AdminDAO;
 
+/**
+ * Serviço responsável por gerar relatórios gerais do sistema em formato PDF,
+ * incluindo informações de clientes, vigilantes, contratos, endereços, rotas,
+ * trajetos, produtos, ocorrências, gravações e administradores.
+ */
 @Service
 public class RelatorioGeralService {
 
-    @Autowired private ClienteDAO clienteDAO;
-    @Autowired private ContratoDAO contratoDAO;
-    @Autowired private EnderecoDAO enderecoDAO;
-    @Autowired private VigilanteDAO vigilanteDAO;
-    @Autowired private RotaDAO rotaDAO;
-    @Autowired private TrajetoDAO trajetoDAO;
-    @Autowired private ProdutoDAO produtoDAO;
-    @Autowired private OcorrenciaDAO ocorrenciaDAO;
-    @Autowired private GravacaoDAO gravacaoDAO;
-    @Autowired private AdminDAO adminDAO;
+    @Autowired 
+    private ClienteDAO clienteDAO;
+    @Autowired 
+    private ContratoDAO contratoDAO;
+    @Autowired 
+    private EnderecoDAO enderecoDAO;
+    @Autowired 
+    private VigilanteDAO vigilanteDAO;
+    @Autowired 
+    private RotaDAO rotaDAO;
+    @Autowired 
+    private TrajetoDAO trajetoDAO;
+    @Autowired 
+    private ProdutoDAO produtoDAO;
+    @Autowired 
+    private OcorrenciaDAO ocorrenciaDAO;
+    @Autowired 
+    private GravacaoDAO gravacaoDAO;
+    @Autowired 
+    private AdminDAO adminDAO;
 
+    /** Formato de data padrão "dd/MM/yyyy". */
     private static final DateTimeFormatter dtfData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    /** Formato de hora padrão "HH:mm". */
     private static final DateTimeFormatter dtfHora = DateTimeFormatter.ofPattern("HH:mm");
 
+    /**
+     * Gera o relatório geral do sistema em formato PDF.
+     *
+     * @return um array de bytes representando o PDF gerado, ou null em caso de erro.
+     */
     public byte[] gerarRelatorio() {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -96,6 +118,12 @@ public class RelatorioGeralService {
         }
     }
 
+    /**
+     * Adiciona um título de seção ao documento PDF.
+     *
+     * @param doc   Documento PDF onde o título será adicionado.
+     * @param titulo Texto do título da seção.
+     */
     private void adicionarTituloSecao(Document doc, String titulo) {
         doc.add(new Paragraph(titulo)
                 .setFontSize(16)
@@ -104,6 +132,12 @@ public class RelatorioGeralService {
                 .setMarginBottom(10));
     }
 
+    /**
+     * Cria uma tabela com cabeçalhos fornecidos.
+     *
+     * @param colunas Nomes das colunas da tabela.
+     * @return Tabela pronta para inserção de dados.
+     */
     private Table criarTabela(String... colunas) {
         float[] widths = new float[colunas.length];
         Arrays.fill(widths, 1);
@@ -114,6 +148,11 @@ public class RelatorioGeralService {
         return table;
     }
 
+    /**
+     * Adiciona a seção de clientes ao PDF.
+     *
+     * @param doc Documento PDF.
+     */
     private void adicionarClientes(Document doc) {
         adicionarTituloSecao(doc, "Clientes");
         ArrayList<Cliente> lista = clienteDAO.buscarTodos();
@@ -132,6 +171,11 @@ public class RelatorioGeralService {
         doc.add(tabela);
     }
 
+    /**
+     * Adiciona a seção de vigilantes ao PDF.
+     *
+     * @param doc Documento PDF.
+     */
     private void adicionarVigilantes(Document doc) {
         adicionarTituloSecao(doc, "Vigilantes");
         ArrayList<Vigilante> lista = vigilanteDAO.buscarTodos();
@@ -156,7 +200,11 @@ public class RelatorioGeralService {
         doc.add(tabela);
     }
 
-
+    /**
+     * Adiciona a seção de contratos ao PDF.
+     *
+     * @param doc Documento PDF.
+     */
     private void adicionarContratos(Document doc) {
         adicionarTituloSecao(doc, "Contratos");
         ArrayList<Contrato> lista = contratoDAO.buscarTodos();
@@ -182,8 +230,11 @@ public class RelatorioGeralService {
         doc.add(tabela);
     }
 
-
-
+    /**
+     * Adiciona a seção de endereços ao PDF.
+     *
+     * @param doc Documento PDF.
+     */
     private void adicionarEnderecos(Document doc) {
         adicionarTituloSecao(doc, "Endereços");
         List<Endereco> lista = enderecoDAO.buscarTodos();
@@ -204,6 +255,11 @@ public class RelatorioGeralService {
         doc.add(tabela);
     }
 
+    /**
+     * Adiciona a seção de rotas ao PDF.
+     *
+     * @param doc Documento PDF.
+     */
     private void adicionarRotas(Document doc) {
         adicionarTituloSecao(doc, "Rotas");
         ArrayList<Rota> lista = rotaDAO.buscarTodos();
@@ -223,6 +279,11 @@ public class RelatorioGeralService {
         doc.add(tabela);
     }
 
+    /**
+     * Adiciona a seção de trajetos ao PDF.
+     *
+     * @param doc Documento PDF.
+     */
     private void adicionarTrajetos(Document doc) {
         adicionarTituloSecao(doc, "Trajetos");
 
@@ -246,7 +307,11 @@ public class RelatorioGeralService {
         doc.add(tabela);
     }
 
-
+    /**
+     * Adiciona a seção de produtos ao PDF.
+     *
+     * @param doc Documento PDF.
+     */
     private void adicionarProdutos(Document doc) {
         adicionarTituloSecao(doc, "Produtos");
         ArrayList<Produto> lista = produtoDAO.buscarTodos();
@@ -265,6 +330,11 @@ public class RelatorioGeralService {
         doc.add(tabela);
     }
 
+    /**
+     * Adiciona a seção de ocorrências ao PDF.
+     *
+     * @param doc Documento PDF.
+     */
     private void adicionarOcorrencias(Document doc) {
         adicionarTituloSecao(doc, "Ocorrências");
 
@@ -290,6 +360,11 @@ public class RelatorioGeralService {
         doc.add(tabela);
     }
 
+    /**
+     * Adiciona a seção de gravações ao PDF.
+     *
+     * @param doc Documento PDF.
+     */
     private void adicionarGravacoes(Document doc) {
         adicionarTituloSecao(doc, "Gravações");
 
@@ -316,6 +391,11 @@ public class RelatorioGeralService {
         doc.add(tabela);
     }
 
+    /**
+     * Adiciona a seção de administradores ao PDF.
+     *
+     * @param doc Documento PDF.
+     */
     private void adicionarAdmins(Document doc) {
         doc.add(new AreaBreak());
 
@@ -334,6 +414,5 @@ public class RelatorioGeralService {
 
         doc.add(tabela);
     }
-
 
 }

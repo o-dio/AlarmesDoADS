@@ -1,4 +1,3 @@
-
 :root {
     --primary-bg: #0d1117;
     --container-bg: #161b22;
@@ -9,24 +8,19 @@
     --border-color: #30363d;
 }
 
-body {
-    background-color: var(--primary-bg);
+.contrato-container {
+    background-color: var(--container-bg);
     color: var(--text-color);
     font-family: 'Poppins', 'Roboto', 'Arial', sans-serif;
-    min-height: 100vh; 
-}
-
-.contrato-container {
     max-width: 1300px;
     margin: 60px auto;
     padding: 40px;
-    background-color: var(--container-bg);
     border-radius: 12px;
     border: 1px solid var(--border-color); 
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); 
 }
 
-h1 {
+.contrato-container h1 {
     color: var(--accent-color);
     text-align: center;
     margin-bottom: 40px;
@@ -37,7 +31,7 @@ h1 {
     padding-bottom: 15px;
 }
 
-p {
+.contrato-container p {
     text-align: center;
     font-size: 1.1em;
     padding: 25px;
@@ -47,7 +41,7 @@ p {
     border-left: 5px solid var(--accent-color);
 }
 
-.contrato-table {
+.contrato-container .contrato-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 30px;
@@ -55,43 +49,44 @@ p {
     overflow: hidden;
 }
 
-.contrato-table thead tr {
+.contrato-container .contrato-table thead tr {
     background-color: #21262d; 
     color: #ffffff;
     font-weight: 600;
 }
 
-.contrato-table th, .contrato-table td {
+.contrato-container .contrato-table th,
+.contrato-container .contrato-table td {
     padding: 15px 20px;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
     font-size: 0.95em;
 }
 
-.contrato-table th {
+.contrato-container .contrato-table th {
     text-transform: uppercase;
     letter-spacing: 0.8px;
     font-weight: 600;
 }
 
-.contrato-table tbody tr {
+.contrato-container .contrato-table tbody tr {
     background-color: #161b22;
     transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.contrato-table tbody tr:hover {
+.contrato-container .contrato-table tbody tr:hover {
     background-color: #21262d; 
-    transform: scale(1.005); box-shadow: 0 4px 12px rgba(140, 98, 57, 0.4);
-
+    transform: scale(1.005); 
+    box-shadow: 0 4px 12px rgba(140, 98, 57, 0.4);
 }
 
-.contrato-actions-cell {
+.contrato-container .contrato-actions-cell {
     display: flex;
     gap: 8px; 
     align-items: center;
 }
 
-.action-button {
+.contrato-container .action-button {
     padding: 8px 15px;
     border: none;
     border-radius: 5px;
@@ -101,41 +96,40 @@ p {
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.action-button:focus {
+.contrato-container .action-button:focus {
     outline: none;
-      box-shadow: 0 4px 12px rgba(140, 98, 57, 0.4);
-
+    box-shadow: 0 4px 12px rgba(140, 98, 57, 0.4);
 }
 
-.view-button {
+.contrato-container .view-button {
     background-color: var(--button-view-bg);
     color: var(--primary-bg); 
 }
 
-.view-button:hover {
+.contrato-container .view-button:hover {
     background-color: #B3865D;
     box-shadow: 0 4px 12px rgba(140, 98, 57, 0.4);
 }
 
-.download-button {
+.contrato-container .download-button {
     background-color: var(--button-download-bg);
     color: white;
 }
 
-.download-button:hover {
+.contrato-container .download-button:hover {
     background-color: #FFD700;
     box-shadow: 0 4px 12px rgba(166, 124, 0, 0.4);
-
 }
 
-h2 {
+.contrato-container h2 {
     color: var(--text-color);
     text-align: center;
-    padding: 80px;
+    padding: 80px 0 20px 0;
     font-size: 1.8em;
 }
 
-.modal-backdrop {
+/* Modal */
+.contrato-container .modal-backdrop {
     position: fixed;
     top: 0;
     left: 0;
@@ -151,12 +145,12 @@ h2 {
     transition: opacity 0.3s ease;
 }
 
-.modal-backdrop.show {
+.contrato-container .modal-backdrop.show {
     opacity: 1;
     pointer-events: auto;
 }
 
-.modal-content {
+.contrato-container .modal-content {
     background-color: var(--container-bg, #0d1117);
     width: 90%;
     max-width: 900px;
@@ -170,11 +164,11 @@ h2 {
     overflow-y: auto;
 }
 
-.modal-backdrop.show .modal-content {
+.contrato-container .modal-backdrop.show .modal-content {
     transform: translateY(0);
 }
 
-.modal-content h2 {
+.contrato-container .modal-content h2 {
     color: var(--accent-color, #A67C00);
     margin-bottom: 20px;
     text-align: center;
@@ -182,7 +176,7 @@ h2 {
     padding-bottom: 10px;
 }
 
-.modal-close {
+.contrato-container .modal-close {
     position: absolute;
     top: 15px;
     right: 15px;
@@ -195,11 +189,11 @@ h2 {
     transition: color 0.2s;
 }
 
-.modal-close:hover {
+.contrato-container .modal-close:hover {
     color: var(--accent-color, #716235);
 }
 
-.contract-preview-box {
+.contrato-container .contract-preview-box {
     background-color: #0d1117;
     border: 1px solid var(--border-color, #30363d);
     padding: 25px;
@@ -208,7 +202,7 @@ h2 {
     margin-top: 15px;
 }
 
-.preview-header {
+.contrato-container .preview-header {
     color: var(--accent-color, #A67C00);
     font-weight: bold;
     font-size: 1.1em;
@@ -217,20 +211,20 @@ h2 {
     margin-bottom: 15px;
 }
 
-.lorem-content {
+.contrato-container .lorem-content {
     font-style: italic;
     color: #8b949e;
     line-height: 1.6;
     margin-top: 20px;
 }
 
-.modal-footer {
+.contrato-container .modal-footer {
     display: flex;
     justify-content: flex-end;
     margin-top: 30px;
 }
 
-.modal-footer .download-button {
+.contrato-container .modal-footer .download-button {
     background-color: #A67C00;
     color: white;
     padding: 10px 20px;

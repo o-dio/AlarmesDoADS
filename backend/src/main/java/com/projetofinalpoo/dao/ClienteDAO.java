@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
  * Classe responsável por realizar operações de acesso a dados (DAO) da entidade
  * Cliente.
  */
-
 @Repository
 public class ClienteDAO {
     private Connection conn = new ConexaoDAO().conectar();
@@ -30,7 +29,7 @@ public class ClienteDAO {
                 "(\"Login\", \"Senha\", \"CPF\", \"DataNasc\", \"Fone\", \"Email\", \"FoneContato\")" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cliente.getLogin());
             stmt.setString(2, cliente.getSenha());
             stmt.setString(3, cliente.getCpf());
@@ -52,32 +51,26 @@ public class ClienteDAO {
      */
     public ArrayList<Cliente> buscarTodos() {
         String sql = "SELECT * FROM \"Cliente\"";
-        ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+        ArrayList<Cliente> clientes = new ArrayList<>();
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Date dataNasc = rs.getDate("DataNasc");
-                String dataFormatada = dataNasc != null ? new SimpleDateFormat("dd/MM/yyyy").format(dataNasc) : null;
-                System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")));
-                clientes.add(new Cliente(
+                Cliente cliente = new Cliente(
                         rs.getString("Login"),
                         rs.getString("Senha"),
                         rs.getString("CPF"),
-
                         new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DataNasc")),
                         new ContatoInfo(
                                 rs.getString("Fone"),
                                 rs.getString("Email"),
-                                rs.getString("FoneContato"))));
+                                rs.getString("FoneContato")));
+                cliente.setId(rs.getInt("id"));
+                clientes.add(cliente);
             }
 
-            if (clientes.size() > 0) {
-                return clientes;
-            }
-
-            return null;
+            return clientes.isEmpty() ? null : clientes;
 
         } catch (Exception e) {
             System.out.println("Erro ao buscar clientes: " + e.getMessage());
@@ -86,15 +79,15 @@ public class ClienteDAO {
     }
 
     /**
-     * Busca um cliente pelo login.
+     * Busca um cliente pelo CPF.
      *
-     * @param cliente Objeto Cliente com o login preenchido.
+     * @param cliente Objeto Cliente com o CPF preenchido.
      * @return Cliente correspondente ou null se não encontrado.
      */
     public Cliente buscar(Cliente cliente) {
         String sql = "SELECT * FROM \"Cliente\" WHERE \"CPF\" = ?";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cliente.getCpf());
             ResultSet rs = stmt.executeQuery();
 
@@ -108,6 +101,7 @@ public class ClienteDAO {
                                 rs.getString("Fone"),
                                 rs.getString("Email"),
                                 rs.getString("FoneContato")));
+                findClient.setId(rs.getInt("id"));
                 return findClient;
             } else {
                 return null;
@@ -128,7 +122,7 @@ public class ClienteDAO {
     public Cliente buscarPeloLoginSenha(String login, String senha) {
         String sql = "SELECT * FROM \"Cliente\" WHERE \"Login\" = ? AND \"Senha\" = ?";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, login);
             stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
@@ -143,6 +137,7 @@ public class ClienteDAO {
                                 rs.getString("Fone"),
                                 rs.getString("Email"),
                                 rs.getString("FoneContato")));
+                findClient.setId(rs.getInt("id"));
                 return findClient;
             } else {
                 System.out.println("Cliente nao encontrado");
@@ -163,7 +158,7 @@ public class ClienteDAO {
     public Cliente buscarPeloCpf(String cpf) {
         String sql = "SELECT * FROM \"Cliente\" WHERE \"CPF\" = ?";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cpf);
             ResultSet rs = stmt.executeQuery();
 
@@ -177,6 +172,7 @@ public class ClienteDAO {
                                 rs.getString("Fone"),
                                 rs.getString("Email"),
                                 rs.getString("FoneContato")));
+                findClient.setId(rs.getInt("id"));
                 return findClient;
             } else {
                 System.out.println("Cliente nao encontrado com CPF: " + cpf);
@@ -204,7 +200,7 @@ public class ClienteDAO {
                 "\"FoneContato\" = ? " +
                 "WHERE \"CPF\" = ?";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cliente.getLogin());
             stmt.setString(2, cliente.getSenha());
             stmt.setString(3, cliente.getCpf());
@@ -235,8 +231,7 @@ public class ClienteDAO {
     public void deletar(Cliente cliente) {
         String sql = "DELETE FROM \"Cliente\" WHERE \"CPF\" = ?";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
-
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cliente.getCpf());
 
             int linhasAfetadas = stmt.executeUpdate();
