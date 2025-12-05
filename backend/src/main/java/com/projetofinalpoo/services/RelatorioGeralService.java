@@ -97,7 +97,15 @@ public class RelatorioGeralService {
             doc.add(new Paragraph("Gerado em: " + sdf.format(new Date()))
                     .setFontSize(11)
                     .setMarginBottom(20));
-
+                    
+            doc.add(new Paragraph(
+                "Este relatório apresenta uma visão detalhada e organizada do sistema, incluindo todas as entidades registradas.\n" +
+                "Ele documenta as atualizações recentes de clientes, contratos, vigilantes, endereços, rotas, trajetos, produtos, ocorrências, gravações e administradores.\n\n" +
+                "O objetivo é fornecer transparência, rastreabilidade e facilidade para auditorias e análises gerenciais.\n" +
+                "Cada seção detalha os atributos principais de suas respectivas entidades, permitindo acompanhar alterações, monitorar operações e apoiar decisões estratégicas.\n\n" +
+                "Este relatório serve como ferramenta de referência confiável para o acompanhamento contínuo do sistema."
+            ).setFontSize(12).setMarginBottom(20));
+            
             adicionarClientes(doc);
             adicionarVigilantes(doc);
             adicionarContratos(doc);
@@ -154,6 +162,7 @@ public class RelatorioGeralService {
      * @param doc Documento PDF.
      */
     private void adicionarClientes(Document doc) {
+        doc.add(new AreaBreak());
         adicionarTituloSecao(doc, "Clientes");
         ArrayList<Cliente> lista = clienteDAO.buscarTodos();
         if (lista == null || lista.isEmpty()) {
@@ -177,6 +186,7 @@ public class RelatorioGeralService {
      * @param doc Documento PDF.
      */
     private void adicionarVigilantes(Document doc) {
+        doc.add(new AreaBreak());
         adicionarTituloSecao(doc, "Vigilantes");
         ArrayList<Vigilante> lista = vigilanteDAO.buscarTodos();
         if (lista == null || lista.isEmpty()) {
@@ -206,6 +216,7 @@ public class RelatorioGeralService {
      * @param doc Documento PDF.
      */
     private void adicionarContratos(Document doc) {
+        doc.add(new AreaBreak());
         adicionarTituloSecao(doc, "Contratos");
         ArrayList<Contrato> lista = contratoDAO.buscarTodos();
         if (lista == null || lista.isEmpty()) {
@@ -236,6 +247,7 @@ public class RelatorioGeralService {
      * @param doc Documento PDF.
      */
     private void adicionarEnderecos(Document doc) {
+        doc.add(new AreaBreak());
         adicionarTituloSecao(doc, "Endereços");
         List<Endereco> lista = enderecoDAO.buscarTodos();
         if (lista.isEmpty()) {
@@ -261,6 +273,7 @@ public class RelatorioGeralService {
      * @param doc Documento PDF.
      */
     private void adicionarRotas(Document doc) {
+        doc.add(new AreaBreak());
         adicionarTituloSecao(doc, "Rotas");
         ArrayList<Rota> lista = rotaDAO.buscarTodos();
         if (lista.isEmpty()) {
@@ -285,6 +298,7 @@ public class RelatorioGeralService {
      * @param doc Documento PDF.
      */
     private void adicionarTrajetos(Document doc) {
+        doc.add(new AreaBreak());
         adicionarTituloSecao(doc, "Trajetos");
 
         ArrayList<Trajeto> lista = trajetoDAO.buscarTodos();
@@ -313,12 +327,14 @@ public class RelatorioGeralService {
      * @param doc Documento PDF.
      */
     private void adicionarProdutos(Document doc) {
+        doc.add(new AreaBreak());
         adicionarTituloSecao(doc, "Produtos");
         ArrayList<Produto> lista = produtoDAO.buscarTodos();
         if (lista.isEmpty()) {
             doc.add(new Paragraph("Nenhum produto cadastrado."));
             return;
         }
+
         Table tabela = criarTabela("ID", "Data Instalação", "Data Retirada", "Defeito", "Endereço");
         for (Produto p : lista) {
             tabela.addCell(String.valueOf(p.getId()));
@@ -336,6 +352,7 @@ public class RelatorioGeralService {
      * @param doc Documento PDF.
      */
     private void adicionarOcorrencias(Document doc) {
+        doc.add(new AreaBreak());
         adicionarTituloSecao(doc, "Ocorrências");
 
         ArrayList<Ocorrencia> lista = ocorrenciaDAO.buscarTodos();
@@ -366,6 +383,7 @@ public class RelatorioGeralService {
      * @param doc Documento PDF.
      */
     private void adicionarGravacoes(Document doc) {
+        doc.add(new AreaBreak());
         adicionarTituloSecao(doc, "Gravações");
 
         List<Gravacao> lista = gravacaoDAO.buscarTodos();
