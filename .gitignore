@@ -6,7 +6,6 @@
 /.vscode/
 
 # Ignorar arquivos de build
-/target/
 /build/
 
 # Ignorar arquivos de sistema
