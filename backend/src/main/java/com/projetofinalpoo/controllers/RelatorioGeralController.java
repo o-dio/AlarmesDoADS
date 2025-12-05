@@ -1,4 +1,4 @@
-package com.projetofinalpoo.controller;
+package com.projetofinalpoo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ContentDisposition;
