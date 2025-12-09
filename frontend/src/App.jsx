@@ -11,6 +11,7 @@ import Ocorrencia from "./views/ocorrencia";
 import DashboardAdmin from "./views/dashboardAdmin";
 import Contrato from "./views/contrato";
 import RelatorioGeral from "./views/relatoriogeral";
+import MeuPerfil from "./views/meuperfil";
 
 function App() {
   const [userType, setUserType] = useState(null);
@@ -69,6 +70,10 @@ function App() {
       <Route
         path="/relatorio-geral"
         element={userType ? <RelatorioGeral /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/meu-perfil"
+        element={userType ? <MeuPerfil /> : <Navigate to="/" />}
       />
     </Routes>
   );

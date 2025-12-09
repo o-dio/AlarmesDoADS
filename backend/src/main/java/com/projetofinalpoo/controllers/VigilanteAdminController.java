@@ -42,13 +42,12 @@ public class VigilanteAdminController {
             throw new IllegalArgumentException("O login do vigilante não pode ser vazio.");
         }
 
-        // Verifica se já existe um vigilante com esse login
+        // Verifica se ja existe um vigilante com esse login
         Vigilante existing = vigilanteDAO.buscarPeloLogin(vigilante.getLogin());
         if (existing == null) {
-            vigilante.setSenha(HashMD5Service.gerarMD5(vigilante.getSenha()));
+            //vigilante.setSenha(HashMD5Service.gerarMD5(vigilante.getSenha()));
             vigilanteDAO.cadastrar(vigilante);
         } else {
-            vigilante.setSenha(HashMD5Service.gerarMD5(vigilante.getSenha()));
             vigilanteDAO.atualizar(existing, vigilante);
         }
         return vigilante;
