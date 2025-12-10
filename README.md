@@ -2,9 +2,6 @@
 
 **Nomes:** Vitor Emmanuel de Mello Siqueira Bitencourt, Gustavo de Moura Daniel, Dioniso Ilha Antunes e Vitor Dahmer Santos  
 **Turma:** 4º Semestre - ADS  
-**Data de entrega:** 05/12/2025  
-**Disciplina:** Desenvolvimento WEB II  
-**Professora:** Humberto Jorge de Moura Costa
 
 ---
 
