@@ -48,6 +48,7 @@ public class VigilanteAdminController {
             vigilante.setSenha(HashMD5Service.gerarMD5(vigilante.getSenha()));
             vigilanteDAO.cadastrar(vigilante);
         } else {
+            vigilante.setSenha(HashMD5Service.gerarMD5(vigilante.getSenha()));
             vigilanteDAO.atualizar(existing, vigilante);
         }
         return vigilante;

@@ -16,45 +16,50 @@ export default function MeuPerfil() {
         email: "",
         fone: "",
         foneContato: "",
-        role: "",
         cpf: "",
         dataNasc: "",
         turno: "",
-        dataContratacao: "",
+        cargaHoraria: "",
+        dataContratacao: ""
     });
 
-    function formatDateToBR(dateStr) {
-        if (!dateStr) return "";
-        const [y, m, d] = dateStr.split("-");
+    function formatToBR(date) {
+        if (!date) return "";
+        const [y, m, d] = date.split("-");
         return `${d}/${m}/${y}`;
     }
 
+    function formatToISO(date) {
+        if (!date.includes("/")) return date;
+        const [d, m, y] = date.split("/");
+        return `${y}-${m}-${d}`;
+    }
+
+    // CARREGA PERFIL
     useEffect(() => {
         axios.get("http://localhost:8080/api/session", { withCredentials: true })
             .then(res => {
-
                 if (!res.data || !res.data.usuario) {
                     navigate("/login");
                     return;
                 }
-
                 const usuario = res.data.usuario;
                 const tipoUsuario = res.data.tipo;
-
-                let dadosFix = { ...usuario };
-
-                if (usuario.dataNasc) {
-                    const [d, m, y] = usuario.dataNasc.split("/");
-                    dadosFix.dataNasc = `${y}-${m}-${d}`;
-                }
-
-                if (usuario.dataContratacao) {
-                    const [d, m, y] = usuario.dataContratacao.split("/");
-                    dadosFix.dataContratacao = `${y}-${m}-${d}`;
-                }
-
                 setTipo(tipoUsuario);
-                setDados(dadosFix);
+
+                setDados({
+                    login: usuario.login || "",
+                    senha: "",
+                    email: usuario.contatoInfo?.email || "",
+                    fone: usuario.contatoInfo?.fone || "",
+                    foneContato: usuario.contatoInfo?.foneContato || "",
+                    cpf: usuario.cpf || "",
+                    dataNasc: usuario.dataNasc ? formatToISO(usuario.dataNasc) : "",
+                    turno: usuario.turno || "",
+                    cargaHoraria: usuario.cargaHoraria || "",
+                    dataContratacao: usuario.dataContratacao ? formatToISO(usuario.dataContratacao) : ""
+                });
+
                 setLoading(false);
             })
             .catch(err => {
@@ -68,13 +73,48 @@ export default function MeuPerfil() {
         setDados(prev => ({ ...prev, [name]: value }));
     }
 
+    // SALVAR ALTERAÇÕES
     async function salvar(e) {
         e.preventDefault();
 
-        const payload = { ...dados };
+        let payload = {};
 
-        if (tipo === "cliente") payload.dataNasc = formatDateToBR(dados.dataNasc);
-        if (tipo === "vigilante") payload.dataContratacao = formatDateToBR(dados.dataContratacao);
+        if (tipo === "cliente") {
+            payload = {
+                login: dados.login,
+                senha: dados.senha || undefined,
+                cpf: dados.cpf,
+                dataNasc: formatToBR(dados.dataNasc),
+                contatoInfo: {
+                    email: dados.email,
+                    fone: dados.fone,
+                    foneContato: dados.foneContato
+                }
+            };
+        }
+
+        if (tipo === "vigilante") {
+            payload = {
+                login: dados.login,
+                senha: dados.senha || undefined,
+                turno: dados.turno,
+                cargaHoraria: dados.cargaHoraria || "08:00:00",
+                remuneracao: dados.remuneracao ? Number(dados.remuneracao) : undefined,
+                dataContratacao: formatToBR(dados.dataContratacao),
+                contatoInfo: {
+                    email: dados.email,
+                    fone: dados.fone,
+                    foneContato: dados.foneContato
+                }
+            };
+        }
+
+        if (tipo === "admin") {
+            payload = {
+                login: dados.login,
+                senha: dados.senha || undefined
+            };
+        }
 
         try {
             if (tipo === "cliente") {
@@ -85,7 +125,7 @@ export default function MeuPerfil() {
                 await axios.post("http://localhost:8080/api/admin/salvar", payload, { withCredentials: true });
             }
 
-            alert("Perfil atualizado com sucesso!");
+            alert("Perfil atualizado!");
             navigate("/");
 
         } catch (error) {
@@ -102,95 +142,67 @@ export default function MeuPerfil() {
 
     return (
         <>
-            <Helmet>
-                <title>Meu Perfil</title>
-            </Helmet>
+            <Helmet><title>Meu Perfil</title></Helmet>
 
             <div className="register-wrapper">
-                <div className="register-box">
+                <div className="register-box" style={{ textAlign: "left" }}>
                     <h2>Meu Perfil</h2>
 
                     <form onSubmit={salvar}>
 
-                        {/* Campos comuns */}
-                        <input
-                            name="login"
-                            placeholder="Login"
-                            required
-                            value={dados.login || ""}
-                            onChange={atualizar}
-                        />
+                        <label>Login</label>
+                        <input name="login" value={dados.login} onChange={atualizar} required />
 
-                        <input
-                            type="password"
-                            name="senha"
-                            placeholder="Nova senha"
-                            onChange={atualizar}
-                        />
+                        <label>Nova Senha</label>
+                        <input type="password" name="senha" placeholder="Nova senha" onChange={atualizar} />
 
                         {!isAdmin && (
                             <>
-                                <input
-                                    name="email"
-                                    placeholder="E-mail"
-                                    value={dados.email || ""}
-                                    onChange={atualizar}
-                                />
+                                <label>E-mail</label>
+                                <input name="email" value={dados.email} onChange={atualizar} />
 
-                                <input
-                                    name="fone"
-                                    placeholder="Telefone"
-                                    value={dados.fone || ""}
-                                    onChange={atualizar}
-                                />
+                                <label>Telefone</label>
+                                <input name="fone" value={dados.fone} onChange={atualizar} />
 
-                                <input
-                                    name="foneContato"
-                                    placeholder="Telefone de Contato"
-                                    value={dados.foneContato || ""}
-                                    onChange={atualizar}
-                                />
+                                <label>Telefone para Contato</label>
+                                <input name="foneContato" value={dados.foneContato} onChange={atualizar} />
                             </>
                         )}
 
-                        {/* CLIENTE */}
                         {isCliente && (
                             <>
+                                <label>CPF</label>
                                 <input
                                     name="cpf"
-                                    placeholder="CPF"
-                                    value={dados.cpf || ""}
-                                    onChange={atualizar}
+                                    value={dados.cpf}
+                                    readOnly
+                                    style={{ color: "#333" }}
                                 />
 
+                                <label>Data de Nascimento</label>
                                 <input
                                     type="date"
                                     name="dataNasc"
-                                    value={dados.dataNasc || ""}
+                                    value={dados.dataNasc}
                                     onChange={atualizar}
                                 />
                             </>
                         )}
 
-                        {/* VIGILANTE */}
                         {isVigilante && (
                             <>
                                 <label>Turno</label>
-                                <select
-                                    name="turno"
-                                    value={dados.turno || ""}
-                                    onChange={atualizar}
-                                >
+                                <select name="turno" value={dados.turno} onChange={atualizar}>
                                     <option value="">--Selecione--</option>
-                                    <option value="D">🌞 Diurno</option>
-                                    <option value="N">🌙 Noturno</option>
+                                    <option value="D">Diurno</option>
+                                    <option value="N">Noturno</option>
                                 </select>
 
                                 <label>Data de Contratação</label>
                                 <input
                                     type="date"
                                     name="dataContratacao"
-                                    value={dados.dataContratacao || ""}
+                                    value={dados.dataContratacao}
                                     onChange={atualizar}
                                 />
                             </>
@@ -199,7 +211,6 @@ export default function MeuPerfil() {
                         <button type="submit">Salvar alterações</button>
                     </form>
 
-                    {/* 🔹 Botão de voltar embaixo do formulário */}
                     <button
                         type="button"
                         onClick={() => navigate("/")}
@@ -217,7 +228,6 @@ export default function MeuPerfil() {
                     >
                         ⬅ Voltar
                     </button>
-
                 </div>
             </div>
         </>

@@ -20,7 +20,7 @@ public class Vigilante implements Usuario {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private LocalTime cargaHoraria;
 
-    private double remuneracao;
+    private Double remuneracao;
 
     /** Data da contratacao de vigilante no formato HH:mm:ss para JSON. */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
@@ -39,7 +39,7 @@ public class Vigilante implements Usuario {
      * @param dataContratacao data de contratação no formato "dd/MM/yyyy"
      * @param contatoInfo     informações para contatar o vigilante
      */
-    public Vigilante(String login, String senha, String turno, String cargaHoraria, double remuneracao,
+    public Vigilante(String login, String senha, String turno, String cargaHoraria, Double remuneracao,
             String dataContratacao, ContatoInfo contatoInfo) {
         this.login = login;
         this.senha = senha;
@@ -127,7 +127,7 @@ public class Vigilante implements Usuario {
      *
      * @return valor da remuneração
      */
-    public double getRemuneracao() {
+    public Double getRemuneracao() {
         return remuneracao;
     }
 
@@ -136,7 +136,7 @@ public class Vigilante implements Usuario {
      *
      * @param remuneracao novo valor da remuneração
      */
-    public void setRemuneracao(double remuneracao) {
+    public void setRemuneracao(Double remuneracao) {
         this.remuneracao = remuneracao;
     }
 

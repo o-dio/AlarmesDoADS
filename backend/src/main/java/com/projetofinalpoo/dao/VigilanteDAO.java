@@ -219,24 +219,42 @@ public class VigilanteDAO {
      */
     public void atualizar(Vigilante oldVigilante, Vigilante newVigilante) {
         String sql = "UPDATE \"Vigilante\" SET " +
-                "\"Login\" = ?, \"Senha\" = ?, \"Turno\" = ?, \"CargaHoraria\" = ?, \"Remuneracao\" = ?, " +
-                "\"DataContratacao\" = ?, \"Fone\" = ?, \"Email\" = ?, \"FoneContato\" = ? " +
+                "\"Login\" = ?, " +
+                "\"Senha\" = ?, " +
+                "\"Turno\" = ?, " +
+                "\"CargaHoraria\" = COALESCE(?, \"CargaHoraria\"), " +
+                "\"Remuneracao\" = COALESCE(?, \"Remuneracao\"), " +
+                "\"DataContratacao\" = ?, " +
+                "\"Fone\" = ?, " +
+                "\"Email\" = ?, " +
+                "\"FoneContato\" = ? " +
                 "WHERE \"Login\" = ?";
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, newVigilante.getLogin());
             stmt.setString(2, newVigilante.getSenha());
             stmt.setString(3, newVigilante.getTurno());
-            stmt.setTime(4, Time.valueOf(newVigilante.getCargaHoraria()));
-            stmt.setDouble(5, newVigilante.getRemuneracao());
+
+            if (newVigilante.getCargaHoraria() != null) {
+                stmt.setTime(4, Time.valueOf(newVigilante.getCargaHoraria()));
+            } else {
+                stmt.setNull(4, java.sql.Types.TIME);
+            }
+
+            if (newVigilante.getRemuneracao() != null) {
+                stmt.setObject(5, newVigilante.getRemuneracao(), java.sql.Types.NUMERIC);
+            } else {
+                stmt.setNull(5, java.sql.Types.NUMERIC);
+            }
+
             stmt.setDate(6, Date.valueOf(newVigilante.getDataContratacao()));
             stmt.setString(7, newVigilante.getContatoInfo().getFone());
             stmt.setString(8, newVigilante.getContatoInfo().getEmail());
             stmt.setString(9, newVigilante.getContatoInfo().getFoneContato());
             stmt.setString(10, oldVigilante.getLogin());
 
+            // Executa update
             int linhas = stmt.executeUpdate();
-
             if (linhas > 0) {
                 System.out.println("Vigilante atualizado com sucesso!");
             } else {
@@ -246,6 +264,7 @@ public class VigilanteDAO {
             System.out.println("Erro ao atualizar vigilante: " + e.getMessage());
         }
     }
+
 
     /**
      * Remove um vigilante do banco com base no login.
