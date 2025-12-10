@@ -309,6 +309,9 @@ footer {
   border-top: var(--border);
 }
 
+input {
+    text-transform: none !important;
+}
 
 /* RESPONSIVO */
 @media (max-width: 768px) {

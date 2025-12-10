@@ -45,6 +45,10 @@
     transform: translateY(-2px);
 }
 
+input {
+    text-transform: none !important;
+}
+
 /* Responsivo */
 @media (max-width: 768px) {
     .relatorio-container h1 {

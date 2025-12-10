@@ -49,6 +49,10 @@
   animation: pulse 2s infinite;
 }
 
+input {
+    text-transform: none !important;
+}
+
 /* Animacao */
 @keyframes pulse {
   0%, 100% { transform: scale(1); }

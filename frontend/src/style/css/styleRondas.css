@@ -270,6 +270,10 @@
   color: var(--hover-color);
 }
 
+input {
+    text-transform: none !important;
+}
+
 @media (max-width: 600px) {
   .rondas-page .ronda-card {
     padding: 1.5rem 1.5rem;

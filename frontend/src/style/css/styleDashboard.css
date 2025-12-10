@@ -311,6 +311,14 @@ button + a button:hover {
   color: #fff;
 }
 
+input {
+    text-transform: none !important;
+}
+
+td {
+  text-transform: none !important;;
+}
+
 
 /* Responsividade */
 @media (max-width: 600px) {

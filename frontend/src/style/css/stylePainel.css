@@ -191,3 +191,7 @@ h2, h3 {
 .btn-close-cameras:hover {
   background-color: #b78e4a;
 }
+
+input {
+    text-transform: none !important;
+}

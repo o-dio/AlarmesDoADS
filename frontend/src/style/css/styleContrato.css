@@ -232,3 +232,7 @@
     border: none;
     cursor: pointer;
 }
+
+input {
+    text-transform: none !important;
+}

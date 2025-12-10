@@ -106,3 +106,7 @@ button:hover {
   accent-color: var(--main-color);
   margin-right: 0.4rem;
 }
+
+input {
+    text-transform: none !important;
+}

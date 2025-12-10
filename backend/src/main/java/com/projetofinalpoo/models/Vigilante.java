@@ -83,7 +83,7 @@ public class Vigilante implements Usuario {
      * @param senha nova senha em texto plano
      */
     public void setSenha(String senha) {
-        this.senha = HashMD5Service.gerarMD5(senha);
+        this.senha = senha;
     }
 
     /**

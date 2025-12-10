@@ -12,6 +12,11 @@ public class Admin implements Usuario {
     private String senha;
 
     /**
+     * Cria uma instância de Admin sem login e senha.
+     */
+    public Admin() {}
+
+    /**
      * Cria uma instância de Admin com login e senha informados.
      *
      * @param login o nome de login do administrador

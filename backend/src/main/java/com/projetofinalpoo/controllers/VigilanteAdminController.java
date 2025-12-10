@@ -45,7 +45,7 @@ public class VigilanteAdminController {
         // Verifica se ja existe um vigilante com esse login
         Vigilante existing = vigilanteDAO.buscarPeloLogin(vigilante.getLogin());
         if (existing == null) {
-            //vigilante.setSenha(HashMD5Service.gerarMD5(vigilante.getSenha()));
+            vigilante.setSenha(HashMD5Service.gerarMD5(vigilante.getSenha()));
             vigilanteDAO.cadastrar(vigilante);
         } else {
             vigilanteDAO.atualizar(existing, vigilante);

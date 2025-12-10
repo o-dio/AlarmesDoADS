@@ -21,7 +21,7 @@ public class IndexController {
     
     @Autowired
     private EmailService emailService;
-
+    
     /**
      * Endereço de email remetente configurado no application.properties.
      */
