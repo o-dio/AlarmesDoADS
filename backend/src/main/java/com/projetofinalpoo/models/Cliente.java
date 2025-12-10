@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.projetofinalpoo.services.HashMD5Service;
 import com.projetofinalpoo.models.Contrato;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -115,12 +114,12 @@ public class Cliente implements Usuario {
     }
 
     /** 
-     * Define a senha do cliente, armazenando-a como hash MD5.
+     * Define a senha do cliente.
      * 
      * @param senha Senha em texto puro.
      */
     public void setSenha(String senha) {
-        this.senha = HashMD5Service.gerarMD5(senha);
+        this.senha = senha;
     }
 
     /** @return CPF do cliente. */

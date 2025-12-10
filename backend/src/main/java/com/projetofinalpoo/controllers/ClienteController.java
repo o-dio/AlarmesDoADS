@@ -3,6 +3,8 @@ package com.projetofinalpoo.controllers;
 import com.projetofinalpoo.dao.ClienteDAO;
 import com.projetofinalpoo.models.Cliente;
 import com.projetofinalpoo.models.ContatoInfo;
+import com.projetofinalpoo.services.HashMD5Service;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,8 +53,10 @@ public class ClienteController {
         Cliente existente = dao.buscarPeloCpf(cliente.getCpf());
 
         if (existente == null) {
+            cliente.setSenha(HashMD5Service.gerarMD5(cliente.getSenha()));
             dao.cadastrar(cliente);
         } else {
+            cliente.setSenha(HashMD5Service.gerarMD5(cliente.getSenha()));
             dao.atualizar(cliente);
         }
 

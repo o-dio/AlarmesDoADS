@@ -37,12 +37,10 @@ public class VigilanteAdminController {
      */
     @PostMapping("/salvar")
     public Vigilante salvarVigilante(@RequestBody Vigilante vigilante) {
-        // Se login for null ou vazio, cria novo vigilante
         if (vigilante.getLogin() == null || vigilante.getLogin().isEmpty()) {
             throw new IllegalArgumentException("O login do vigilante não pode ser vazio.");
         }
 
-        // Verifica se ja existe um vigilante com esse login
         Vigilante existing = vigilanteDAO.buscarPeloLogin(vigilante.getLogin());
         if (existing == null) {
             vigilante.setSenha(HashMD5Service.gerarMD5(vigilante.getSenha()));

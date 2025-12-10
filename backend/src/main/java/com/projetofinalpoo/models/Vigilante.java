@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import com.projetofinalpoo.services.HashMD5Service;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -78,7 +77,7 @@ public class Vigilante implements Usuario {
     }
 
     /**
-     * Define a senha do vigilante e aplica criptografia MD5.
+     * Define a senha do vigilante.
      *
      * @param senha nova senha em texto plano
      */
